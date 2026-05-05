@@ -10,11 +10,13 @@
 
   imports = [
     inputs.make-shell.flakeModules.default
+    inputs.git-hooks-nix.flakeModule
   ];
 
   perSystem = {
     pkgs,
     lib,
+    self',
     ...
   }: {
     files.file.".envrc" = {
@@ -55,6 +57,7 @@
         alejandra
         shfmt
       ];
+      shellHook = ''${self'.checks.pre-commit}'';
     };
 
     make-shells.latex = {

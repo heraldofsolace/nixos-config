@@ -3,7 +3,7 @@
 {
   description = "My personal Nix configuration, built with Dendritic.";
 
-  outputs = inputs: inputs.flake-parts.lib.mkFlake {inherit inputs;} (inputs.import-tree ./modules);
+  outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
 
   nixConfig = {
     accept-flake-config = true;
@@ -175,4 +175,5 @@
       url = "github:b3nj5m1n/xdg-ninja";
     };
   };
+
 }

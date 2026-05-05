@@ -1,10 +1,5 @@
-{lib, ...}: {
-  blazar.astronomy.homeManager = {
-    lib,
-    pkgs,
-    config,
-    ...
-  }: {
+_: {
+  blazar.astronomy.homeManager = {pkgs, ...}: {
     home.packages = with pkgs; [
       siril
       kstars

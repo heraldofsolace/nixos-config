@@ -12,14 +12,10 @@
 }: let
   # Workaround to cope with utillinux in Nixpkgs 20.09 and util-linux in Nixpkgs master
   utillinux =
-    if pkgs ? utillinux
-    then pkgs.utillinux
-    else pkgs.util-linux;
+    pkgs.utillinux or pkgs.util-linux;
 
   python =
-    if nodejs ? python
-    then nodejs.python
-    else python2;
+    nodejs.python or python2;
 
   # Create a tar wrapper that filters all the 'Ignoring unknown extended header keyword' noise
   tarWrapper = runCommand "tarWrapper" {} ''
@@ -127,12 +123,11 @@
 
   # Recursively composes the dependencies of a package
   composePackage = {
-    name,
     packageName,
     src,
     dependencies ? [],
     ...
-  } @ args:
+  }:
     builtins.addErrorContext "while evaluating node package '${packageName}'" ''
       installPackage "${packageName}" "${src}"
       ${includeDependencies {inherit dependencies;}}
@@ -212,7 +207,7 @@
         if [ -d node_modules ]
         then
             cd node_modules
-            ${lib.concatMapStrings (dependency: pinpointDependenciesOfPackage dependency) dependencies}
+            ${lib.concatMapStrings pinpointDependenciesOfPackage dependencies}
             cd ..
         fi
       ''}
@@ -227,7 +222,7 @@
     dependencies ? [],
     production ? true,
     ...
-  } @ args: ''
+  }: ''
     if [ -d "${packageName}" ]
     then
         cd "${packageName}"
@@ -518,7 +513,6 @@
     name,
     packageName,
     version ? null,
-    dependencies ? [],
     buildInputs ? [],
     production ? true,
     npmFlags ? "",
@@ -542,8 +536,8 @@
         }";
         buildInputs =
           [tarWrapper python nodejs]
-          ++ lib.optional (stdenv.isLinux) utillinux
-          ++ lib.optional (stdenv.isDarwin) libtool
+          ++ lib.optional stdenv.isLinux utillinux
+          ++ lib.optional stdenv.isDarwin libtool
           ++ buildInputs;
 
         inherit nodejs;
@@ -606,7 +600,7 @@
         meta =
           {
             # default to Node.js' platforms
-            platforms = nodejs.meta.platforms;
+            inherit (nodejs.meta) platforms;
           }
           // meta;
       }
@@ -641,8 +635,8 @@
 
         buildInputs =
           [tarWrapper python nodejs]
-          ++ lib.optional (stdenv.isLinux) utillinux
-          ++ lib.optional (stdenv.isDarwin) libtool
+          ++ lib.optional stdenv.isLinux utillinux
+          ++ lib.optional stdenv.isDarwin libtool
           ++ buildInputs;
 
         inherit dontStrip; # Stripping may fail a build for some package deployments
@@ -691,19 +685,9 @@
   # Builds a development shell
   buildNodeShell = {
     name,
-    packageName,
     version ? null,
-    src,
     dependencies ? [],
     buildInputs ? [],
-    production ? true,
-    npmFlags ? "",
-    dontNpmInstall ? false,
-    bypassCache ? false,
-    reconstructLock ? false,
-    dontStrip ? true,
-    unpackPhase ? "true",
-    buildPhase ? "true",
     ...
   } @ args: let
     nodeDependencies = buildNodeDependencies args;
@@ -716,7 +700,7 @@
           else "-${version}"
         }";
 
-        buildInputs = [python nodejs] ++ lib.optional (stdenv.isLinux) utillinux ++ buildInputs;
+        buildInputs = [python nodejs] ++ lib.optional stdenv.isLinux utillinux ++ buildInputs;
         buildCommand = ''
           mkdir -p $out/bin
           cat > $out/bin/shell <<EOF

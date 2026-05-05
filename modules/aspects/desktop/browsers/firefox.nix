@@ -1,10 +1,5 @@
-{lib, ...}: {
-  blazar.firefox.homeManager = {
-    lib,
-    pkgs,
-    config,
-    ...
-  }: {
+_: {
+  blazar.firefox.homeManager = {pkgs, ...}: {
     home.packages = with pkgs; [
       firefox
       ungoogled-chromium

@@ -99,5 +99,9 @@
           # settings.formatter.terraform.excludes = [ "hello.tf" ];
         };
       };
+      pre-commit.settings.hooks.treefmt = {
+        enable = true;
+        pass_filenames = false;
+      };
     };
 }

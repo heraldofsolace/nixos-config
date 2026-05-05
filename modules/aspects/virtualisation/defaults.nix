@@ -1,8 +1,5 @@
 {
-  blazar.virtualisation = {
-    host,
-    user,
-  }: {
+  blazar.virtualisation = {user, ...}: {
     nixos = {
       config,
       lib,

@@ -1,8 +1,4 @@
-{
-  blazar,
-  inputs,
-  ...
-}: {
+{blazar, ...}: {
   den.hosts.x86_64-linux = {
     # users, homes, and hosts aspects are Nix module system submodules (one can define type-checked options) and freeform types (one can define freeform attributes).
     HOST-nixos = {

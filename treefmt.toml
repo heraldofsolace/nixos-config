@@ -9,12 +9,12 @@ options = ["-i", "2", "-s", "-w"]
 
 [global]
 excludes = [
-    ".direnv",
-    "secrets/*",
-    ".conform.yaml",
-    "treefmt.toml",
-    ".editorconfig",
-    ".github/settings.yml",
-    "lefthook.yml",
-    "book.toml",
+  ".direnv",
+  "secrets/*",
+  ".conform.yaml",
+  "treefmt.toml",
+  ".editorconfig",
+  ".github/settings.yml",
+  "lefthook.yml",
+  "book.toml"
 ]

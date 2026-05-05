@@ -8,7 +8,6 @@
     oh-my-tmux-conf = "oh-my-tmux.conf";
     oh-my-tmux-conf-path = "${config.xdg.configHome}/${oh-my-tmux-conf}";
     oh-tmux-conf-local = "${oh-my-tmux-conf}.local";
-    oh-tmux-conf-local-path = "${config.xdg.configHome}/${oh-tmux-conf-local}";
 
     oh-my-tmux = pkgs.stdenvNoCC.mkDerivation rec {
       pname = "oh-my-tmux";

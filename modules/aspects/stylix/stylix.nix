@@ -1,20 +1,11 @@
-{
-  lib,
-  inputs,
-  ...
-}: {
+{inputs, ...}: {
   flake-file.inputs = {
     stylix = {
       url = "github:nix-community/stylix/release-25.11";
       # url = "git+file:///home/aniket/stylix";
     };
   };
-  blazar.stylix.homeManager = {
-    lib,
-    pkgs,
-    config,
-    ...
-  }: {
+  blazar.stylix.homeManager = {pkgs, ...}: {
     stylix.enable = true;
 
     stylix.targets.tmux.enable = false;

@@ -5,11 +5,7 @@
       inputs.nix-vscode-extensions.overlays.default
     ];
   };
-  blazar.editors._.vscode.homeManager = {
-    pkgs,
-    config,
-    ...
-  }: {
+  blazar.editors._.vscode.homeManager = {pkgs, ...}: {
     programs.vscode = {
       enable = true;
       # TODO split extensions based on active modules

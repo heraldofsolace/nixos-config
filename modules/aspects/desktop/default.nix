@@ -1,9 +1,5 @@
 {
-  blazar.desktop.homeManager = {
-    config,
-    pkgs,
-    ...
-  }: {
+  blazar.desktop.homeManager = {pkgs, ...}: {
     home = {
       packages = with pkgs; [
         appimage-run

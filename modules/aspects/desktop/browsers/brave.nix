@@ -1,10 +1,5 @@
-{lib, ...}: {
-  blazar.brave.homeManager = {
-    lib,
-    pkgs,
-    config,
-    ...
-  }: {
+_: {
+  blazar.brave.homeManager = _: {
     programs.brave.enable = true;
   };
 }

@@ -128,17 +128,14 @@
     ...
   }: let
     terminal = "wezterm";
-    generate-wallpapers = {
-      pkgs,
-      config,
-    }: {
+    generate-wallpapers = {pkgs, ...}: {
       name,
       colors,
       directory,
     }: let
       jsonContent = builtins.toJSON {
-        name = name;
-        colors = colors;
+        inherit name;
+        inherit colors;
       };
       themeFile = pkgs.writeText "stylix.json" jsonContent;
     in
@@ -172,10 +169,6 @@
     swww-command = "swww-schedule ${lib.concatStrings swww-args}";
     swww-script = pkgs.writeShellScript "swww" ''
       ${swww-command}
-    '';
-    yt = pkgs.writeShellScript "yt" ''
-      notify-send "Opening video" "$(wl-paste)"
-      mpv "$(wl-paste)"
     '';
   in {
     imports = [

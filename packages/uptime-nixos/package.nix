@@ -1,8 +1,4 @@
-{
-  writeShellApplication,
-  writeText,
-  ...
-}:
+{writeShellApplication, ...}:
 writeShellApplication {
   name = "uptime-nixos";
   text = ''

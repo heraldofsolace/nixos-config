@@ -18,7 +18,7 @@ from your system flake so that you can still run it via nix run from anywhere.
 
 The following is just the outputs function from the flake template.
 */
-{inputs, ...} @ attrs: let
+{inputs, ...}: let
   nixpkgs = inputs.latest;
   inherit (inputs.nixCats) utils;
   luaPath = "${./.}";
@@ -50,15 +50,7 @@ The following is just the outputs function from the flake template.
       # )
     ];
 
-  categoryDefinitions = {
-    pkgs,
-    settings,
-    categories,
-    extra,
-    name,
-    mkNvimPlugin,
-    ...
-  } @ packageDef: {
+  categoryDefinitions = {pkgs, ...} @ packageDef: {
     lspsAndRuntimeDeps = {
       general = with pkgs; [
         universal-ctags

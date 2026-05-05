@@ -1,11 +1,6 @@
 {
   blazar.media._.music = {
-    homeManager = {
-      config,
-      inputs',
-      # pkgs,
-      ...
-    }: {
+    homeManager = _: {
       # programs.beets = {
       #   enable = true;
       #   # FIXME: Uncomment when build succeeds

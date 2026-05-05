@@ -2,11 +2,11 @@
 {
   nodeEnv,
   fetchurl,
-  fetchgit,
   nix-gitignore,
   stdenv,
   lib,
   globalBuildInputs ? [],
+  ...
 }: let
   sources = {
     "@taplo/core-0.2.0" = {
@@ -61,8 +61,8 @@
     reconstructLock = true;
   };
 in {
-  args = args;
-  sources = sources;
+  inherit args;
+  inherit sources;
   tarball = nodeEnv.buildNodeSourceDist args;
   package = nodeEnv.buildNodePackage args;
   shell = nodeEnv.buildNodeShell args;

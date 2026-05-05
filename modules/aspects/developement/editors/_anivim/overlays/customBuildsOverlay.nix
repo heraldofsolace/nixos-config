@@ -1,5 +1,5 @@
-importName: inputs: let
-  overlay = self: super: rec {
+importName: _inputs: let
+  overlay = _self: super: rec {
     ${importName} = rec {
       vim-schlepp = super.vimUtils.buildVimPlugin {
         pname = "vim-schlepp";

@@ -3,12 +3,7 @@
   inputs,
   ...
 }: {
-  den.hosts.x86_64-linux.andromeda = {
-    pkgs,
-    config,
-    lib,
-    ...
-  }: {
+  den.hosts.x86_64-linux.andromeda = _: {
     description = "NixOS workstation for Work notebook Lenovo ThinkPad T14 Gen 4 Ryzen";
     users.aniket = {
       description = "Aniket";

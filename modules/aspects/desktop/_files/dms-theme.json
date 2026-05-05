@@ -1,0 +1,22 @@
+{
+  "name": "Stylix",
+  "primary": "#a06666",
+  "primaryText": "#000000",
+  "primaryContainer": "#dd9999",
+  "secondary": "#dd9999",
+  "surface": "#121212",
+  "surfaceText": "#c1c1c1",
+  "surfaceVariant": "#222222",
+  "surfaceVariantText": "#c1c1c1",
+  "surfaceTint": "#dd9999",
+  "background": "#000000",
+  "backgroundText": "#F0FFF0",
+  "outline": "#dd9999",
+  "surfaceContainer": "#222222",
+  "surfaceContainerHigh": "#333333",
+  "surfaceContainerHighest": "#444444",
+  "error": "#FF0066",
+  "warning": "#CCFF00",
+  "info": "#5f8787",
+  "matugen_type": "scheme-expressive"
+}

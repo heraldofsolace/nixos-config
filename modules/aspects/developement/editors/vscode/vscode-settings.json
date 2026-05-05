@@ -1,0 +1,38 @@
+{
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  "workbench.iconTheme": "vscode-icons",
+  "vsicons.dontShowNewVersionMessage": true,
+  "editor.inlineSuggest.enabled": true,
+  "nix.enableLanguageServer": true,
+  "nix.serverPath": "nil",
+  "nix.serverSettings": {
+    "nil": {
+      "formatting": {
+        "command": ["alejandra"]
+      }
+    }
+  },
+  "window.zoomLevel": 1,
+  "update.mode": "none",
+  "editor.mouseWheelZoom": true,
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.autoIndentOnPaste": true,
+  "window.menuBarVisibility": "toggle",
+  "editor.scrollbar.vertical": "hidden",
+  "editor.scrollbar.verticalScrollbarSize": 0,
+  "security.workspace.trust.untrustedFiles": "newWindow",
+  "security.workspace.trust.startupPrompt": "never",
+  "security.workspace.trust.enabled": false,
+  "editor.minimap.side": "left",
+  "extensions.autoUpdate": false,
+  "workbench.statusBar.visible": false,
+  "terminal.external.linuxExec": "wezterm",
+  "terminal.explorerKind": "both",
+  "terminal.sourceControlRepositoriesKind": "both",
+  "telemetry.telemetryLevel": "off",
+  "workbench.activityBar.location": "top",
+  "window.customTitleBarVisibility": "auto",
+  "workbench.sideBar.location": "right"
+}

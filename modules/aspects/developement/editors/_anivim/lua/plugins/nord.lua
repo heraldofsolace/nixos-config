@@ -1,0 +1,1 @@
+return {"shaunsingh/nord.nvim", priority = 2000}

@@ -124,8 +124,8 @@
           wip = "!git add --all && git commit -m 'WIP'";
         };
         user = {
-          name = "David Chocholatý";
-          email = "chocholaty.david@protonmail.com";
+          name = "Aniket Bhattacharyea";
+          email = "aniket@abhattacharyea.dev";
         };
 
         pull.rebase = true;
@@ -137,7 +137,7 @@
           excludesfile = "~/.config/git/.gitignore_global";
         };
         init = {
-          defaultBranch = "master";
+          defaultBranch = "main";
         };
         color = {
           ui = true;
@@ -265,7 +265,7 @@
         };
       };
       signing = {
-        key = "22146EBAB4684AE2907DDC228FC8E68432148DCA";
+        key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA3GRcKkyXAJvKjyovyzkPzV9aaT7FRBSbnR1t1bmwqP";
         signByDefault = true;
         format = "openpgp";
       };

@@ -7,7 +7,7 @@
         junction
 
         # inputs'.nixpkgs-local.legacyPackages.atuin-desktop
-        atuin-desktop
+        # atuin-desktop
         # stable.atuin-desktop
 
         libportal-qt6
@@ -33,7 +33,9 @@
 
         cameractrls
 
-        wl-clipboard-rs
+        wl-clipboard
+
+        kdePackages.dolphin
       ];
     };
 
@@ -68,13 +70,13 @@
         # };
       };
 
-      systemDirs = {
-        data = [
-          "/usr/share"
-          "/usr/local/share"
-        ];
-        config = ["/etc/xdg"];
-      };
+      # systemDirs = {
+      #   data = [
+      #     "/usr/share"
+      #     "/usr/local/share"
+      #   ];
+      #   config = ["/etc/xdg"];
+      # };
       userDirs = {
         enable = true;
         createDirectories = true;
@@ -117,10 +119,10 @@
       };
     };
 
-    services.nextcloud-client = {
-      enable = true;
-      startInBackground = true;
-    };
+    # services.nextcloud-client = {
+    #   enable = true;
+    #   startInBackground = true;
+    # };
 
     # programs.calibre = {
     #   enable = true;

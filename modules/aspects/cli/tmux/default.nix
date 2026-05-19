@@ -1,8 +1,9 @@
-{
+_: {
   blazar.tmux.homeManager = {
     lib,
     pkgs,
     config,
+    self',
     ...
   }: let
     oh-my-tmux-conf = "oh-my-tmux.conf";
@@ -15,12 +16,12 @@
       src = pkgs.fetchFromGitHub {
         owner = "gpakosz";
         repo = ".tmux";
-        rev = "124f5fc36dbca79a840d14f898d751c96ed9a1e7";
-        sha256 = "sha256-cF3S8K+0k37W7BM998xWV+RSODdfKWMT+eckbRa3cw8=";
+        rev = "af33f07134b76134acca9d01eacbdecca9c9cda6";
+        sha256 = "sha256-zXI1c9Mj8AJCAquOP4W1MCH7nIzisYjMcW7WuSZ+/yI=";
         stripRoot = false;
       };
 
-      version = "124f5fc36dbca79a840d14f898d751c96ed9a1e7";
+      version = "af33f07134b76134acca9d01eacbdecca9c9cda6";
 
       nativeBuildInputs = [pkgs.gnused pkgs.perl pkgs.gawk];
 
@@ -39,7 +40,7 @@
       };
     };
   in {
-    home.packages = [pkgs.blazar.tmx pkgs.gnused pkgs.perl pkgs.gawk];
+    home.packages = [self'.packages.tmx pkgs.gnused pkgs.perl pkgs.gawk];
     programs.tmux = {
       enable = true;
 

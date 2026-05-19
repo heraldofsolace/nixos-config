@@ -1,6 +1,7 @@
 {
   inputs,
   self,
+  blazar,
   ...
 }: {
   flake-file.inputs = {
@@ -21,6 +22,11 @@
 
       # THIS IS IMPORTANT
       # Mismatched system dependencies will lead to crashes and other issues.
+      inputs.nixpkgs.follows = "latest";
+    };
+
+    sysc-greet = {
+      url = "github:deephack1982/sysc-greet";
       inputs.nixpkgs.follows = "latest";
     };
 
@@ -56,6 +62,10 @@
     lib,
     ...
   }: {
+    imports = [
+      inputs.sysc-greet.nixosModules.default
+    ];
+
     programs.hyprland = {
       enable = true;
       xwayland = {
@@ -76,15 +86,6 @@
         xdg-desktop-portal-gtk
       ];
     };
-    # programs.wayland-bongocat = {
-    #   enable = true;
-    #   autostart = true;
-    #   inputDevices = [
-    #     # Example devices
-    #     "/dev/input/event26"
-    #   ];
-    #   enableDebug = true; # enable debug logging
-    # };
 
     hardware.graphics = let
       pkgs-unstable = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
@@ -104,16 +105,22 @@
       WLR_NO_HARDWARE_CURSORS = "1"; # disable hardware cursors for wlroots
     };
 
-    programs.dank-material-shell.greeter = {
+    # programs.dank-material-shell.greeter = {
+    #   enable = true;
+    #   compositor.name = "hyprland"; # Or "hyprland" or "sway"
+    #   quickshell.package = inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.default;
+    #   logs = {
+    #     save = true;
+    #     path = "/tmp/dms-greeter.log";
+    #   };
+    #   configHome = "/home/aniket";
+    # };
+
+    services.sysc-greet = {
       enable = true;
-      compositor.name = "hyprland"; # Or "hyprland" or "sway"
-      quickshell.package = inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.default;
-      logs = {
-        save = true;
-        path = "/tmp/dms-greeter.log";
-      };
-      configHome = "/home/aniket";
+      compositor = "hyprland"; # or "hyprland" or "sway"
     };
+
     services.atd.enable = true;
     services.atd.allowEveryone = true;
     systemd.tmpfiles.rules = [
@@ -121,6 +128,9 @@
     ];
   };
 
+  blazar.hyprland.includes = [
+    blazar.noctalia
+  ];
   blazar.hyprland.homeManager = {
     lib,
     pkgs,
@@ -191,6 +201,7 @@
       playerctl
       brightnessctl
       wireplumber
+      swww
       swww-schedule
       kdePackages.kwallet-pam
       fzf
@@ -200,6 +211,14 @@
       (breeze-hacked-cursor-theme.override {accentColor = "#${red}";})
       # inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
+
+    home.pointerCursor = {
+      gtk.enable = true;
+      x11.enable = true;
+      package = pkgs.breeze-hacked-cursor-theme.override {accentColor = "#${red}";};
+      name = "Breeze-Hacked";
+      size = 16;
+    };
 
     programs.wezterm = {
       enable = true;
@@ -216,28 +235,28 @@
       # All options from the config.json can be used here.
       config = {
         search.placeholder = "Search";
-        # providers."default" = [
-        #   "desktopapplications"
-        #   "calc"
-        #   "runner"
-        #   "websearch"
-        #   "menus"
-        # ];
-        # providers.empty = ["desktopapplications"];
-        # providers.prefixes = [
-        #   {
-        #     provider = "websearch";
-        #     prefix = "+";
-        #   }
-        #   {
-        #     provider = "switcher";
-        #     prefix = "_";
-        #   }
-        # ];
-        # keybinds.quick_activate = ["F1" "F2" "F3"];
-        # list = {
-        #   height = 500;
-        # };
+        providers."default" = [
+          "desktopapplications"
+          "calc"
+          "runner"
+          "websearch"
+          "menus"
+        ];
+        providers.empty = ["desktopapplications"];
+        providers.prefixes = [
+          {
+            provider = "websearch";
+            prefix = "+";
+          }
+          {
+            provider = "switcher";
+            prefix = "_";
+          }
+        ];
+        keybinds.quick_activate = ["F1" "F2" "F3"];
+        list = {
+          height = 500;
+        };
       };
     };
 
@@ -297,9 +316,9 @@
         "XCURSOR_SIZE,24"
         "HYPRCURSOR_SIZE,32"
 
-        # Cursor theme
-        "XCURSOR_THEME,Breeze-Hacked"
-        "HYPRCURSOR_THEME,Breeze-Hacked"
+        # # Cursor theme
+        # "XCURSOR_THEME,Breeze-Hacked"
+        # "HYPRCURSOR_THEME,Breeze-Hacked"
 
         # Force all apps to use Wayland
         "GDK_BACKEND,wayland,x11,*"
@@ -437,7 +456,7 @@
         "float on, match:tag picture-in-picture"
         "keep_aspect_ratio on, match:tag picture-in-picture"
         "move 73% 72%,match:tag picture-in-picture"
-        "size 25%,match:tag picture-in-picture"
+        "size 25% 25%,match:tag picture-in-picture"
         "float on, match:tag picture-in-picture"
         "pin on,match:tag picture-in-picture"
       ];

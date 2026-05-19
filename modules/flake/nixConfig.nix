@@ -27,9 +27,23 @@
       auto-optimise-store = true;
       use-xdg-base-directories = true;
       experimental-features = [
-        "nix-command"
+        "auto-allocate-uids"
+        "blake3-hashes"
+        "ca-derivations"
+        "cgroups"
+        "dynamic-derivations"
+        "fetch-closure"
         "flakes"
+        "impure-derivations"
+        #"local-overlay-store"
+        "nix-command"
+        "no-url-literals"
+        "parse-toml-timestamps"
         "pipe-operators"
+        # "pipe-operator"
+        "read-only-local-store"
+        "recursive-nix"
+        # "repl-automation"
       ];
     };
   };

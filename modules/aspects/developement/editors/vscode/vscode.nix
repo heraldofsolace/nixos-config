@@ -86,8 +86,8 @@
         userSettings = builtins.fromJSON (builtins.readFile ./vscode-settings.json);
       };
     };
-  };
-
-  blazar.editors._.vscode.nixos = {
+    home.packages = with pkgs; [
+      nil
+    ];
   };
 }

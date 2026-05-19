@@ -9,17 +9,19 @@
   };
 
   blazar.security._.sops.homeManager = {pkgs, ...}: {
-    imports = [
-      inputs.sops-nix.homeManagerModules.sops
-    ];
+    # imports = [
+    #   inputs.sops-nix.homeManagerModules.sops
+    # ];
 
-    sops.secrets = with lib; {
-      user-passwords = {
-        key = "user-passwords";
-        sopsFile = ../../../secrets/user-passwords.yaml;
-        neededForUsers = true;
-      };
-    };
+    # sops.secrets = with lib; {
+    #   user-passwords = {
+    #     key = "user-passwords";
+    #     sopsFile = ../../../secrets/user-passwords.yaml;
+    #     neededForUsers = true;
+    #   };
+    # };
+
+    # sops.gnupg.sshKeyPaths = null;
 
     home.packages = with pkgs; [
       age
@@ -33,6 +35,8 @@
     imports = [
       inputs.sops-nix.nixosModules.sops
     ];
+
+    services.openssh.enable = true;
 
     sops.secrets = with lib; {
       root-password = {
@@ -53,23 +57,23 @@
         neededForUsers = true;
       };
 
-      nextcloud-password = mkIf config.${namespace}.system.users.nextcloud.enable {
-        key = "nextcloud";
-        sopsFile = ../../../secrets/user-passwords.yaml;
-        owner = "nextcloud";
-      };
+      # nextcloud-password = {
+      #   key = "nextcloud";
+      #   sopsFile = ../../../secrets/user-passwords.yaml;
+      #   owner = "nextcloud";
+      # };
 
-      miranda-cert = mkIf config.${namespace}.system.users.nginx.enable {
-        key = "miranda-cert";
-        sopsFile = ../../../secrets/keys.yaml;
-        owner = "nginx";
-      };
+      # miranda-cert = {
+      #   key = "miranda-cert";
+      #   sopsFile = ../../../secrets/keys.yaml;
+      #   owner = "nginx";
+      # };
 
-      miranda-cert-key = mkIf config.${namespace}.system.users.nginx.enable {
-        key = "miranda-cert-key";
-        sopsFile = ../../../secrets/keys.yaml;
-        owner = "nginx";
-      };
+      # miranda-cert-key = {
+      #   key = "miranda-cert-key";
+      #   sopsFile = ../../../secrets/keys.yaml;
+      #   owner = "nginx";
+      # };
 
       tailscale-key = {
         key = "tailscale";

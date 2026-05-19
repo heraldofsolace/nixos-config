@@ -23,31 +23,30 @@
         # blazar.setUserName
       ];
 
-    sops.secrets.hass-password = {
-      key = "hass";
-      sopsFile = ../../../secrets/user-passwords.yaml;
-      neededForUsers = true;
-    };
-  };
-
-  blazar.setUserName = {
-    user,
-    pkgs,
-    config,
-    ...
-  }: {
     nixos = {
+      pkgs,
+      config,
+      lib,
+      ...
+    }: {
+      sops.secrets.hass-password = {
+        key = "hass";
+        sopsFile = ../../../secrets/user-passwords.yaml;
+        neededForUsers = true;
+      };
+
+      security.sudo.configFile = lib.mkMerge [
+        ''
+          hass ALL=NOPASSWD:${pkgs.systemd}/bin/systemctl suspend
+        ''
+      ];
+
+      services.openssh.enable = true;
+
       users.users = {
-        ${user.userName} = {
-          description = user.userNameReal;
-          extraSystemOptions = {
-            security.sudo.configFile = ''
-              hass ALL=NOPASSWD:${pkgs.systemd}/bin/systemctl suspend
-            '';
-          };
-          extraOptions = {
-            hashedPasswordFile = config.sops.secrets.hass-password.path;
-          };
+        hass = {
+          description = "Home Assistant";
+          hashedPasswordFile = config.sops.secrets.hass-password.path;
         };
       };
     };

@@ -41,11 +41,31 @@
       overlays = let
         # When applied, the stable nixpkgs set (declared in the flake inputs) will
         # be accessible through 'pkgs.stable'
-        latestPackages = final: _: {
-          stable = import inputs.latest {
+        latestPackages = final: _: rec {
+          latest = import inputs.latest {
             inherit (final.stdenv.hostPlatform) system;
             inherit (final) config;
           };
+          inherit
+            (latest)
+            _1password-cli
+            _1password-gui
+            direnv
+            tailscale
+            jetbrains
+            siril
+            obs-studio
+            vial
+            via
+            wally-cli
+            kanata
+            wrapNeovimUnstable
+            openrgb
+            copyq
+            zoom
+            kstars
+            electron
+            ;
         };
       in
         with inputs; [
@@ -86,163 +106,96 @@
     #   };
     # };
 
-    nix =
-      # let
-      #   flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
-      # in
-      {
-        # package =
-        #   lib.mkForce
-        #     # pkgs.nix;
-        #     # pkgs.nixVersions.latest;
-        #     # pkgs.lixPackageSets.latest.lix;
-        #     inputs.determinate.packages.${pkgs.stdenv.hostPlatform.system}.default;
+    nix = {
+      settings = {
+        experimental-features = [
+          "auto-allocate-uids"
+          "blake3-hashes"
+          "ca-derivations"
+          "cgroups"
+          "dynamic-derivations"
+          "fetch-closure"
+          "flakes"
+          "impure-derivations"
+          #"local-overlay-store"
+          "nix-command"
+          "no-url-literals"
+          "parse-toml-timestamps"
+          "pipe-operators"
+          # "pipe-operator"
+          "read-only-local-store"
+          "recursive-nix"
+          # "repl-automation"
+        ];
 
-        # This will add each flake input as a registry
-        # To make nix3 commands consistent with your flake
-        # registry = (lib.mapAttrs (_: flake: { inherit flake; })) (
-        #   # (lib.filterAttrs (_: lib.isType "flake"))
-        #   inputs
-        # );
+        auto-allocate-uids = true;
 
-        # Garbage collecting.
-        # gc = {
-        #   automatic = true;
-        #   dates = "weekly";
-        #   options = "--delete-older-than 7d";
-        # };
+        # Deduplicate and optimize nix store
+        auto-optimise-store = true;
 
-        settings = {
-          experimental-features = [
-            "auto-allocate-uids"
-            "blake3-hashes"
-            "ca-derivations"
-            "cgroups"
-            "dynamic-derivations"
-            "fetch-closure"
-            "flakes"
-            "impure-derivations"
-            #"local-overlay-store"
-            "nix-command"
-            "no-url-literals"
-            "parse-toml-timestamps"
-            "pipe-operators"
-            # "pipe-operator"
-            "read-only-local-store"
-            "recursive-nix"
-            # "repl-automation"
-          ];
+        # Opinionated: disable global registry
+        #flake-registry = "";
+        # Workaround for https://github.com/NixOS/nix/issues/9574
+        # nix-path = config.nix.nixPath;
 
-          auto-allocate-uids = true;
+        # lazy-trees = true;
 
-          # Deduplicate and optimize nix store
-          auto-optimise-store = true;
+        # FIXME: Remove "no-url-literals" and uncomment these when Nix 2.34 is available.
+        # lint-url-literals = "fatal";
+        # lint-short-path-literals = "warn";
+        # lint-absolute-path-literals = "warn";
 
-          # Opinionated: disable global registry
-          #flake-registry = "";
-          # Workaround for https://github.com/NixOS/nix/issues/9574
-          # nix-path = config.nix.nixPath;
+        warn-dirty = false;
 
-          # lazy-trees = true;
+        # Avoid unwanted garbage collection when using nix-direnv.
+        keep-outputs = true;
+        keep-derivations = true;
 
-          # FIXME: Remove "no-url-literals" and uncomment these when Nix 2.34 is available.
-          # lint-url-literals = "fatal";
-          # lint-short-path-literals = "warn";
-          # lint-absolute-path-literals = "warn";
-
-          warn-dirty = false;
-
-          # Avoid unwanted garbage collection when using nix-direnv.
-          keep-outputs = true;
-          keep-derivations = true;
-
-          trusted-users = [
-            "root"
-            "@wheel"
-          ];
-        };
-        # Opinionated: disable channels
-        channel.enable = false;
-
-        # Opinionated: make flake registry and nix path match flake inputs
-        # This will add each flake input as a registry
-        # To make nix3 commands consistent with your flake
-        # registry = lib.mapAttrs (_name: flake: { inherit flake; }) flakeInputs;
-
-        # This will add each flake input as a registry
-        # To make nix3 commands consistent with your flake
-        # registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
-
-        # This will add each flake input as a registry
-        # To make nix3 commands consistent with your flake
-        # registry = (lib.mapAttrs (_: flake: { inherit flake; })) (
-        #   (lib.filterAttrs (_: lib.isType "flake")) inputs
-        # );
-
-        # nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
-        # This will additionally add your inputs to the system's legacy channels
-        # Making legacy nix commands consistent as well, awesome!
-        # nixPath = [ "/etc/nix/path" ];
+        trusted-users = [
+          "root"
+          "@wheel"
+        ];
+        sandbox = true;
+        allowed-users = ["root @wheel"];
       };
-    # environment.etc = (
-    #   lib.mapAttrs' (name: value: {
-    #     name = "nix/path/${name}";
-    #     value.source = value.flake;
-    #   }) config.nix.registry
-    # )
+      # Opinionated: disable channels
+      # channel.enable = false;
 
-    # # Bootloader.
-    # boot = {
-    #   loader = {
-    #     systemd-boot.enable = lib.mkForce false;
-    #     grub = {
-    #       enable = lib.mkForce true;
-    #       #device = "/dev/nvme0n1p5";
-    #       device = "nodev";
-    #       efiSupport = true;
-    #       #efiInstallAsRemovable = true; # in case canTouchEfiVariables doesn't work for your system
-    #       useOSProber = true;
-    #       configurationLimit = 10;
-    #     };
-    #     efi = {
-    #       canTouchEfiVariables = lib.mkForce true;
-    #       efiSysMountPoint = "/boot/efi"; # use the same mount point here.
-    #     };
-    #     timeout = null; # Remain in boot menu indefinitely.
-    #   };
-    #   supportedFilesystems = [
-    #     "ntfs"
-    #   ];
-    #   # kernelPackages = ;
-    #   # kernelPackages = pkgs.linuxPackages_latest;
-    #   kernelPackages = pkgs.linuxPackages_xanmod_latest;
-    #   extraModulePackages = [
-    #     # pkgs.linuxPackages_zen.kernel
-    #     # pkgs.linuxPackages_latest.kernel
-    #   ];
-    #   # initrd.kernelModules = [
-    #   #   "amdgpu"
-    #   # ];
-    # };
-
+      optimise.automatic = true;
+      extraOptions = ''
+        min-free = 536870912
+        keep-outputs = true
+        keep-derivations = true
+        fallback = true
+      '';
+    };
+    programs.nh = {
+      enable = true;
+      clean.enable = true;
+      clean.extraArgs = "--keep-since 4d --keep 3";
+      flake = "/home/aniket/my-nix";
+    };
     hardware.uinput.enable = true;
 
     hardware.graphics.enable = true;
 
     # This setups a SSH server. Very important if you're setting up a headless system.
     # Feel free to remove if you don't need it.
-    services.openssh = {
-      enable = true;
-      settings = {
-        # Forbid root login through SSH.
-        PermitRootLogin = "no";
-        # Use keys only. Remove if you want to SSH using password (not recommended)
-        PasswordAuthentication = false;
 
-        X11Forwarding = true;
+    services.openssh = {
+      enable = lib.mkDefault true;
+
+      settings = {
+        # Use only public keys
+        PasswordAuthentication = lib.mkForce false;
+        KbdInteractiveAuthentication = lib.mkForce false;
+
+        # root login is never welcome, except for remote builders
+        PermitRootLogin = lib.mkForce "prohibit-password";
       };
 
-      openFirewall = true;
+      startWhenNeeded = lib.mkDefault true;
+      openFirewall = lib.mkDefault false;
     };
 
     services.envfs = {
@@ -252,46 +205,57 @@
       '';
     };
 
-    # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-    # Configure network proxy if necessary
-    # networking.proxy.default = "http://user:password@proxy:port/";
-    # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-    # Enable networking
-    networking.networkmanager.enable = true;
-
     # Set your time zone.
-    time.timeZone = "Europe/Prague";
+    time.timeZone = "Asia/Kolkata";
 
-    # Select internationalisation properties.
-    i18n.defaultLocale = lib.mkForce "en_GB.UTF-8";
+    users.mutableUsers = lib.mkDefault false;
+    security.sudo.enable = lib.mkForce true;
+    security.sudo.wheelNeedsPassword = lib.mkForce false;
 
-    i18n.extraLocaleSettings = {
-      LC_ADDRESS = "cs_CZ.UTF-8";
-      LC_IDENTIFICATION = "cs_CZ.UTF-8";
-      LC_MEASUREMENT = "cs_CZ.UTF-8";
-      LC_MONETARY = "cs_CZ.UTF-8";
-      LC_NAME = "cs_CZ.UTF-8";
-      LC_NUMERIC = "cs_CZ.UTF-8";
-      LC_PAPER = "cs_CZ.UTF-8";
-      LC_TELEPHONE = "cs_CZ.UTF-8";
-      LC_TIME = "cs_CZ.UTF-8";
-      LC_DATE = "en_US.UTF-8";
+    console = {
+      font = "Lat2-Terminus16";
     };
 
-    # Enable the X11 windowing system.
-    # You can disable this if you're only using the Wayland session.
-    services.xserver.enable = true;
+    fonts.fontconfig.defaultFonts = {
+      monospace = ["FiraCode Nerd Font Mono"];
+      sansSerif = ["DejaVu Sans"];
+    };
 
-    # Configure keymap in X11
-    # services.xserver = {
-    #   xkb.layout = "cz";
-    #   xkb.variant = "coder";
-    # };
+    programs.fuse = {
+      userAllowOther = true;
+    };
+
+    i18n.defaultLocale = "en_US.UTF-8";
+    i18n.extraLocales = "all";
+    i18n.extraLocaleSettings = {
+      LC_ADDRESS = "en_IN.UTF-8";
+      LC_IDENTIFICATION = "en_IN.UTF-8";
+      LC_MEASUREMENT = "en_IN.UTF-8";
+      LC_MONETARY = "en_IN.UTF-8";
+      LC_NAME = "en_IN.UTF-8";
+      LC_NUMERIC = "en_IN.UTF-8";
+      LC_PAPER = "en_IN.UTF-8";
+      LC_TELEPHONE = "en_IN.UTF-8";
+      LC_TIME = "en_IN.UTF-8";
+    };
+    i18n.inputMethod = {
+      type = "fcitx5";
+      enable = true;
+      fcitx5.addons = with pkgs; [
+        fcitx5-mozc
+        fcitx5-gtk
+        # fcitx5-openbangla-keyboard
+      ];
+    };
+    environment.sessionVariables = {
+      XMODIFIERS = "@im=fcitx";
+      QT_IM_MODULE = "fcitx";
+      GTK_IM_MODULE = "fcitx";
+    };
 
     # Enable CUPS to print documents.
     services.printing.enable = true;
+    services.printing.drivers = [pkgs.hplip];
 
     # Enable sound with pipewire.
     services.pulseaudio.enable = false;
@@ -302,12 +266,40 @@
       alsa.support32Bit = true;
       pulse.enable = true;
       # If you want to use JACK applications, uncomment this
-      #jack.enable = true;
+      jack.enable = true;
 
       # use the example session manager (no others are packaged yet so this is enabled by default,
       # no need to redefine it in your config for now)
       #media-session.enable = true;
     };
+
+    services.earlyoom.enable = true;
+
+    users.groups.realtime = {};
+    users.groups.uinput = {};
+    security.pam.loginLimits = [
+      {
+        domain = "@realtime";
+        type = "-";
+        item = "memlock";
+        value = "unlimited";
+      }
+      {
+        domain = "@realtime";
+        type = "-";
+        item = "rtprio";
+        value = "95";
+      }
+      {
+        domain = "@realtime";
+        type = "-";
+        item = "nice";
+        value = "-11";
+      }
+    ];
+
+    hardware.sane.enable = true;
+    hardware.sane.extraBackends = [pkgs.hplipWithPlugin pkgs.sane-airscan];
 
     hardware.bluetooth = {
       enable = true;
@@ -318,6 +310,20 @@
       #     };
       #   };
     };
+    hardware.opentabletdriver.enable = true;
+    hardware.opentabletdriver.daemon.enable = true;
+
+    programs.nix-ld.enable = true;
+    programs.nix-ld.libraries = with pkgs; [
+      stdenv.cc.cc
+      zlib
+      fuse3
+      icu
+      nss
+      openssl
+      curl
+      expat
+    ];
     #services.blueman.enable = true;
 
     # Enable touchpad support (enabled default in most desktopManager).
@@ -351,8 +357,6 @@
     };
 
     programs.nano.enable = false;
-
-    programs.zsh.enable = true;
     programs.fish = {
       enable = true;
       # vendor = {
@@ -366,10 +370,10 @@
     # Some programs need SUID wrappers, can be configured further or are
     # started in user sessions.
     # programs.mtr.enable = true;
-    programs.gnupg.agent = {
-      enable = true;
-      enableSSHSupport = true;
-    };
+    # programs.gnupg.agent = {
+    #   enable = true;
+    #   enableSSHSupport = true;
+    # };
 
     services.fstrim = {
       enable = true;
@@ -378,22 +382,22 @@
 
     fonts = {
       enableDefaultPackages = true;
-      packages = with pkgs; [
-        nerd-fonts.ubuntu-mono
-        source-code-pro
-        nerd-fonts.fira-code
-        dejavu_fonts
-        powerline-fonts
-        font-awesome
-        nerd-fonts.jetbrains-mono
-        nerd-fonts.liberation # no mono version of this?
-        nerd-fonts.droid-sans-mono
-        nerd-fonts.symbols-only
-        nerd-fonts.fantasque-sans-mono
-      ];
+      packages = with pkgs;
+        [
+          nerd-fonts.ubuntu-mono
+          source-code-pro
+          nerd-fonts.fira-code
+          dejavu_fonts
+          powerline-fonts
+          font-awesome
+          nerd-fonts.jetbrains-mono
+          nerd-fonts.liberation # no mono version of this?
+          nerd-fonts.droid-sans-mono
+          nerd-fonts.symbols-only
+          nerd-fonts.fantasque-sans-mono
+        ]
+        ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts);
     };
-
-    systemd.services.syncthing.environment.STNODEFAULTFOLDER = "true"; # Don't create default ~/Sync folder.
 
     services.fwupd = {
       enable = true;
@@ -413,9 +417,8 @@
 
   den.ctx.host.homeManager = {
     programs.home-manager.enable = true;
-
     # Nicely reload system units when changing configs
-    systemd.user.startServices = "sd-switch";
+    # systemd.user.startServices = "sd-switch";
 
     # You can import other home-manager modules here
     # Only import desktop configuration if the host is desktop enabled

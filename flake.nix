@@ -10,9 +10,20 @@
     allow-import-from-derivation = true;
     auto-optimise-store = true;
     experimental-features = [
-      "nix-command"
+      "auto-allocate-uids"
+      "blake3-hashes"
+      "ca-derivations"
+      "cgroups"
+      "dynamic-derivations"
+      "fetch-closure"
       "flakes"
+      "impure-derivations"
+      "nix-command"
+      "no-url-literals"
+      "parse-toml-timestamps"
       "pipe-operators"
+      "read-only-local-store"
+      "recursive-nix"
     ];
     extra-substituters = [
       "https://nix-community.cachix.org"
@@ -157,6 +168,10 @@
       url = "github:Mic92/sops-nix";
     };
     stylix.url = "github:nix-community/stylix/release-25.11";
+    sysc-greet = {
+      inputs.nixpkgs.follows = "latest";
+      url = "github:deephack1982/sysc-greet";
+    };
     systems.url = "github:nix-systems/x86_64-linux";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     tsui = {

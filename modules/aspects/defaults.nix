@@ -3,16 +3,15 @@
   # deadnix: skip # enable <den/brackets> syntax for demo.
   __findFile ? __findFile,
   den,
-  lib,
   ...
 }: {
-  # Lets also configure some defaults using aspects.
-  # These are global static settings.
-  den.schema.user.classes = lib.mkDefault [
-    "homeManager"
-    "hjem"
-    "maid"
-  ];
+  # # Lets also configure some defaults using aspects.
+  # # These are global static settings.
+  # den.schema.user.classes = lib.mkDefault [
+  #   "homeManager"
+  #   "hjem"
+  #   "maid"
+  # ];
   den.schema.host = {
     hjem.enable = true;
     home-manager.enable = true;

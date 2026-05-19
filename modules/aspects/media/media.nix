@@ -29,6 +29,13 @@
 
           nuclear
           shortwave
+          qpwgraph
+          audacity
+          ardour
+          guitarix
+          alsa-scarlett-gui
+          bitwig-studio
+          mpc
         ];
 
         services.easyeffects.enable = true;

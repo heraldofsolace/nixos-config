@@ -92,7 +92,6 @@
         # gnutar
         # gawk
         # zstd
-        zsh-fzf-tab
         flirt
 
         # Development.
@@ -119,11 +118,11 @@
         # lsof # list open files
 
         # system tools
-        # sysstat
-        # lm_sensors # for `sensors` command
-        # ethtool
-        # pciutils # lspci
-        # usbutils # lsusb
+        sysstat
+        lm_sensors # for `sensors` command
+        ethtool
+        pciutils # lspci
+        usbutils # lsusb
         procs # Listing a snapshot of current processes. A modern replacement for 'ps'.
         lazyjournal
 
@@ -135,7 +134,7 @@
 
         # Other.
         fastfetch
-        # frogmouth # Terminal Mardown viewer.
+        frogmouth # Terminal Mardown viewer.
         lolcat
         # thefuck
         # tldr # Modern Unix `man`.
@@ -153,8 +152,6 @@
         syncthingtray
 
         # Privacy.
-        keepassxc
-        keepass-diff
         tor-browser
         veracrypt
         inputs'.tsui.packages.tsui
@@ -163,13 +160,13 @@
       sessionVariables = {
         # PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig";
 
-        TERMINAL = "alacritty";
+        TERMINAL = "wezterm-gui";
 
         # Already set using programs.<program>.defaultEditor.
-        # EDITOR = "hx"; # "codium", "nvim"
-        # VISUAL = "hx"; # "codium", "nvim"
+        EDITOR = "anivim"; # "codium", "nvim"
+        VISUAL = "anivim"; # "codium", "nvim"
 
-        SYSTEMD_EDITOR = "hx"; # "codium", "nvim"
+        SYSTEMD_EDITOR = "anivim"; # "codium", "nvim"
 
         MANPAGER = "sh -c 'col --no-backspaces --spaces | bat --language man'";
         MANROFFOPT = "-c";
@@ -210,9 +207,39 @@
       '';
     };
 
+    programs.jq.enable = true;
+    programs.jq.colors = {
+      null = "1;30";
+      false = "0;31";
+      true = "0;32";
+      numbers = "0;36";
+      strings = "0;33";
+      arrays = "1;35";
+      objects = "1;37";
+      objectKeys = "1;34";
+    };
+
+    programs.less = {
+      enable = true;
+    };
+
+    programs.mcfly = {
+      enable = true;
+    };
+
+    programs.sagemath = {
+      enable = true;
+    };
+
+    programs.gpg.enable = true;
+    services.gpg-agent = {
+      enable = true;
+      enableSshSupport = true;
+    };
+
     programs.fzf = {
       enable = true;
-      enableFishIntegration = false;
+      enableFishIntegration = true;
     };
 
     programs.yazi = {
@@ -365,7 +392,8 @@
     };
 
     programs.pay-respects = {
-      enable = false;
+      enable = true;
+      enableFishIntegration = true;
     };
 
     programs.navi = {

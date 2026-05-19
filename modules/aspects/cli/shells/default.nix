@@ -12,12 +12,19 @@
       "NIXPKGS_ALLOW_UNFREE" = 1;
     };
 
+    programs.direnv = {
+      enable = true;
+      nix-direnv = {
+        enable = true;
+      };
+    };
+
     programs.zoxide = {
       enable = true;
-      options = [
-        # "--no-cmd" # Do not create 'zi' and 'z' command aliases.
-      ];
+      options = ["--cmd cd"];
+      enableFishIntegration = true;
     };
+
     home.sessionVariables._ZO_ECHO = 1; # Enable zoxide echoing the directory it is changing to.
 
     programs.vivid = {

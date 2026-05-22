@@ -74,7 +74,7 @@
     {device = "/dev/disk/by-id/nvme-Seagate_FireCuda_520_SSD_ZP1000GM30002_7QG021QD-part4";}
   ];
 
-  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.cpu.amd.updateMicrocode = lib.mkDefault true;
 
   hardware.keyboard.zsa.enable = true;
   hardware.keyboard.qmk.enable = true;

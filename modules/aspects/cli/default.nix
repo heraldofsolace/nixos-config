@@ -184,15 +184,6 @@
         set vertical-split =  false
       '';
 
-      # "systemd" = {
-      #   source = ../../../dotfiles/home/.config/systemd;
-      #   recursive = true;
-      # };
-      # "ranger" = {
-      # source = ../../../dotfiles/home/.config/ranger;
-      # recursive = true;
-      # };
-
       "glow/glow.yml".text = ''
         # style name or JSON path (default "auto")
         style: "auto"

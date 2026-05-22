@@ -119,7 +119,6 @@
           "impure-derivations"
           #"local-overlay-store"
           "nix-command"
-          "no-url-literals"
           "parse-toml-timestamps"
           "pipe-operators"
           # "pipe-operator"
@@ -141,7 +140,7 @@
         # lazy-trees = true;
 
         # FIXME: Remove "no-url-literals" and uncomment these when Nix 2.34 is available.
-        # lint-url-literals = "fatal";
+        lint-url-literals = "fatal";
         # lint-short-path-literals = "warn";
         # lint-absolute-path-literals = "warn";
 
@@ -340,6 +339,7 @@
         usbutils
         wget
         xterm
+        comma
 
         # Fix Flatpak fonts
         # xsettingsd

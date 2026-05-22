@@ -157,7 +157,7 @@
         echo "${themeFile}"
         gowall convert --dir ${directory} -t ${themeFile} --output $out
       '';
-    red = config.lib.stylix.colors.base0F;
+    red = config.lib.stylix.colors.base08;
     mauve = config.lib.stylix.colors.base0E;
     green = config.lib.stylix.colors.base0B;
     lavender = config.lib.stylix.colors.base08;
@@ -208,7 +208,7 @@
       copyq
       xdg-desktop-portal-hyprland
       # inputs.caelestia-shell.packages.${pkgs.stdenv.hostPlatform.system}.default
-      (breeze-hacked-cursor-theme.override {accentColor = "#${red}";})
+      # (breeze-hacked-cursor-theme.override {accentColor = "#${red}";})
       # inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
 
@@ -216,8 +216,9 @@
       gtk.enable = true;
       x11.enable = true;
       package = pkgs.breeze-hacked-cursor-theme.override {accentColor = "#${red}";};
-      name = "Breeze-Hacked";
-      size = 16;
+      hyprcursor.enable = true;
+      name = "Breeze_Hacked";
+      size = 32;
     };
 
     programs.wezterm = {

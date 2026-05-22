@@ -89,5 +89,4 @@ result-*
 *.qcow2?
 #  .editorconfig
 #  .pre-commit-config.yaml
-direnv/
 

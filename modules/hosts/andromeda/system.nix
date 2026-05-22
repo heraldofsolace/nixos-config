@@ -100,6 +100,7 @@
     includes = with blazar; [
       stylix
       impermanence
+      determinate-nix
     ];
   };
 }

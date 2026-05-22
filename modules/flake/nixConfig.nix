@@ -11,6 +11,7 @@
         # Numtide cache server.
         "https://numtide.cachix.org"
         "https://cache.numtide.com"
+        "https://install.determinate.systems"
       ];
       extra-trusted-public-keys = [
         # Nix community cache server public key.
@@ -20,12 +21,14 @@
         # Numtide cache server public key.
         "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE"
         "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
+        "cache.flakehub.com-3:hJuILl5sVK4iKm86JzgdXW12Y2Hwd5G07qKtHTOcDCM="
       ];
       submodules = true;
       # lazy-trees = true;
       accept-flake-config = true;
       auto-optimise-store = true;
       use-xdg-base-directories = true;
+      lint-url-literals = "fatal";
       experimental-features = [
         "auto-allocate-uids"
         "blake3-hashes"
@@ -37,7 +40,6 @@
         "impure-derivations"
         #"local-overlay-store"
         "nix-command"
-        "no-url-literals"
         "parse-toml-timestamps"
         "pipe-operators"
         # "pipe-operator"

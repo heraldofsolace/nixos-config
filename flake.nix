@@ -19,7 +19,6 @@
       "flakes"
       "impure-derivations"
       "nix-command"
-      "no-url-literals"
       "parse-toml-timestamps"
       "pipe-operators"
       "read-only-local-store"
@@ -30,13 +29,16 @@
       "https://cache.flox.dev"
       "https://numtide.cachix.org"
       "https://cache.numtide.com"
+      "https://install.determinate.systems"
     ];
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "flox-cache-public-1:7F4OyH7ZCnFhcze3fJdfyXYLQw/aV7GEed86nQ7IsOs="
       "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE"
       "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
+      "cache.flakehub.com-3:hJuILl5sVK4iKm86JzgdXW12Y2Hwd5G07qKtHTOcDCM="
     ];
+    lint-url-literals = "fatal";
     submodules = true;
     use-xdg-base-directories = true;
   };
@@ -60,6 +62,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
       url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
     };
+    determinate-nix.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
     dgop = {
       inputs.nixpkgs.follows = "latest";
       url = "github:AvengeMedia/dgop";

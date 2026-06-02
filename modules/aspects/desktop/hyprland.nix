@@ -175,10 +175,10 @@
       then "0" + builtins.toString n
       else builtins.toString n;
     wallpaper-name = i: "${wallpapers}/${builtins.toString i}.png";
-    swww-args = builtins.map (i: "-i \"${wallpaper-name i};${padString i}:00\" ") (lib.range 0 23);
-    swww-command = "swww-schedule ${lib.concatStrings swww-args}";
-    swww-script = pkgs.writeShellScript "swww" ''
-      ${swww-command}
+    awww-args = builtins.map (i: "-i \"${wallpaper-name i};${padString i}:00\" ") (lib.range 0 23);
+    awww-command = "awww-schedule ${lib.concatStrings awww-args}";
+    awww-script = pkgs.writeShellScript "awww" ''
+      ${awww-command}
     '';
   in {
     imports = [
@@ -201,8 +201,8 @@
       playerctl
       brightnessctl
       wireplumber
-      swww
-      swww-schedule
+      awww
+      awww-schedule
       kdePackages.kwallet-pam
       fzf
       copyq
@@ -354,8 +354,8 @@
         no_update_news = true;
       };
       exec-once = [
-        "swww-daemon"
-        swww-script
+        "awww-daemon"
+        awww-script
         "${pkgs.kdePackages.kwallet-pam}/libexec/pam_kwallet_init"
         "copyq --start-server"
         ''bash -c "wl-paste --watch cliphist store &"''

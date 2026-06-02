@@ -1,6 +1,6 @@
 {writeShellApplication, ...}:
 writeShellApplication {
-  name = "swww-schedule";
+  name = "awww-schedule";
   text = ''
     while getopts "i:" opt; do
       case $opt in
@@ -22,7 +22,7 @@ writeShellApplication {
       this=$(echo "''${sorted[val]}" | cut -d';' -f2)
       img=$(echo "''${sorted[val]}" | cut -d';' -f1)
 
-      echo "swww img $img --transition-type center" | at "$this"
+      echo "awww img $img --transition-type center" | at "$this"
     done
 
     for val in "''${!sorted[@]}"; do
@@ -38,7 +38,7 @@ writeShellApplication {
       then
         echo "''${sorted[val]} will be used"
         found=1
-        swww img "$img" --transition-type center
+        awww img "$img" --transition-type center
         break
       fi
     done
@@ -51,12 +51,12 @@ writeShellApplication {
         echo "Before the first"
         img=$(echo "''${sorted[0]}" | cut -d';' -f1)
         echo "Setting $img"
-        swww img "$img" --transition-type center
+        awww img "$img" --transition-type center
       else
         echo "After the last"
         img=$(echo "''${sorted[-1]}" | cut -d';' -f1)
         echo "Setting $img"
-        swww img "$img" --transition-type center
+        awww img "$img" --transition-type center
       fi
     fi
   '';

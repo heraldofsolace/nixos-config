@@ -65,6 +65,7 @@
             zoom
             kstars
             electron
+            awww
             ;
         };
       in

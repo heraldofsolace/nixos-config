@@ -40,20 +40,20 @@
         stdenv.cc.cc
         systemd
         vulkan-loader
-        libX11
-        libXScrnSaver
-        libXcomposite
-        libXcursor
-        libXdamage
-        libXext
-        libXfixes
-        libXi
-        libXrandr
-        libXrender
-        libXtst
-        libxcb
-        libxkbfile
-        libxshmfence
+        # libX11
+        # libXScrnSaver
+        # libXcomposite
+        # libXcursor
+        # libXdamage
+        # libXext
+        # libXfixes
+        # libXi
+        # libXrandr
+        # libXrender
+        # libXtst
+        # libxcb
+        # libxkbfile
+        # libxshmfence
         zlib
       ];
     };

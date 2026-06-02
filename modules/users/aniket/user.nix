@@ -48,6 +48,8 @@
           editors._.anivim
           editors._.vscode
           editors._.jetbrains
+
+          games
           # development._.desktop
           # development._.console
         ]

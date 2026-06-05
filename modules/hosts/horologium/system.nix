@@ -44,6 +44,7 @@
         systemPackages = with pkgs; [
           maliit-keyboard
           maliit-framework
+          brightnessctl
         ];
       };
 

@@ -15,8 +15,9 @@
       };
     };
     latest.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixos.url = "github:NixOS/nixpkgs/nixos-25.11";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixos.url = "github:NixOS/nixpkgs/nixos-26.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
 
     # nixpkgs-local.url = "path:/home/adda/documents/it/nixos/nixpkgs";
     determinate = {
@@ -24,7 +25,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.11";
+      url = "github:nix-community/home-manager/release-26.05";
       # url = "path:/home/adda/documents/it/nixos/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -106,5 +107,5 @@
   # homeManagerModules = import ./modules/home-manager;
 
   # Allow all aspects to contribute to the top-level flake outputs.
-  den.ctx.flake-system.into.host = {system}: map (host: {inherit host;}) (lib.attrValues den.hosts.${system});
+  den.schema.flake-system.into.host = {system}: map (host: {inherit host;}) (lib.attrValues den.hosts.${system});
 }

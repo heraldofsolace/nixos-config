@@ -13,27 +13,23 @@
 # Be sure to read: https://vic.github.io/den/dependencies.html
 # See usage at: defaults.nix, alice.nix, igloo.nix
 #
-{
-  blazar,
-  den,
-  ...
-}: {
+_: {
   # Usage: `den.default.includes [ addax.routes ]`
-  blazar.routes = let
-    # eg, `<user>._.<host>` and `<host>._.<user>`
-    mutual = from: to: blazar.${from.aspect}._.${to.aspect} or {};
+  # blazar.routes = let
+  #   # eg, `<user>._.<host>` and `<host>._.<user>`
+  #   mutual = from: to: blazar.${from.aspect}._.${to.aspect} or {};
 
-    routes = {
-      host,
-      user,
-      ...
-    } @ ctx:
-      den.lib.parametric.fixedTo ctx {
-        includes = [
-          (mutual user host)
-          (mutual host user)
-        ];
-      };
-  in
-    routes;
+  #   routes = {
+  #     host,
+  #     user,
+  #     ...
+  #   } @ ctx:
+  #     den.lib.parametric.fixedTo ctx {
+  #       includes = [
+  #         (mutual user host)
+  #         (mutual host user)
+  #       ];
+  #     };
+  # in
+  #   routes;
 }

@@ -1,15 +1,14 @@
 {
   config,
-  inputs,
   lib,
   flake-parts-lib,
   ...
 }: let
   outerCfg = config.files;
 in {
-  imports = [
-    inputs.files.flakeModules.default
-  ];
+  # imports = [
+  #   "${inputs.files}/flake-module.nix"
+  # ];
 
   # https://github.com/vidhanio/vidhanix/blob/62305aa1a355b2519ab4449a3cf38334ccafbc89/modules/files/options.nix
   options = {
@@ -101,7 +100,7 @@ in {
                 generateWarningMessage,
                 ...
               }: {
-                path_ = name;
+                path = name;
                 drv =
                   pkgs.runCommandLocal "files-${name}"
                   {
@@ -133,8 +132,11 @@ in {
       }
     );
   };
-
-  config.flake-file.inputs.files.url = "github:mightyiam/files";
+  config.flake-file.inputs.files = {
+    # FIXME: Unpin when compatibility with warning message is restored.
+    url = "github:mightyiam/files/bec7bba1cfd70a6305c8a690b33dac5771812a28";
+    flake = false;
+  };
   config.perSystem = {
     config,
     pkgs,
@@ -161,7 +163,7 @@ in {
           lock_bck=$(mktemp)
           cp -p flake.lock "$lock_bck"
 
-          ${self'.packages.write-flake}/bin/write-flake
+          ${lib.getExe self'.packages.write-flake}
 
           # If flake.lock remains unchanged, restore mtime.
           if cmp -s flake.lock "$lock_bck"; then

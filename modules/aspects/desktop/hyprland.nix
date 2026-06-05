@@ -282,6 +282,7 @@
       # set the Hyprland and XDPH packages to null to use the ones from the NixOS module
       package = null;
       portalPackage = null;
+      configType = "hyprlang";
     };
     wayland.windowManager.hyprland.systemd.variables = ["--all"];
     wayland.windowManager.hyprland.settings = let
@@ -355,7 +356,7 @@
       };
       exec-once = [
         "awww-daemon"
-        awww-script
+        awww-script.outPath
         "${pkgs.kdePackages.kwallet-pam}/libexec/pam_kwallet_init"
         "copyq --start-server"
         ''bash -c "wl-paste --watch cliphist store &"''

@@ -3,7 +3,15 @@
   inputs,
   ...
 }: {
-  den.ctx.host.nixos = {
+  den.schema.flake-parts.includes = [
+    # Enter flake-parts scope from flake-system.
+    den.policies.system-to-flake-parts
+
+    # Exclude vanilla packages route — handled via flake-parts scope.
+    # den.policies.packages-to-flake
+  ];
+
+  den.default.nixos = {
     pkgs,
     lib,
     ...
@@ -80,7 +88,7 @@
           # nvfetcher.overlays.default
           hyprland-contrib.overlays.default
           # nix-vscode-extensions.overlays.default
-          dolphin-overlay.overlays.default
+          # dolphin-overlay.overlays.default
 
           # You can also add overlays exported from other flakes:
           # neovim-nightly-overlay.overlays.default
@@ -416,7 +424,7 @@
     };
   };
 
-  den.ctx.host.homeManager = {
+  den.default.homeManager = {
     programs.home-manager.enable = true;
     # Nicely reload system units when changing configs
     # systemd.user.startServices = "sd-switch";
@@ -444,5 +452,5 @@
 
   # mutual-provider is activated at a `{host,user}` context
   # either per-user or for all of them.
-  den.ctx.user.includes = [den._.mutual-provider];
+  den.schema.user.includes = [den._.mutual-provider];
 }

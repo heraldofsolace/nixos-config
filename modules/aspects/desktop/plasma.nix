@@ -1,4 +1,4 @@
-{inputs, ...}: {
+_: {
   blazar.plasma.nixos = {pkgs, ...}: {
     services.desktopManager.plasma6.enable = true;
     services.displayManager.sddm.enable = true;

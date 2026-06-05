@@ -33,6 +33,7 @@
       ./_hardware-configuration.nix
       ./_zfs.nix
       dankMaterialShell.nixosModules.greeter
+      chaotic.nixosModules.default
     ];
 
     nixos = {
@@ -95,6 +96,24 @@
 
       security.polkit.enable = true;
       services.avahi.hostName = "andromeda";
+
+      nixpkgs.overlays = [
+        (_final: prev: {
+          kdePackages = prev.kdePackages.overrideScope (_kfinal: kprev: {
+            dolphin = prev.symlinkJoin {
+              name = "dolphin-wrapped";
+              paths = [kprev.dolphin kprev.dolphin.dev];
+              nativeBuildInputs = [prev.makeWrapper];
+              postBuild = ''
+                rm $out/bin/dolphin
+                makeWrapper ${kprev.dolphin}/bin/dolphin $out/bin/dolphin \
+                  --set XDG_CONFIG_DIRS "${prev.kdePackages.kservice}/etc/xdg:$XDG_CONFIG_DIRS" \
+                  --run "${kprev.kservice}/bin/kbuildsycoca6 --noincremental ${prev.kdePackages.kservice}/etc/xdg/menus/applications.menu"
+              '';
+            };
+          });
+        })
+      ];
     };
 
     includes = with blazar; [

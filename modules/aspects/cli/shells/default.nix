@@ -29,7 +29,6 @@
 
     programs.vivid = {
       enable = true;
-      activeTheme = "molokai";
       # filetypes = lib.readFile (
       #   builtins.fetchurl {
       #     url = "https://github.com/sharkdp/vivid/blob/master/config/filetypes.yml";

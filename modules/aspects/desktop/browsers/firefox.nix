@@ -17,7 +17,7 @@ _: {
         name = "Default";
         isDefault = true;
         settings = {"browser.startup.homepage" = "https://google.com";};
-        extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+        extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; [
           addy_io
           buster-captcha-solver
           consent-o-matic

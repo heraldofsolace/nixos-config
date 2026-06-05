@@ -1,5 +1,4 @@
 {
-  lib,
   config,
   pkgs,
   ...
@@ -62,8 +61,30 @@
   boot.zfs.devNodes = "/dev/disk/by-partuuid";
   systemd.services.zfs-mount.enable = false;
 
-  boot.initrd.postDeviceCommands = lib.mkAfter ''
-    zpool import -a -d ${config.boot.zfs.devNodes}
-    zfs rollback -r rpool/local/root@blank
-  '';
+  # boot.initrd.postDeviceCommands = lib.mkAfter ''
+  #   zpool import -a -d ${config.boot.zfs.devNodes}
+  #   zfs rollback -r rpool/local/root@blank
+  # '';
+
+  boot.initrd.systemd = {
+    enable = true; # this enabled systemd support in stage1 - required for the below setup
+    services.rollback = {
+      description = "Rollback BTRFS root subvolume to a pristine state";
+      wantedBy = ["initrd.target"];
+
+      after = ["zfs-import-rpool.service"];
+
+      # Before mounting the system root (/sysroot) during the early boot process
+      before = ["sysroot.mount"];
+      path = with pkgs; [
+        zfs
+      ];
+      unitConfig.DefaultDependencies = "no";
+      serviceConfig.Type = "oneshot";
+      script = ''
+        zpool import -a -d ${config.boot.zfs.devNodes}
+        zfs rollback -r rpool/local/root@blank && echo "  >> >> rollback complete << <<"
+      '';
+    };
+  };
 }

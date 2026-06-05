@@ -16,6 +16,7 @@
           boxbuddy
           distroshelf
           pods
+          swtpm
         ];
       };
 
@@ -32,6 +33,8 @@
           enable = true;
         };
 
+        virtualbox.host.enable = true;
+
         docker = {
           enable = false;
           autoPrune.enable = true;
@@ -45,7 +48,8 @@
 
       users.users.${user.userName}.extraGroups =
         (lib.optional config.virtualisation.podman.enable "podman")
-        ++ (lib.optional config.virtualisation.libvirtd.enable "libvirtd") ++ (lib.optional config.virtualisation.docker.enable "docker");
+        ++ (lib.optional config.virtualisation.libvirtd.enable "libvirtd")
+        ++ (lib.optional config.virtualisation.docker.enable "docker") ++ (lib.optional config.virtualisation.virtualbox.host.enable "vboxusers");
     };
 
     blazar.virtualisation.homeManager = {

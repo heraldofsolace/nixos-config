@@ -12,6 +12,7 @@
         "https://numtide.cachix.org"
         "https://cache.numtide.com"
         "https://install.determinate.systems"
+        "https://nyx-cache.chaotic.cx/"
       ];
       extra-trusted-public-keys = [
         # Nix community cache server public key.
@@ -22,6 +23,7 @@
         "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE"
         "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
         "cache.flakehub.com-3:hJuILl5sVK4iKm86JzgdXW12Y2Hwd5G07qKtHTOcDCM="
+        "nyx-cache.chaotic.cx:dJxTrgMC3V3cFfyIiBQDQorG6k1LsqurH/srpMSq7qk="
       ];
       submodules = true;
       # lazy-trees = true;

@@ -1,7 +1,7 @@
 {inputs, ...}: {
   flake-file.inputs = {
     stylix = {
-      url = "github:nix-community/stylix/release-25.11";
+      url = "github:nix-community/stylix/release-26.05";
       # url = "git+file:///home/aniket/stylix";
     };
   };

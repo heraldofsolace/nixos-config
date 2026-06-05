@@ -81,6 +81,6 @@
     # aspect, it configures `inputs'` for the corresponding Home Manager configuration.
     den._.inputs'
 
-    <blazar/routes>
+    # <blazar/routes>
   ];
 }

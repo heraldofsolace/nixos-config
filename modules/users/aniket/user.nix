@@ -1,9 +1,10 @@
 {
   blazar,
   den,
+  lib,
   ...
 }: {
-  den.aspects.aniket = _: {
+  den.aspects.aniket = {host, ...}: {
     # Including other aspects.
     # For small, private one-shot aspects, use let-bindings like here.
     # for more complex or re-usable ones, define on their own modules,
@@ -35,7 +36,6 @@
           # nix
           desktop
           desktop._.image
-          hyprland
           firefox
           brave
           # ai
@@ -63,7 +63,8 @@
           <den/primary-user> # The user is always admin.
           # blazar.setUserName
           # (<den/user-shell> "dash") # default user shell # Cannot be used for `dash`.
-        ];
+        ]
+        ++ (lib.optional (host.name == "andromeda") [hyprland]) ++ (lib.optional (host.name == "horologium") [plasma]);
 
     nixos = {
       pkgs,

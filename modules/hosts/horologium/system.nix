@@ -73,7 +73,7 @@
     includes = with blazar; [
       stylix
       determinate-nix
-      plasma
+      # plasma
     ];
   };
 }

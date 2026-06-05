@@ -103,7 +103,7 @@
       users.groups.uinput.members = ["aniket"];
       users.groups.input.members = ["aniket"];
 
-      sops.gnupg.sshKeyPaths = ["/persist/etc/ssh/ssh_host_rsa_key"];
+      sops.gnupg.sshKeyPaths = ["/persist/etc/ssh/ssh_host_rsa_key" "/etc/ssh/ssh_host_rsa_key"];
 
       sops.secrets.aniket-password = {
         key = "aniket";

@@ -56,6 +56,7 @@
         treefmt
         alejandra
         shfmt
+        deploy-rs
       ];
       shellHook = ''${self'.checks.pre-commit}'';
     };

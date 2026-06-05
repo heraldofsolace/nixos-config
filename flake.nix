@@ -61,6 +61,7 @@
     };
     den.url = "github:denful/den";
     dendrix.url = "github:vic/dendrix";
+    deploy-rs.url = "github:serokell/deploy-rs";
     determinate = {
       url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
       inputs.nixpkgs.follows = "nixpkgs";

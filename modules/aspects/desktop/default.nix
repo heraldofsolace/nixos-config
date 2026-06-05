@@ -7,7 +7,7 @@
         junction
 
         # inputs'.nixpkgs-local.legacyPackages.atuin-desktop
-        # atuin-desktop
+        atuin-desktop
         # stable.atuin-desktop
 
         libportal-qt6

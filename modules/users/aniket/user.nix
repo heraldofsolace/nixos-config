@@ -27,6 +27,7 @@
           virtualisation
           # cpu
           console
+          atuin
           vcs
           shells
           tmux

@@ -36,6 +36,9 @@
         wl-clipboard
 
         kdePackages.dolphin
+
+        bambu-studio
+        obs-studio
       ];
     };
 

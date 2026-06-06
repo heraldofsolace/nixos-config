@@ -32,8 +32,8 @@
       ediff = false;
       settings = {
         user = {
-          name = "David Chocholatý";
-          email = "chocholaty.david@protonmail.com";
+          name = "Aniket Bhattacharyea";
+          email = "aniket@abhattacharyea.dev";
         };
         ui = {
           color = "auto"; # "always"

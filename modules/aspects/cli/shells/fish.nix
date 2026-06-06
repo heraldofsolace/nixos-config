@@ -76,7 +76,7 @@
         mn = ''
           manix "" | grep '^# ' | sed 's/^# \(.*\) (.*/\1/;s/ (.*//;s/^# //' | sk --preview="manix '{}'" | xargs manix
         '';
-        top = "btm";
+        top = "htop";
 
         # sudo
         s = "sudo -E ";

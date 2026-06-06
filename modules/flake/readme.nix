@@ -3,7 +3,7 @@
     files.file."README.md".text =
       # markdown
       ''
-        # Anike's NixOS configuration
+        # Aniket's NixOS configuration
 
         <p align="center">
           <a href="https://nixos.org"><img alt="NixOS" src="https://img.shields.io/badge/NixOS-5277C3?logo=nixos&logoColor=fff" /></a>

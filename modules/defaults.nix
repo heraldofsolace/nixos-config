@@ -349,6 +349,8 @@
         wget
         xterm
         comma
+        htop
+        manix
 
         # Fix Flatpak fonts
         # xsettingsd

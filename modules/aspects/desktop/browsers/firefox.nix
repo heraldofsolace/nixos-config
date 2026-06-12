@@ -1,16 +1,22 @@
 _: {
-  blazar.firefox.homeManager = {pkgs, ...}: {
+  blazar.firefox.homeManager = {
+    pkgs,
+    config,
+    ...
+  }: {
     home.packages = with pkgs; [
       firefox
       ungoogled-chromium
     ];
-
+    stylix.targets.firefox.profileNames = ["default"];
     programs.firefox = {
       enable = true;
       package = pkgs.librewolf;
       nativeMessagingHosts = with pkgs; [
         tridactyl-native
       ];
+
+      configPath = "${config.xdg.configHome}/mozilla/firefox";
 
       profiles.default = {
         id = 0;

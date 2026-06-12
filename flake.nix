@@ -102,10 +102,7 @@
     hjem.follows = "hjem-rum/hjem";
     hjem-rum = {
       url = "github:snugnug/hjem-rum";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        treefmt-nix.follows = "treefmt-nix";
-      };
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
@@ -121,6 +118,7 @@
       inputs.hyprland.follows = "hyprland";
     };
     hyprland-profile-switcher.url = "github:heraldofsolace/hyprland-profile-switcher";
+    hyprqt6engine.url = "github:hyprwm/hyprqt6engine";
     ignoreBoy = {
       url = "github:Ookiiboy/ignoreBoy";
       inputs = {
@@ -160,7 +158,7 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     noctalia = {
-      url = "github:noctalia-dev/noctalia-shell";
+      url = "github:noctalia-dev/noctalia/legacy-v4";
       inputs.nixpkgs.follows = "latest";
     };
     nur = {
@@ -197,6 +195,10 @@
         flake-utils.follows = "flake-utils";
         nixpkgs.follows = "nixpkgs";
       };
+    };
+    zen = {
+      url = "github:0xc000022070/zen-browser-flake";
+      inputs.nixpkgs.follows = "latest";
     };
   };
 }

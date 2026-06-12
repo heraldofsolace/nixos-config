@@ -43,7 +43,7 @@
           kdePackages.dolphin
           obs-studio
         ]
-        ++ (lib.optional (host.name == "andromeda") [bambu-studio]);
+        ++ (lib.optional (host.name == "andromeda") bambu-studio);
     };
 
     services.wl-clip-persist = {
@@ -63,18 +63,18 @@
         defaultApplications = {
           "application/pdf" = "org.kde.okular.desktop";
           "image/*" = "gwenview.desktop";
+          "text/html" = "firefox.desktop";
+          "x-scheme-handler/http" = "firefox.desktop";
+          "x-scheme-handler/https" = "firefox.desktop";
+          "x-scheme-handler/about" = "firefox.desktop";
+          "x-scheme-handler/unknown" = "firefox.desktop";
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document" = "onlyoffice-desktopeditors.desktop";
         };
-        # associations.added = {
-        #   "x-scheme-handler/heroic" = "com.heroicgameslauncher.hgl.desktop;heroic.desktop";
-        #   "application/vnd.openxmlformats-officedocument.wordprocessingml.document" =
-        #     "onlyoffice-desktopeditors.desktop";
-        #   "x-scheme-handler/anytype" = "io.anytype.anytype.desktop;anytype.desktop";
-        #   "application/vnd.openxmlformats-officedocument.presentationml.presentation" =
-        #     "onlyoffice-desktopeditors.desktop";
-        #   "x-scheme-handler/freetube" = "io.freetubeapp.FreeTube.desktop";
-        #   "x-scheme-handler/sgnl" = "signal.desktop";
-        #   "x-scheme-handler/signalcaptcha" = "signal.desktop";
-        # };
+        associations.added = {
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document" = "onlyoffice-desktopeditors.desktop";
+          "x-scheme-handler/anytype" = "io.anytype.anytype.desktop;anytype.desktop";
+          "application/vnd.openxmlformats-officedocument.presentationml.presentation" = "onlyoffice-desktopeditors.desktop";
+        };
       };
 
       # systemDirs = {
@@ -87,7 +87,7 @@
       userDirs = {
         enable = true;
         createDirectories = true;
-        # setSessionVariables = true;
+        setSessionVariables = true;
 
         # desktop = "${config.home.homeDirectory}/desktop";
         # documents = "${config.home.homeDirectory}/documents";

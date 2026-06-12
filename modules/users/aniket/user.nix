@@ -23,6 +23,7 @@
       with blazar;
         [
           # from the aspect tree
+          ai
           security._.sops
           security._.onepassword
           virtualisation
@@ -36,8 +37,10 @@
           # nix
           desktop
           desktop._.image
+          desktop._.messaging._.vesktop
           firefox
           brave
+          zen
           # ai
           media
           media._.music

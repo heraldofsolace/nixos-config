@@ -113,9 +113,9 @@
         uv
 
         # system call monitoring
-        # strace # system call monitoring
-        # ltrace # library call monitoring
-        # lsof # list open files
+        strace # system call monitoring
+        ltrace # library call monitoring
+        lsof # list open files
 
         # system tools
         sysstat

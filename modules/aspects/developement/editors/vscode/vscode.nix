@@ -44,25 +44,20 @@
             # likec4.likec4-vscode
             avetis.tokyo-night
             bbenoist.nix
+            openai.chatgpt
           ]
           ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
             {
               name = "markdown-preview-enhanced";
               publisher = "shd101wyy";
-              version = "0.8.11";
-              sha256 = "sha256-XY439c8QtThw+d2zDDqfrlDi/+y+7+4i8lHbNEMwR3I=";
-            }
-            {
-              name = "kotlin";
-              publisher = "fwcd";
-              version = "0.2.34";
-              sha256 = "sha256-03F6cHIA9Tx8IHbVswA8B58tB8aGd2iQi1i5+1e1p4k=";
+              version = "0.8.19";
+              sha256 = "sha256-F87YInLUkPUpB2oifCCq1xWD41LUdqg8cusGw2wEYg0=";
             }
             {
               name = "vscode-firefox-debug";
               publisher = "firefox-devtools";
-              version = "2.9.10";
-              sha256 = "sha256-xuvlE8L/qjOn8Qhkv9sutn/xRbwC9V/IIfEr4Ixm1vA=";
+              version = "2.15.0";
+              sha256 = "sha256-hBj0V42k32dj2gvsNStUBNZEG7iRYxeDMbuA15AYQqk=";
             }
             {
               name = "carbon";
@@ -73,8 +68,8 @@
             {
               name = "vscode-icons";
               publisher = "vscode-icons-team";
-              version = "12.7.0";
-              sha256 = "sha256-q0PS5nSQNx/KUpl+n2ZLWtd3NHxGEJaUEUw4yEB7YPA=";
+              version = "12.18.0";
+              sha256 = "sha256-wnCmghY/tMMcntC2ij6gB4uoA17gF+XSWI+WihmMne0=";
             }
             {
               name = "better-comments";

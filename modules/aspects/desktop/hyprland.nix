@@ -17,6 +17,11 @@
       url = "github:hyprwm/contrib";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    hyprqt6engine = {
+      url = "github:hyprwm/hyprqt6engine";
+    };
+
     quickshell = {
       url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
 
@@ -42,10 +47,6 @@
 
     dgop = {
       url = "github:AvengeMedia/dgop";
-      inputs.nixpkgs.follows = "latest";
-    };
-    noctalia = {
-      url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "latest";
     };
     hyprland-profile-switcher.url = "github:heraldofsolace/hyprland-profile-switcher";
@@ -137,7 +138,7 @@
     config,
     ...
   }: let
-    terminal = "wezterm";
+    terminal = "waveterm";
     generate-wallpapers = {pkgs, ...}: {
       name,
       colors,
@@ -191,6 +192,7 @@
       hyprsysteminfo
       hyprland-qt-support
       hyprland-qtutils
+      inputs.hyprqt6engine.packages.${pkgs.stdenv.hostPlatform.system}.default
       grimblast
       uptime-nixos
       hass-report-status
@@ -211,14 +213,15 @@
       # (breeze-hacked-cursor-theme.override {accentColor = "#${red}";})
       # inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
-
+    programs.waveterm.enable = true;
     home.pointerCursor = {
       gtk.enable = true;
       x11.enable = true;
-      package = pkgs.breeze-hacked-cursor-theme.override {accentColor = "#${red}";};
+      # package = pkgs.breeze-hacked-cursor-theme.override {accentColor = "#${red}";};
+      package = self.packages.${pkgs.stdenv.hostPlatform.system}.hornet-cursor-theme;
       hyprcursor.enable = true;
-      name = "Breeze_Hacked";
-      size = 32;
+      name = "Hornet";
+      size = 64;
     };
 
     programs.wezterm = {
@@ -325,8 +328,7 @@
         # Force all apps to use Wayland
         "GDK_BACKEND,wayland,x11,*"
         "QT_QPA_PLATFORM,wayland;xcb"
-        "QT_QPA_PLATFORMTHEME,qt5ct"
-        "QT_STYLE_OVERRIDE,Fusion"
+        "QT_QPA_PLATFORMTHEME,hyprqt6engine"
         # "SDL_VIDEODRIVER,wayland"
         "MOZ_ENABLE_WAYLAND,1"
         "ELECTRON_OZONE_PLATFORM_HINT,wayland"
@@ -591,6 +593,7 @@
         "match:namespace quickshell:bar, no_screen_share on"
         "match:namespace quickshell:popout, no_screen_share on"
         "match:namespace quickshell:modal, no_screen_share on"
+        "match:namespace selection, no_anim on"
       ];
     };
 

@@ -47,7 +47,6 @@
       # You may want hjem-rum to use your defined nixpkgs input to
       # minimize redundancies.
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.treefmt-nix.follows = "treefmt-nix";
       # Same goes for hjem, to avoid discrepancies between the version
       # you use directly and the one hjem-rum uses.
       # inputs.hjem.follows = "hjem";

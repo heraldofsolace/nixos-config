@@ -3,6 +3,7 @@
     shells._.starship
     shells._.bash
     shells._.fish
+    shells._.carapace
   ];
 
   blazar.shells.homeManager = {

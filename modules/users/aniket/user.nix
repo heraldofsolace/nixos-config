@@ -38,6 +38,7 @@
           desktop
           desktop._.image
           desktop._.messaging._.vesktop
+          desktop._.messaging._.zoom
           firefox
           brave
           zen

@@ -60,7 +60,7 @@
   mesonFlags = [
     "-Ddoc=false"
     "--buildtype=release"
-    "--prefix=usr/"
+    "--prefix=/usr"
   ];
 
   meta = with lib; {

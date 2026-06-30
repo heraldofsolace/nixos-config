@@ -1,30 +1,33 @@
-{ lib
-, git
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, meson
-, ninja
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, gobject-introspection
-, cmake
-, openssl
-, doctest
-, opencv
-, gusb
-, pixman
-, glib
-, nss
-, cairo
-, libgudev
-,
-}: stdenv.mkDerivation {
+{
+  lib,
+  git,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  meson,
+  ninja,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  gobject-introspection,
+  cmake,
+  openssl,
+  doctest,
+  opencv,
+  gusb,
+  pixman,
+  glib,
+  nss,
+  cairo,
+  libgudev,
+}:
+stdenv.mkDerivation {
   pname = "libfprint-goodixtls-55x4";
-  version = "1.0";
+  version = "1.1";
   # branch: 55b4-experimental
-
+  outputs = [
+    "out"
+  ];
   src = fetchFromGitHub {
     owner = "TheWeirdDev";
     repo = "libfprint";
@@ -57,11 +60,27 @@
   ];
   enableParallelBuilding = true;
 
+  postPatch = ''
+    patchShebangs \
+      tests/test-runner.sh \
+      tests/unittest_inspector.py \
+      tests/virtual-image.py \
+      tests/umockdev-test.py \
+      tests/test-generated-hwdb.sh
+    mkdir -p $out/include/libfprint-2
+    cp -r libfprint/sigfm $out/include/libfprint-2
+  '';
+
   mesonFlags = [
-    "-Ddoc=false"
-    "--buildtype=release"
-    "--prefix=/usr"
+    "-Dudev_rules_dir=${placeholder "out"}/lib/udev/rules.d"
+    # Include virtual drivers for fprintd tests
+    "-Ddrivers=default"
+    "-Dudev_hwdb_dir=${placeholder "out"}/lib/udev/hwdb.d"
   ];
+
+  # installPhase = ''
+  #   mkdir -p "$out/lib/udev/rules.d/"
+  # '';
 
   meta = with lib; {
     description = "libfprint fork for goodixtls 55x4 devices (supports 55b4, 55a4 support planned)";

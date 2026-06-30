@@ -81,17 +81,21 @@
 
       # Install the driver
       services.fprintd.enable = true;
-      services.fprintd.package = pkgs.fprintd.override {
-        version = "1.94.4";
-        src = pkgs.fetchFromGitLab {
-          domain = "gitlab.freedesktop.org";
-          owner = "libfprint";
-          repo = "fprintd";
-          rev = "refs/tags/v1.94.4";
-          hash = "";
+      services.fprintd.package = let
+        fprintd = pkgs.frintd.overridAttrs {
+          version = "1.94.4";
+          src = pkgs.fetchFromGitLab {
+            domain = "gitlab.freedesktop.org";
+            owner = "libfprint";
+            repo = "fprintd";
+            rev = "refs/tags/v1.94.4";
+            hash = "";
+          };
         };
-        libfprint = self.packages.${pkgs.stdenv.hostPlatform.system}.libfprint-goodixtls-55x4;
-      };
+      in
+        fprintd.override {
+          libfprint = self.packages.${pkgs.stdenv.hostPlatform.system}.libfprint-goodixtls-55x4;
+        };
       # If simply enabling fprintd is not enough, try enabling fprintd.tod...
       system.stateVersion = "25.11";
     };

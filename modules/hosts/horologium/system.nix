@@ -89,7 +89,7 @@
             owner = "libfprint";
             repo = "fprintd";
             rev = "refs/tags/v1.94.4";
-            hash = "";
+            hash = "sha256-B2g2d29jSER30OUqCkdk3+Hv5T3DA4SUKoyiqHb8FeU=";
           };
         };
       in

@@ -23,7 +23,7 @@
 }:
 stdenv.mkDerivation {
   pname = "libfprint-goodixtls-55x4";
-  version = "1.1";
+  version = "1.3";
   # branch: 55b4-experimental
   outputs = [
     "out"

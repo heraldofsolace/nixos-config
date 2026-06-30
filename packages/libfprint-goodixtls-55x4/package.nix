@@ -29,7 +29,7 @@
     owner = "TheWeirdDev";
     repo = "libfprint";
     rev = "d1ca62a801aa565e67d1a2a47aaa7a33232b7990";
-    sha256 = "";
+    sha256 = "sha256-EbFvsfl3ry6jrwFNhXVFCoqWz4TDj1UX0GcuVRVmd2M=";
   };
 
   nativeBuildInputs = [

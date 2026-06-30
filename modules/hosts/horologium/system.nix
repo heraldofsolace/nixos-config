@@ -52,6 +52,7 @@
           maliit-framework
           brightnessctl
           iio-sensor-proxy
+          self.packages.${pkgs.stdenv.hostPlatform.system}.libfprint-goodixtls-55x4
         ];
       };
 

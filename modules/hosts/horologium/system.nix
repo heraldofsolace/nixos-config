@@ -82,7 +82,7 @@
       # Install the driver
       services.fprintd.enable = true;
       services.fprintd.package = let
-        fprintd = pkgs.fprintd.overridAttrs {
+        fprintd = pkgs.fprintd.overrideAttrs {
           version = "1.94.4";
           src = pkgs.fetchFromGitLab {
             domain = "gitlab.freedesktop.org";

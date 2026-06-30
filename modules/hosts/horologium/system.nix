@@ -82,7 +82,7 @@
       # If simply enabling fprintd is not enough, try enabling fprintd.tod...
       services.fprintd.tod.enable = true;
       # ...and use one of the next four drivers
-      services.fprintd.tod.driver = pkgs.libfprint-2-tod1-goodix; # Goodix driver module
+      services.fprintd.tod.driver =self.packages.${pkgs.stdenv.hostPlatform.system}.libfprint-goodixtls-55x4; # Goodix driver module
       system.stateVersion = "25.11";
     };
 

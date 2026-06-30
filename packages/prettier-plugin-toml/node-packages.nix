@@ -5,9 +5,10 @@
   nix-gitignore,
   stdenv,
   lib,
-  globalBuildInputs ? [],
+  globalBuildInputs ? [ ],
   ...
-}: let
+}:
+let
   sources = {
     "@taplo/core-0.2.0" = {
       name = "_at_taplo_slash_core";
@@ -60,24 +61,25 @@
     bypassCache = true;
     reconstructLock = true;
   };
-in {
+in
+{
   inherit args;
   inherit sources;
   tarball = nodeEnv.buildNodeSourceDist args;
   package = nodeEnv.buildNodePackage args;
   shell = nodeEnv.buildNodeShell args;
-  nodeDependencies = nodeEnv.buildNodeDependencies (lib.overrideExisting args {
-    src = stdenv.mkDerivation {
-      name = args.name + "-package-json";
-      src =
-        nix-gitignore.gitignoreSourcePure [
+  nodeDependencies = nodeEnv.buildNodeDependencies (
+    lib.overrideExisting args {
+      src = stdenv.mkDerivation {
+        name = args.name + "-package-json";
+        src = nix-gitignore.gitignoreSourcePure [
           "*"
           "!package.json"
           "!package-lock.json"
-        ]
-        args.src;
-      dontBuild = true;
-      installPhase = "mkdir -p $out; cp -r ./* $out;";
-    };
-  });
+        ] args.src;
+        dontBuild = true;
+        installPhase = "mkdir -p $out; cp -r ./* $out;";
+      };
+    }
+  );
 }

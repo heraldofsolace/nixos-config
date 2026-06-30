@@ -4,7 +4,8 @@
   __findFile ? __findFile,
   den,
   ...
-}: {
+}:
+{
   # # Lets also configure some defaults using aspects.
   # # These are global static settings.
   # den.schema.user.classes = lib.mkDefault [
@@ -43,11 +44,7 @@
     <den/define-user>
 
     # Disable booting when running on CI on all NixOS hosts.
-    (
-      if config ? _module.args.CI
-      then <eg/ci-no-boot>
-      else {}
-    )
+    (if config ? _module.args.CI then <eg/ci-no-boot> else { })
     # Provides the `flake-parts` `self'` (the flake's `self` with system pre-selected) as a top-level module argument.
     # This allows modules to access per-system flake outputs without needing
     # `pkgs.stdenv.hostPlatform.system`.

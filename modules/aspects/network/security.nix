@@ -1,5 +1,5 @@
 {
-  den.default.nixos = {lib, ...}: {
+  den.default.nixos = { lib, ... }: {
     networking = {
       dhcpcd.wait = "background";
       dhcpcd.extraConfig = "noarp";

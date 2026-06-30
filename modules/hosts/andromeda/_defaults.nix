@@ -35,7 +35,7 @@
     xserver = {
       enable = true;
       wacom.enable = true;
-      videoDrivers = ["amdgpu"];
+      videoDrivers = [ "amdgpu" ];
     };
     gvfs.enable = true;
     openssh = {

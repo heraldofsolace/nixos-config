@@ -176,11 +176,14 @@
     };
     stylix.url = "github:nix-community/stylix/release-26.05";
     sysc-greet = {
-      url = "github:deephack1982/sysc-greet";
+      url = "github:Nomadcxx/sysc-greet";
       inputs.nixpkgs.follows = "latest";
     };
     systems.url = "github:nix-systems/x86_64-linux";
-    treefmt-nix.url = "github:numtide/treefmt-nix";
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     tsui = {
       url = "github:guibou/tsui";
       inputs.nixpkgs.follows = "nixpkgs";

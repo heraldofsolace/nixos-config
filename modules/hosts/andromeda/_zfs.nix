@@ -2,8 +2,9 @@
   config,
   pkgs,
   ...
-}: {
-  boot.supportedFilesystems = ["zfs"];
+}:
+{
+  boot.supportedFilesystems = [ "zfs" ];
   networking.hostId = "ab16568e";
 
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
@@ -70,12 +71,12 @@
     enable = true; # this enabled systemd support in stage1 - required for the below setup
     services.rollback = {
       description = "Rollback BTRFS root subvolume to a pristine state";
-      wantedBy = ["initrd.target"];
+      wantedBy = [ "initrd.target" ];
 
-      after = ["zfs-import-rpool.service"];
+      after = [ "zfs-import-rpool.service" ];
 
       # Before mounting the system root (/sysroot) during the early boot process
-      before = ["sysroot.mount"];
+      before = [ "sysroot.mount" ];
       path = with pkgs; [
         zfs
       ];

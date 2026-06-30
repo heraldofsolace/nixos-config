@@ -1,5 +1,5 @@
 _: {
-  blazar.editors._.jetbrains.homeManager = {pkgs, ...}: {
+  blazar.editors._.jetbrains.homeManager = { pkgs, ... }: {
     home.packages = with pkgs.jetbrains; [
       # pycharm-community
       webstorm

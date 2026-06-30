@@ -1,18 +1,19 @@
-{inputs, ...}: {
+{ inputs, ... }: {
   flake-file.inputs.nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
   blazar.editors._.vscode.nixos = {
     nixpkgs.overlays = [
       inputs.nix-vscode-extensions.overlays.default
     ];
   };
-  blazar.editors._.vscode.homeManager = {pkgs, ...}: {
+  blazar.editors._.vscode.homeManager = { pkgs, ... }: {
     programs.vscode = {
       enable = true;
       # TODO split extensions based on active modules
       profiles.default = {
         enableUpdateCheck = false;
 
-        extensions = with pkgs.vscode-marketplace;
+        extensions =
+          with pkgs.vscode-marketplace;
           [
             # ms-vscode-remote.remote-ssh
             # github.vscode-pull-request-github

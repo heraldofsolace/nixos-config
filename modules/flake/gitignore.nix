@@ -1,4 +1,4 @@
-{inputs, ...}: {
+{ inputs, ... }: {
   flake-file.inputs = {
     github-gitignore = {
       url = "github:github/gitignore";
@@ -16,7 +16,7 @@
     };
   };
 
-  perSystem = {system, ...}: {
+  perSystem = { system, ... }: {
     files.file.".gitignore".source = inputs.ignoreBoy.lib.${system}.generateGitIgnore {
       # https://github.com/github/gitignore
       # - use this repo, and add the filename and/ or path/filename to the array, drop the extension. Note the

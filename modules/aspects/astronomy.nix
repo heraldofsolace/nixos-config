@@ -1,5 +1,5 @@
 _: {
-  blazar.astronomy.homeManager = {pkgs, ...}: {
+  blazar.astronomy.homeManager = { pkgs, ... }: {
     home.packages = with pkgs; [
       siril
       kstars

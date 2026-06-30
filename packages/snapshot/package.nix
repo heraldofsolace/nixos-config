@@ -9,7 +9,13 @@
 }:
 writeShellApplication {
   name = "blazar-snapshot";
-  runtimeInputs = [libnotify grim slurp satty wl-clipboard];
+  runtimeInputs = [
+    libnotify
+    grim
+    slurp
+    satty
+    wl-clipboard
+  ];
   text = ''
     outputDir="$HOME/Pictures/Screenshots/"
     outputFile="snapshot_$(date +%Y-%m-%d_%H-%M-%S).png"

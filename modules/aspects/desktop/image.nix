@@ -1,6 +1,6 @@
 {
   blazar.desktop._.image = {
-    homeManager = {pkgs, ...}: {
+    homeManager = { pkgs, ... }: {
       home.packages = with pkgs; [
         gimp
         imagemagick

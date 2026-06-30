@@ -3,9 +3,11 @@
   lib,
   flake-parts-lib,
   ...
-}: let
+}:
+let
   outerCfg = config.files;
-in {
+in
+{
   # imports = [
   #   "${inputs.files}/flake-module.nix"
   # ];
@@ -24,16 +26,18 @@ in {
       formatters = lib.mkOption {
         type = lib.types.attrsOf (lib.types.functionTo lib.types.str);
         description = "Functions to format comments for different file types.";
-        default = let
-          hashSign = text: lib.concatMapStringsSep "\n" (line: "# ${line}") (lib.splitString "\n" text);
-        in {
-          md = text: "<!-- ${text} -->";
-          sh = hashSign;
-          envrc = hashSign;
-          gitignore = hashSign;
-          toml = hashSign;
-          license = _: "";
-        };
+        default =
+          let
+            hashSign = text: lib.concatMapStringsSep "\n" (line: "# ${line}") (lib.splitString "\n" text);
+          in
+          {
+            md = text: "<!-- ${text} -->";
+            sh = hashSign;
+            envrc = hashSign;
+            gitignore = hashSign;
+            toml = hashSign;
+            license = _: "";
+          };
         readOnly = true;
       };
       # textFormatted =
@@ -52,9 +56,11 @@ in {
         config,
         pkgs,
         ...
-      }: let
+      }:
+      let
         cfg = config.files;
-      in {
+      in
+      {
         options.files = {
           file = lib.mkOption {
             type = lib.types.attrsOf (
@@ -63,7 +69,8 @@ in {
                   name,
                   config,
                   ...
-                }: {
+                }:
+                {
                   options = {
                     fileType = lib.mkOption {
                       type = lib.types.enum (lib.attrNames outerCfg.generatedWarningMessage.formatters);
@@ -92,26 +99,28 @@ in {
         };
 
         config = {
-          files.files =
-            lib.mapAttrsToList (
-              name: {
-                fileType,
-                source,
-                generateWarningMessage,
-                ...
-              }: {
-                path = name;
-                drv =
-                  pkgs.runCommandLocal "files-${name}"
+          files.files = lib.mapAttrsToList (
+            name:
+            {
+              fileType,
+              source,
+              generateWarningMessage,
+              ...
+            }:
+            {
+              path = name;
+              drv =
+                pkgs.runCommandLocal "files-${name}"
                   {
                     comment =
                       # outerCfg.generatedWarningMessage.textFormatted fileType;
                       let
                         mkComment = outerCfg.generatedWarningMessage.formatters.${fileType};
                       in
-                        if generateWarningMessage && outerCfg.mkComment != null
-                        then mkComment outerCfg.generatedWarningMessage.text
-                        else "";
+                      if generateWarningMessage && outerCfg.mkComment != null then
+                        mkComment outerCfg.generatedWarningMessage.text
+                      else
+                        "";
                     inherit source;
                   }
                   ''
@@ -125,9 +134,8 @@ in {
                     ${lib.getExe config.treefmt.build.wrapper} --no-cache --tree-root-file "${name}" "${name}"
                     mv "${name}" $out
                   '';
-              }
-            )
-            cfg.file;
+            }
+          ) cfg.file;
         };
       }
     );
@@ -137,57 +145,61 @@ in {
     url = "github:mightyiam/files/bec7bba1cfd70a6305c8a690b33dac5771812a28";
     flake = false;
   };
-  config.perSystem = {
-    config,
-    pkgs,
-    self',
-    ...
-  }: {
-    apps.write-files = {
-      program = config.files.writer.drv;
-      meta.description = "Generate files using github:mightyiam/files.";
-    };
-
-    # https://github.com/vidhanio/vidhanix/blob/62305aa1a355b2519ab4449a3cf38334ccafbc89/modules/files/default.nix
-    apps.generate-files = let
-      description = "Generate all automatically generated files for this repository";
-    in {
-      meta.decription = description;
-      program = pkgs.writeShellApplication {
-        name = "generate-files";
-        meta.description = description;
-        text = ''
-          # github:mightyiam/files.
-          ${self'.apps.write-files.program}
-
-          lock_bck=$(mktemp)
-          cp -p flake.lock "$lock_bck"
-
-          ${lib.getExe self'.packages.write-flake}
-
-          # If flake.lock remains unchanged, restore mtime.
-          if cmp -s flake.lock "$lock_bck"; then
-            touch -r "$lock_bck" flake.lock
-          fi
-        '';
+  config.perSystem =
+    {
+      config,
+      pkgs,
+      self',
+      ...
+    }:
+    {
+      apps.write-files = {
+        program = config.files.writer.drv;
+        meta.description = "Generate files using github:mightyiam/files.";
       };
+
+      # https://github.com/vidhanio/vidhanix/blob/62305aa1a355b2519ab4449a3cf38334ccafbc89/modules/files/default.nix
+      apps.generate-files =
+        let
+          description = "Generate all automatically generated files for this repository";
+        in
+        {
+          meta.decription = description;
+          program = pkgs.writeShellApplication {
+            name = "generate-files";
+            meta.description = description;
+            text = ''
+              # github:mightyiam/files.
+              ${self'.apps.write-files.program}
+
+              lock_bck=$(mktemp)
+              cp -p flake.lock "$lock_bck"
+
+              ${lib.getExe self'.packages.write-flake}
+
+              # If flake.lock remains unchanged, restore mtime.
+              if cmp -s flake.lock "$lock_bck"; then
+                touch -r "$lock_bck" flake.lock
+              fi
+            '';
+          };
+        };
+
+      # https://github.com/vidhanio/vidhanix/blob/62305aa1a355b2519ab4449a3cf38334ccafbc89/modules/files/default.nix
+      pre-commit.settings.hooks.generate-files = {
+        enable = true;
+        package = config.packages.generate-files;
+        entry = self'.apps.generate-files.program;
+        pass_filenames = false;
+      };
+
+      # files.readme.content.generated-files.content = ''
+      #   most of the non-nix files in this repository (including this very readme) are generated via [`nix run .#generate-files`](modules/files/default.nix).
+      #   the generated files are:
+
+      #   ${config.files.readme.lib.renderList (
+      #     map (p: "[`${p}`](${p})") (lib.sortOn (p: p) (map ({ path_, ... }: path_) config.files.files))
+      #   )}
+      # '';
     };
-
-    # https://github.com/vidhanio/vidhanix/blob/62305aa1a355b2519ab4449a3cf38334ccafbc89/modules/files/default.nix
-    pre-commit.settings.hooks.generate-files = {
-      enable = true;
-      package = config.packages.generate-files;
-      entry = self'.apps.generate-files.program;
-      pass_filenames = false;
-    };
-
-    # files.readme.content.generated-files.content = ''
-    #   most of the non-nix files in this repository (including this very readme) are generated via [`nix run .#generate-files`](modules/files/default.nix).
-    #   the generated files are:
-
-    #   ${config.files.readme.lib.renderList (
-    #     map (p: "[`${p}`](${p})") (lib.sortOn (p: p) (map ({ path_, ... }: path_) config.files.files))
-    #   )}
-    # '';
-  };
 }

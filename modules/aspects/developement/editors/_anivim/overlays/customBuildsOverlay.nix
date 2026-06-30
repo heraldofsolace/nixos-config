@@ -1,4 +1,5 @@
-importName: _inputs: let
+importName: _inputs:
+let
   overlay = _self: super: rec {
     ${importName} = rec {
       vim-schlepp = super.vimUtils.buildVimPlugin {
@@ -38,7 +39,7 @@ importName: _inputs: let
           sha256 = "sha256-VjKaSzibXFufCGb6x2RFtkgWTDqZQRbdNtgXQgDUGys=";
         };
         doCheck = false;
-        depenedencies = [guihua-lua];
+        depenedencies = [ guihua-lua ];
       };
 
       inlay-hints-nvim = super.vimUtils.buildVimPlugin {
@@ -54,4 +55,4 @@ importName: _inputs: let
     };
   };
 in
-  overlay
+overlay

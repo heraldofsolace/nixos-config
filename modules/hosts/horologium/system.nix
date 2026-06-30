@@ -1,11 +1,15 @@
-{blazar, ...}: {
+{ blazar, ... }: {
   den.hosts.x86_64-linux.horologium = _: {
     description = "NixOS workstation for Work notebook Lenovo ThinkPad T14 Gen 4 Ryzen";
     users.aniket = {
       description = "Aniket";
       userNameNick = "Aniket";
       userNameReal = "Aniket Bhattacharyea";
-      classes = ["homeManager" "hjem" "maid"];
+      classes = [
+        "homeManager"
+        "hjem"
+        "maid"
+      ];
     };
 
     # users.root = {
@@ -20,14 +24,16 @@
   };
 
   den.aspects.horologium = {
-    nixos = {pkgs, ...}: {
+    nixos = { pkgs, ... }: {
       imports = [
         ./_hardware-configuration.nix
       ];
 
       # Enable swap on luks
-      boot.initrd.luks.devices."luks-ac0722b1-35f7-4b31-a215-942322657a7c".device = "/dev/disk/by-uuid/ac0722b1-35f7-4b31-a215-942322657a7c";
-      boot.initrd.luks.devices."luks-ac0722b1-35f7-4b31-a215-942322657a7c".keyFile = "/crypto_keyfile.bin";
+      boot.initrd.luks.devices."luks-ac0722b1-35f7-4b31-a215-942322657a7c".device =
+        "/dev/disk/by-uuid/ac0722b1-35f7-4b31-a215-942322657a7c";
+      boot.initrd.luks.devices."luks-ac0722b1-35f7-4b31-a215-942322657a7c".keyFile =
+        "/crypto_keyfile.bin";
 
       boot.loader.efi.efiSysMountPoint = "/boot/efi";
       boot.loader.grub.enable = true;
@@ -45,6 +51,7 @@
           maliit-keyboard
           maliit-framework
           brightnessctl
+          iio-sensor-proxy
         ];
       };
 
@@ -56,7 +63,7 @@
         xserver = {
           enable = true;
           wacom.enable = true;
-          videoDrivers = ["amdgpu"];
+          videoDrivers = [ "amdgpu" ];
         };
         gvfs.enable = true;
         openssh = {

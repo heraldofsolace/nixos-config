@@ -3,7 +3,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   blazar.ci-no-boot = {
     description = "Disable booting when running on CI on all NixOS hosts.";
     nixos = {

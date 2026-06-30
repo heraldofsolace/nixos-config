@@ -1,4 +1,4 @@
-{stdenvNoCC}:
+{ stdenvNoCC }:
 stdenvNoCC.mkDerivation {
   pname = "hornet-cursor-theme";
   version = "1.3";

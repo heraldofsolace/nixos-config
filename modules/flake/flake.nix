@@ -3,7 +3,8 @@
   den,
   inputs,
   ...
-}: {
+}:
+{
   debug = true;
   flake-file.inputs = {
     git-hooks-nix = {
@@ -106,5 +107,6 @@
   # homeManagerModules = import ./modules/home-manager;
 
   # Allow all aspects to contribute to the top-level flake outputs.
-  den.schema.flake-system.into.host = {system}: map (host: {inherit host;}) (lib.attrValues den.hosts.${system});
+  den.schema.flake-system.into.host =
+    { system }: map (host: { inherit host; }) (lib.attrValues den.hosts.${system});
 }

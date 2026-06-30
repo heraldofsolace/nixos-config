@@ -5,20 +5,24 @@
   inputs,
   den,
   ...
-}: {
+}:
+{
   den.aspects.andromeda.includes = [
     (den._.tty-autologin "aniket")
     # eg.vm._.tui
   ];
 
-  perSystem = {pkgs, ...}: let
-    hosts = builtins.attrNames inputs.self.nixosConfigurations;
-    vms =
-      map (
-        hostName: let
+  perSystem =
+    { pkgs, ... }:
+    let
+      hosts = builtins.attrNames inputs.self.nixosConfigurations;
+      vms = map (
+        hostName:
+        let
           vmName = "vm-${hostName}";
           host = inputs.self.nixosConfigurations.${hostName}.config;
-        in {
+        in
+        {
           name = vmName;
           value = {
             meta.description = "Run aniket@${vmName} in a VM for testing before applying changes.";
@@ -30,9 +34,9 @@
             };
           };
         }
-      )
-      hosts;
-  in {
-    apps = builtins.listToAttrs vms;
-  };
+      ) hosts;
+    in
+    {
+      apps = builtins.listToAttrs vms;
+    };
 }

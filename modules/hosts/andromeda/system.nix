@@ -2,14 +2,19 @@
   blazar,
   inputs,
   ...
-}: {
+}:
+{
   den.hosts.x86_64-linux.andromeda = _: {
     description = "NixOS workstation for Work notebook Lenovo ThinkPad T14 Gen 4 Ryzen";
     users.aniket = {
       description = "Aniket";
       userNameNick = "Aniket";
       userNameReal = "Aniket Bhattacharyea";
-      classes = ["homeManager" "hjem" "maid"];
+      classes = [
+        "homeManager"
+        "hjem"
+        "maid"
+      ];
     };
     users.hass = {
       description = "Home Assistant";
@@ -73,7 +78,7 @@
         xserver = {
           enable = true;
           wacom.enable = true;
-          videoDrivers = ["amdgpu"];
+          videoDrivers = [ "amdgpu" ];
         };
         gvfs.enable = true;
         openssh = {
@@ -99,18 +104,23 @@
 
       nixpkgs.overlays = [
         (_final: prev: {
-          kdePackages = prev.kdePackages.overrideScope (_kfinal: kprev: {
-            dolphin = prev.symlinkJoin {
-              name = "dolphin-wrapped";
-              paths = [kprev.dolphin kprev.dolphin.dev];
-              nativeBuildInputs = [prev.makeWrapper];
-              postBuild = ''
-                rm $out/bin/dolphin
-                makeWrapper ${kprev.dolphin}/bin/dolphin $out/bin/dolphin \
-                  --run "${kprev.kservice}/bin/kbuildsycoca6 --noincremental"
-              '';
-            };
-          });
+          kdePackages = prev.kdePackages.overrideScope (
+            _kfinal: kprev: {
+              dolphin = prev.symlinkJoin {
+                name = "dolphin-wrapped";
+                paths = [
+                  kprev.dolphin
+                  kprev.dolphin.dev
+                ];
+                nativeBuildInputs = [ prev.makeWrapper ];
+                postBuild = ''
+                  rm $out/bin/dolphin
+                  makeWrapper ${kprev.dolphin}/bin/dolphin $out/bin/dolphin \
+                    --run "${kprev.kservice}/bin/kbuildsycoca6 --noincremental"
+                '';
+              };
+            }
+          );
         })
       ];
     };

@@ -14,7 +14,7 @@ appimageTools.wrapAppImage rec {
       hash = "sha256-yGmedF8MRdTMp4AFS+aOjftQESoJ5rwoBaLivKBwbHY=";
     };
   };
-  extraPkgs = pkgs: with pkgs; [];
+  extraPkgs = pkgs: with pkgs; [ ];
 
   extraInstallCommands = ''
      # Now, install assets such as the desktop file and icons

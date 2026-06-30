@@ -1,5 +1,5 @@
 _: {
-  blazar.plasma.nixos = {pkgs, ...}: {
+  blazar.plasma.nixos = { pkgs, ... }: {
     services.desktopManager.plasma6.enable = true;
     services.displayManager.plasma-login-manager.enable = true;
     services.xserver.wacom.enable = true;

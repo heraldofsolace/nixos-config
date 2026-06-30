@@ -1,5 +1,5 @@
 {
-  blazar.games.nixos = {pkgs, ...}: {
+  blazar.games.nixos = { pkgs, ... }: {
     programs.nix-ld = {
       enable = true;
       libraries = with pkgs; [

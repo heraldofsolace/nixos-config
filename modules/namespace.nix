@@ -2,9 +2,10 @@
   inputs,
   den,
   ...
-}: {
+}:
+{
   # create an `eg` (example!) namespace. (flake exposed)
-  imports = [(inputs.den.namespace "blazar" true)];
+  imports = [ (inputs.den.namespace "blazar" true) ];
 
   # you can have more than one namespace (false = not flake exposed)
   # imports = [ (inputs.den.namespace "my" false) ];

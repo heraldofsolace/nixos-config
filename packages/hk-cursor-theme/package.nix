@@ -1,4 +1,4 @@
-{stdenvNoCC}:
+{ stdenvNoCC }:
 stdenvNoCC.mkDerivation {
   pname = "hk-cursor-theme";
   version = "1.3";

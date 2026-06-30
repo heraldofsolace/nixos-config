@@ -4,22 +4,42 @@
   modulesPath,
   pkgs,
   ...
-}: {
+}:
+{
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
-  boot.initrd.availableKernelModules = ["nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod"];
-  boot.initrd.kernelModules = [];
-  boot.kernelModules = ["kvm-amd" "uinput" "v4l2loopback" "coretemp" "nct6775"];
-  boot.extraModulePackages = [config.boot.kernelPackages.v4l2loopback];
+  boot.initrd.availableKernelModules = [
+    "nvme"
+    "xhci_pci"
+    "ahci"
+    "usbhid"
+    "usb_storage"
+    "sd_mod"
+  ];
+  boot.initrd.kernelModules = [ ];
+  boot.kernelModules = [
+    "kvm-amd"
+    "uinput"
+    "v4l2loopback"
+    "coretemp"
+    "nct6775"
+  ];
+  boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
   boot.kernelPackages = pkgs.linuxPackages_cachyos;
+  boot.zfs.package = pkgs.zfs_cachyos;
   services.scx.enable = true; # by default uses scx_rustland scheduler
-  boot.blacklistedKernelModules = ["rtl8192cu" "rtl_usb" "rtl8192c_common" "rtlwifi"];
+  boot.blacklistedKernelModules = [
+    "rtl8192cu"
+    "rtl_usb"
+    "rtl8192c_common"
+    "rtlwifi"
+  ];
   boot.extraModprobeConfig = ''
     options snd_usb_audio vid=0x1235,0x1235 pid=0x8211,0x8210 device_setup=1,1
   '';
-  boot.zfs.extraPools = ["rpool"];
+  boot.zfs.extraPools = [ "rpool" ];
   fileSystems."/" = {
     device = "rpool/local/root";
     fsType = "zfs";
@@ -64,7 +84,7 @@
   fileSystems."/boot/efi" = {
     device = "/boot/efis/nvme-Seagate_FireCuda_520_SSD_ZP1000GM30002_7QG021QD-part1";
     fsType = "none";
-    options = ["bind"];
+    options = [ "bind" ];
   };
 
   fileSystems."/games" = {
@@ -73,7 +93,7 @@
   };
 
   swapDevices = [
-    {device = "/dev/disk/by-id/nvme-Seagate_FireCuda_520_SSD_ZP1000GM30002_7QG021QD-part4";}
+    { device = "/dev/disk/by-id/nvme-Seagate_FireCuda_520_SSD_ZP1000GM30002_7QG021QD-part4"; }
   ];
 
   hardware.cpu.amd.updateMicrocode = lib.mkDefault true;
@@ -84,7 +104,7 @@
   hardware.logitech.wireless.enableGraphical = true;
 
   hardware.bluetooth.enable = true;
-  services.udev.packages = [pkgs.bazecor];
+  services.udev.packages = [ pkgs.bazecor ];
   services.udev.extraRules = ''
     KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"
   '';

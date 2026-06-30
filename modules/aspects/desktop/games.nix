@@ -6,7 +6,7 @@
     # };
   };
 
-  blazar.games.homeManager = {pkgs, ...}: {
+  blazar.games.homeManager = { pkgs, ... }: {
     home.packages = with pkgs; [
       # (inputs.nur.repos.username.package)
 
@@ -38,7 +38,7 @@
     ];
   };
 
-  blazar.games.nixos = {pkgs, ...}: {
+  blazar.games.nixos = { pkgs, ... }: {
     programs.steam = {
       enable = true;
       remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
@@ -49,9 +49,13 @@
 
     programs.gamescope = {
       enable = true;
-      capSysNice = true;
+      capSysNice = false;
     };
-    environment.systemPackages = [pkgs.mangohud pkgs.steamcmd pkgs.lact];
+    environment.systemPackages = [
+      pkgs.mangohud
+      pkgs.steamcmd
+      pkgs.lact
+    ];
     programs.gamemode.enable = true;
     hardware.graphics = {
       enable = true;
@@ -64,7 +68,7 @@
     };
 
     hardware.amdgpu.overdrive.enable = true;
-    systemd.packages = with pkgs; [lact];
-    systemd.services.lactd.wantedBy = ["multi-user.target"];
+    systemd.packages = with pkgs; [ lact ];
+    systemd.services.lactd.wantedBy = [ "multi-user.target" ];
   };
 }

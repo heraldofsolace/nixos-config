@@ -1,4 +1,4 @@
-{blazar, ...}: {
+{ blazar, ... }: {
   blazar.shells.includes = with blazar; [
     shells._.starship
     shells._.bash
@@ -22,7 +22,7 @@
 
     programs.zoxide = {
       enable = true;
-      options = ["--cmd cd"];
+      options = [ "--cmd cd" ];
       enableFishIntegration = true;
     };
 

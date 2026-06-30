@@ -4,12 +4,14 @@
   namespace,
   inputs,
   ...
-}: let
+}:
+let
   inherit (lib) mkEnableOption mkIf;
 
   cfg = config.${namespace}.editors.anivim;
-  anivim = import ./anivim.nix {inherit inputs;};
-in {
+  anivim = import ./anivim.nix { inherit inputs; };
+in
+{
   imports = [
     anivim.homeModules.default
   ];
@@ -18,9 +20,7 @@ in {
     enable = mkEnableOption "anivim";
   };
 
-  config =
-    mkIf cfg.enable
-    {
-      anivim.enable = true;
-    };
+  config = mkIf cfg.enable {
+    anivim.enable = true;
+  };
 }

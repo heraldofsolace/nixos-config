@@ -1,5 +1,5 @@
 {
-  blazar.ai.nixos = {pkgs, ...}: {
+  blazar.ai.nixos = { pkgs, ... }: {
     services.ollama = {
       enable = true;
       package = pkgs.ollama-rocm;
@@ -7,6 +7,7 @@
         # "llama3.1"
         # "mistral"
         "gemma3"
+        "qwen3"
       ];
     };
     services.open-webui.enable = true;

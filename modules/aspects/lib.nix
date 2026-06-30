@@ -2,50 +2,49 @@
   lib,
   inputs,
   ...
-}: let
+}:
+let
   inherit (inputs) deploy-rs;
   lib' = {
     getExeName = pkg: lib.getExe pkg |> baseNameOf;
     getExeName' = pkg: name: lib.getExe' pkg name |> baseNameOf;
-    mkDeploy = {
-      self,
-      overrides ? {},
-    }: let
-      hosts = self.nixosConfigurations or {};
-      names = builtins.attrNames hosts;
-      nodes =
-        lib.foldl (
-          result: name: let
+    mkDeploy =
+      {
+        self,
+        overrides ? { },
+      }:
+      let
+        hosts = self.nixosConfigurations or { };
+        names = builtins.attrNames hosts;
+        nodes = lib.foldl (
+          result: name:
+          let
             host = hosts.${name};
             user = host.config.user.name or null;
             inherit (host.pkgs.stdenv.hostPlatform) system;
           in
-            result
-            // {
-              ${name} =
-                (overrides.${name} or {})
-                // {
-                  hostname = overrides.${name}.hostname or "${name}";
-                  profiles =
-                    (overrides.${name}.profiles or {})
-                    // {
-                      system =
-                        (overrides.${name}.profiles.system or {})
-                        // {
-                          path = deploy-rs.lib.${system}.activate.nixos host;
-                        }
-                        // lib.optionalAttrs (user != null) {
-                          user = "root";
-                          sshUser = user;
-                        };
-                    };
-                };
-            }
-        ) {}
-        names;
-    in {
-      inherit nodes;
-    };
+          result
+          // {
+            ${name} = (overrides.${name} or { }) // {
+              hostname = overrides.${name}.hostname or "${name}";
+              profiles = (overrides.${name}.profiles or { }) // {
+                system =
+                  (overrides.${name}.profiles.system or { })
+                  // {
+                    path = deploy-rs.lib.${system}.activate.nixos host;
+                  }
+                  // lib.optionalAttrs (user != null) {
+                    user = "root";
+                    sshUser = user;
+                  };
+              };
+            };
+          }
+        ) { } names;
+      in
+      {
+        inherit nodes;
+      };
   };
   #   options = {
   #   lib = lib.mkOption {
@@ -53,7 +52,8 @@
   #   visible = false;
   #   type = lib.types.attrsOf lib.types.raw;
   # };
-in {
+in
+{
   _module.args.lib' = lib';
   # FIXME: How to do this?
   # addax.lib = lib';
@@ -157,4 +157,3 @@ in {
 #       isISO
 #       ;
 #   };
-

@@ -5,7 +5,7 @@
 }:
 writeShellApplication {
   name = "tmx";
-  runtimeInputs = [tmux];
+  runtimeInputs = [ tmux ];
   text = ''
     # Modified TMUX start script from:
     #     http://forums.gentoo.org/viewtopic-t-836006-start-0.html

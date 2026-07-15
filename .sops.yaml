@@ -4,7 +4,7 @@ keys:
   - &horologium daca14f2518b4ea3899fc1131d202afcaa8b230d
   - &miranda 40bb7e16213cff0301fdfa26561abc217ba2418d
 creation_rules:
-  - path_regex: secrets/sops/[^/]+\.yaml$
+  - path_regex: secrets/[^/]+\.yaml$
     key_groups:
       - pgp:
           - *aniket

@@ -124,6 +124,24 @@
           neededForUsers = true;
         };
       };
+
+    # maid-activation.service (user service) replaces ~/.config/systemd/user with a
+    # GC-root symlink into the read-only nix store after each login.
+    # home-manager's linkGeneration (system service) then fails on the next rebuild
+    # because it tries to create symlinks inside a read-only store path.
+    # This activation step converts the store symlink back to a real directory before
+    # linkGeneration runs so home-manager can populate it normally.
+    homeManager =
+      { lib, ... }:
+      {
+        home.activation.fixSystemdUserDir = lib.hm.dag.entryBefore [ "linkGeneration" ] ''
+          _sd="''${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user"
+          if [[ -L "$_sd" && "$(readlink "$_sd")" == /nix/store/* ]]; then
+            $DRY_RUN_CMD rm "$_sd"
+            $DRY_RUN_CMD mkdir -p "$_sd"
+          fi
+        '';
+      };
   };
 
   # homeManager.home.homeDirectory = lib.mkDefault (

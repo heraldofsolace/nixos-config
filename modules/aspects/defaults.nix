@@ -14,7 +14,7 @@
   #   "maid"
   # ];
   den.schema.host = {
-    hjem.enable = true;
+    # hjem.enable = true;
     home-manager.enable = true;
   };
 

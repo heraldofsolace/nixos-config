@@ -12,8 +12,6 @@
       userNameReal = "Aniket Bhattacharyea";
       classes = [
         "homeManager"
-        "hjem"
-        "maid"
       ];
     };
     users.hass = {
@@ -42,6 +40,10 @@
     ];
 
     nixos = {
+      nixpkgs.config.permittedInsecurePackages = [
+        "pnpm-10.29.2"
+      ];
+
       environment = {
         variables = {
           EDITOR = "vim";

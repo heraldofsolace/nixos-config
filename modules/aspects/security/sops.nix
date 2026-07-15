@@ -64,18 +64,6 @@
       #   owner = "nextcloud";
       # };
 
-      # miranda-cert = {
-      #   key = "miranda-cert";
-      #   sopsFile = ../../../secrets/keys.yaml;
-      #   owner = "nginx";
-      # };
-
-      # miranda-cert-key = {
-      #   key = "miranda-cert-key";
-      #   sopsFile = ../../../secrets/keys.yaml;
-      #   owner = "nginx";
-      # };
-
       tailscale-key = {
         key = "tailscale";
         sopsFile = ../../../secrets/keys.yaml;

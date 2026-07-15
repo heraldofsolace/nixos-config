@@ -1,5 +1,5 @@
 {
-  den.default.nixos = { lib, ... }: {
+  den.default.nixos = { lib, pkgs, ... }: {
     networking = {
       dhcpcd.wait = "background";
       dhcpcd.extraConfig = "noarp";
@@ -65,7 +65,23 @@
         "100.100.100.100"
         "8.8.8.8"
         "1.1.1.1"
+        "1.0.0.1"
       ];
     };
+
+    services.resolved = {
+      enable = true;
+      settings.Resolve = {
+        DNSSEC = "true";
+        Domains = [ "~." ];
+        DNSOverTLS = "true";
+        FallbackDNS = [
+          "1.1.1.1"
+          "1.0.0.1"
+        ];
+      };
+    };
+    services.mullvad-vpn.enable = true;
+    services.mullvad-vpn.package = pkgs.mullvad-vpn;
   };
 }

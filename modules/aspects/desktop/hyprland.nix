@@ -213,6 +213,7 @@
           snapshot
           hyprland-gamemode
           jaq
+          join
           playerctl
           brightnessctl
           wireplumber
@@ -236,6 +237,8 @@
         name = "Hornet";
         size = 64;
       };
+
+      services.kdeconnect.enable = true;
 
       programs.wezterm = {
         enable = true;

@@ -7,7 +7,7 @@ _: {
         ...
       }:
       {
-        nextcloud-password = {
+        sops.secrets.nextcloud-password = {
           key = "nextcloud";
           sopsFile = ../../../secrets/user-passwords.yaml;
           owner = "nextcloud";

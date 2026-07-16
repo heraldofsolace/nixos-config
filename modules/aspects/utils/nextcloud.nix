@@ -21,6 +21,9 @@ _: {
           database.createLocally = true;
           appstoreEnable = true;
           autoUpdateApps.enable = true;
+          settings = {
+            trusted_domains = [ "miranda.dorper-ghost.ts.net" ];
+          };
           config = {
             dbtype = "pgsql";
             adminpassFile = "/run/secrets/nextcloud-password";

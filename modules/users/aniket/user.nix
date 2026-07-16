@@ -37,6 +37,21 @@
         tmux
         keyboard
         # nix
+        # development._.desktop
+        # development._.console
+      ]
+      ++ [
+        # from local bindings.
+        # customEmacs
+        # from the `eg` namespace.
+        # eg.autologin
+        # den included batteries that provide common configs.
+        <den/primary-user> # The user is always admin.
+        # blazar.setUserName
+        # (<den/user-shell> "dash") # default user shell # Cannot be used for `dash`.
+      ]
+      ++ (lib.optional (host.name == "andromeda") [
+        hyprland
         desktop
         desktop._.image
         desktop._.messaging._.vesktop
@@ -57,21 +72,30 @@
         editors._.jetbrains
 
         games
-        # development._.desktop
-        # development._.console
-      ]
-      ++ [
-        # from local bindings.
-        # customEmacs
-        # from the `eg` namespace.
-        # eg.autologin
-        # den included batteries that provide common configs.
-        <den/primary-user> # The user is always admin.
-        # blazar.setUserName
-        # (<den/user-shell> "dash") # default user shell # Cannot be used for `dash`.
-      ]
-      ++ (lib.optional (host.name == "andromeda") [ hyprland ])
-      ++ (lib.optional (host.name == "horologium") [ plasma ]);
+      ])
+      ++ (lib.optional (host.name == "horologium") [
+        plasma
+        desktop
+        desktop._.image
+        desktop._.messaging._.vesktop
+        desktop._.messaging._.zoom
+        firefox
+        brave
+        zen
+        # ai
+        media
+        media._.music
+        media._.console
+        media._.desktop
+        # documentation
+        # waydroid
+        # xremap
+        editors._.anivim
+        editors._.vscode
+        editors._.jetbrains
+
+        games
+      ]);
 
     nixos =
       {

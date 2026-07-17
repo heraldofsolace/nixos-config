@@ -40,7 +40,6 @@ _: {
               deck
               mail
               twofactor_webauthn
-              app_api
               end_to_end_encryption
               files_mindmap
               memories

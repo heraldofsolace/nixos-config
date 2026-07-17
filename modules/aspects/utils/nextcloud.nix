@@ -12,6 +12,16 @@ _: {
           sopsFile = ../../../secrets/user-passwords.yaml;
           owner = "nextcloud";
         };
+        sops.secrets.onlyoffice-nonce-file = {
+          key = "onlyoffice-nonce-file";
+          sopsFile = ../../../secrets/keys.yaml;
+          owner = "onlyoffice";
+        };
+        sops.secrets.onlyoffice-jwt-secret = {
+          key = "onlyoffice-jwt-secret";
+          sopsFile = ../../../secrets/keys.yaml;
+          owner = "onlyoffice";
+        };
         services.nextcloud = {
           enable = true;
           package = pkgs.nextcloud33;
@@ -58,6 +68,8 @@ _: {
         services.onlyoffice = {
           enable = true;
           hostname = "onlyoffice.miranda.dorper-ghost.ts.net";
+          securityNonceFile = "/run/secrets/onlyoffice-nonce-file";
+          jwtSecretFile = "/run/secrets/onlyoffice-jwt-secret";
         };
 
         services.nginx.virtualHosts.${config.services.nextcloud.hostName} = {

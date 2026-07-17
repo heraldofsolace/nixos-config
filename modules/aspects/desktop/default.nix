@@ -132,10 +132,10 @@
         };
       };
 
-      # services.nextcloud-client = {
-      #   enable = true;
-      #   startInBackground = true;
-      # };
+      services.nextcloud-client = {
+        enable = true;
+        startInBackground = true;
+      };
 
       # programs.calibre = {
       #   enable = true;

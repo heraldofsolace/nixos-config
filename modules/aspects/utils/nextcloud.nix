@@ -40,6 +40,14 @@ _: {
               deck
               mail
               twofactor_webauthn
+              app_api
+              end_to_end_encryption
+              files_mindmap
+              memories
+              music
+              onlyoffice
+              richdocuments
+              spreed
               ;
           };
           extraAppsEnable = true;
@@ -49,7 +57,18 @@ _: {
           configureRedis = true;
         };
 
+        services.onlyoffice = {
+          enable = true;
+          hostname = "onlyoffice.miranda.dorper-ghost.ts.net";
+        };
+
         services.nginx.virtualHosts.${config.services.nextcloud.hostName} = {
+          forceSSL = true;
+          sslCertificate = "/run/secrets/miranda-cert";
+          sslCertificateKey = "/run/secrets/miranda-cert-key";
+        };
+
+        services.nginx.virtualHosts.${config.services.onlyoffice.hostname} = {
           forceSSL = true;
           sslCertificate = "/run/secrets/miranda-cert";
           sslCertificateKey = "/run/secrets/miranda-cert-key";

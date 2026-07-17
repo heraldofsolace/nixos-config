@@ -65,12 +65,12 @@ _: {
           configureRedis = true;
         };
 
-        services.onlyoffice = {
-          enable = true;
-          hostname = "onlyoffice.miranda.dorper-ghost.ts.net";
-          securityNonceFile = "/run/secrets/onlyoffice-nonce-file";
-          jwtSecretFile = "/run/secrets/onlyoffice-jwt-secret";
-        };
+        # services.onlyoffice = {
+        #   enable = true;
+        #   hostname = "onlyoffice.miranda.dorper-ghost.ts.net";
+        #   securityNonceFile = "/run/secrets/onlyoffice-nonce-file";
+        #   jwtSecretFile = "/run/secrets/onlyoffice-jwt-secret";
+        # };
 
         services.nginx.virtualHosts.${config.services.nextcloud.hostName} = {
           forceSSL = true;

@@ -12,16 +12,16 @@ _: {
           sopsFile = ../../../secrets/user-passwords.yaml;
           owner = "nextcloud";
         };
-        sops.secrets.onlyoffice-nonce-file = {
-          key = "onlyoffice-nonce-file";
-          sopsFile = ../../../secrets/keys.yaml;
-          owner = "onlyoffice";
-        };
-        sops.secrets.onlyoffice-jwt-secret = {
-          key = "onlyoffice-jwt-secret";
-          sopsFile = ../../../secrets/keys.yaml;
-          owner = "onlyoffice";
-        };
+        # sops.secrets.onlyoffice-nonce-file = {
+        #   key = "onlyoffice-nonce-file";
+        #   sopsFile = ../../../secrets/keys.yaml;
+        #   owner = "onlyoffice";
+        # };
+        # sops.secrets.onlyoffice-jwt-secret = {
+        #   key = "onlyoffice-jwt-secret";
+        #   sopsFile = ../../../secrets/keys.yaml;
+        #   owner = "onlyoffice";
+        # };
         services.nextcloud = {
           enable = true;
           package = pkgs.nextcloud33;

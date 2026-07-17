@@ -41,7 +41,6 @@ _: {
               mail
               twofactor_webauthn
               end_to_end_encryption
-              files_mindmap
               memories
               music
               onlyoffice

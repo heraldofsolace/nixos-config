@@ -71,14 +71,15 @@ _: {
               memories
               music
               onlyoffice
+              recognize
               richdocuments
               spreed
               ;
-            recognize = pkgs.fetchNextcloudApp {
-              hash = "sha256-x3LXZKDWmzCYLTaNqSvgu4Gvrn6w2c/jifNCx1oaw1U=";
-              url = "https://github.com/nextcloud/recognize/releases/download/v11.0.1/recognize-11.0.1.tar.gz";
-              license = "agpl3Only";
-            };
+            # recognize = pkgs.fetchNextcloudApp {
+            #   hash = "sha256-x3LXZKDWmzCYLTaNqSvgu4Gvrn6w2c/jifNCx1oaw1U=";
+            #   url = "https://github.com/nextcloud/recognize/releases/download/v11.0.1/recognize-11.0.1.tar.gz";
+            #   license = "agpl3Only";
+            # };
           };
           extraAppsEnable = true;
           globalProfiles = true;

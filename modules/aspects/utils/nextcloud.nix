@@ -22,6 +22,10 @@ _: {
         #   sopsFile = ../../../secrets/keys.yaml;
         #   owner = "onlyoffice";
         # };
+        environment.systemPackages = with pkgs; [
+          nodejs
+          ffmpeg
+        ];
         services.nextcloud = {
           enable = true;
           package = pkgs.nextcloud33;

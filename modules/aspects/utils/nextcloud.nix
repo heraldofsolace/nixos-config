@@ -71,6 +71,7 @@ _: {
               memories
               music
               onlyoffice
+              previewgenerator
               recognize
               richdocuments
               spreed

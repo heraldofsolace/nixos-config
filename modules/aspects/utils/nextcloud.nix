@@ -70,6 +70,11 @@ _: {
               richdocuments
               spreed
               ;
+            recognize = pkgs.fetchNextCloudApp {
+              hash = "sha256-x3LXZKDWmzCYLTaNqSvgu4Gvrn6w2c/jifNCx1oaw1U=";
+              url = "https://github.com/nextcloud/recognize/releases/download/v11.0.1/recognize-11.0.1.tar.gz";
+              licenese = "agpl";
+            };
           };
           extraAppsEnable = true;
           globalProfiles = true;

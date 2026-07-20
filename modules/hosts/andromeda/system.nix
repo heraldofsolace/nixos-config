@@ -131,6 +131,7 @@
       stylix
       impermanence
       determinate-nix
+      utils._.samba
     ];
   };
 }

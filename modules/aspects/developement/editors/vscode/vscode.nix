@@ -45,7 +45,7 @@
             # likec4.likec4-vscode
             avetis.tokyo-night
             bbenoist.nix
-            openai.chatgpt
+            # openai.chatgpt
           ]
           ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
             {

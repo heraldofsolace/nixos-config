@@ -87,7 +87,7 @@ _: {
           extraAppsEnable = true;
           globalProfiles = true;
           maxUploadSize = "5G";
-          notify_push.enable = true;
+          # notify_push.enable = true;
           configureRedis = true;
         };
 

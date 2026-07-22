@@ -16,11 +16,13 @@ _: {
           key = "onlyoffice-nonce-file";
           sopsFile = ../../../secrets/keys.yaml;
           group = "onlyoffice";
+          mode = "0440";
         };
         sops.secrets.onlyoffice-jwt-secret = {
           key = "onlyoffice-jwt-secret";
           sopsFile = ../../../secrets/keys.yaml;
           group = "onlyoffice";
+          mode = "0440";
         };
         environment.systemPackages = with pkgs; [
           nodejs

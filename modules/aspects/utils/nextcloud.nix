@@ -93,7 +93,7 @@ _: {
 
         services.onlyoffice = {
           enable = true;
-          hostname = "miranda.dorper-ghost.ts.net";
+          hostname = "onlyoffice";
           port = 8080;
           securityNonceFile = "/run/secrets/onlyoffice-nonce-file";
           jwtSecretFile = "/run/secrets/onlyoffice-jwt-secret";

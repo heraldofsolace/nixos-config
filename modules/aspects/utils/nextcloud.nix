@@ -109,6 +109,9 @@ _: {
         };
 
         services.nginx.virtualHosts.${config.services.onlyoffice.hostname} = {
+          serverAliases = [
+            "miranda.dorper-ghost.ts.net"
+          ];
           listen = [
             {
               addr = "0.0.0.0";

@@ -15,12 +15,12 @@ _: {
         sops.secrets.onlyoffice-nonce-file = {
           key = "onlyoffice-nonce-file";
           sopsFile = ../../../secrets/keys.yaml;
-          owner = "onlyoffice";
+          group = "onlyoffice";
         };
         sops.secrets.onlyoffice-jwt-secret = {
           key = "onlyoffice-jwt-secret";
           sopsFile = ../../../secrets/keys.yaml;
-          owner = "onlyoffice";
+          group = "onlyoffice";
         };
         environment.systemPackages = with pkgs; [
           nodejs

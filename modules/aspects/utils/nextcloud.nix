@@ -103,7 +103,7 @@ _: {
           8443
         ];
 
-        services.nginx.validateConfigFile = true;
+        services.nginx.validateConfigFile = false;
         services.nginx.virtualHosts.${config.services.nextcloud.hostName} = {
           forceSSL = true;
           sslCertificate = "/run/secrets/miranda-cert";

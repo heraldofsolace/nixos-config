@@ -81,7 +81,11 @@
         ];
       };
     };
-    services.mullvad-vpn.enable = true;
-    services.mullvad-vpn.package = pkgs.mullvad-vpn;
+    services.ivpn.enable = true;
+    environment.systemPackages = with pkgs; [
+      openvpn
+      wireguard-tools
+      ivpn
+    ];
   };
 }

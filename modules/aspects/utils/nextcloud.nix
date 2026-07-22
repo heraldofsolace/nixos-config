@@ -127,7 +127,8 @@ _: {
           sslCertificateKey = "/run/secrets/miranda-cert-key";
           extraConfig = ''
             proxy_set_header Host $http_host;
-            proxy_set_header X-Forwarded-Host $http_host;
+            proxy_set_header X-Forwarded-Host "miranda.dorper-ghost.ts.net:8443";
+            proxy_set_header X-Forwarded-Proto "https";
           '';
         };
       };

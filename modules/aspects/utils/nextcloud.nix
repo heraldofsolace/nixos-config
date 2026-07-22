@@ -91,10 +91,14 @@ _: {
 
         services.onlyoffice = {
           enable = true;
-          hostname = "onlyoffice.miranda.dorper-ghost.ts.net";
+          hostname = "onlyoffice";
           securityNonceFile = "/run/secrets/onlyoffice-nonce-file";
           jwtSecretFile = "/run/secrets/onlyoffice-jwt-secret";
         };
+
+        networking.firewall.interfaces.tailscale0.allowedTCPPorts = [
+          8443
+        ];
 
         services.nginx.virtualHosts.${config.services.nextcloud.hostName} = {
           forceSSL = true;
@@ -103,6 +107,14 @@ _: {
         };
 
         services.nginx.virtualHosts.${config.services.onlyoffice.hostname} = {
+          listen = [
+            {
+              addr = "0.0.0.0";
+              port = 8443;
+              ssl = true;
+              extraParameters = [ "default_server" ];
+            }
+          ];
           forceSSL = true;
           sslCertificate = "/run/secrets/miranda-cert";
           sslCertificateKey = "/run/secrets/miranda-cert-key";

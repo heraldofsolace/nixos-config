@@ -124,6 +124,10 @@ _: {
           forceSSL = true;
           sslCertificate = "/run/secrets/miranda-cert";
           sslCertificateKey = "/run/secrets/miranda-cert-key";
+          extraConfig = ''
+            proxy_set_header Host $http_host;
+            proxy_set_header X-Forwarded-Host $http_host;
+          '';
         };
       };
   };

@@ -94,7 +94,7 @@ _: {
         services.onlyoffice = {
           enable = true;
           hostname = "onlyoffice";
-          port = 8080;
+          port = 8088;
           securityNonceFile = "/run/secrets/onlyoffice-nonce-file";
           jwtSecretFile = "/run/secrets/onlyoffice-jwt-secret";
         };

@@ -36,7 +36,7 @@ _: {
           enableImagemagick = true;
           database.createLocally = true;
           appstoreEnable = true;
-          autoUpdateApps.enable = true;
+          autoUpdateApps.enable = false;
           settings = {
             trusted_domains = [ "miranda.dorper-ghost.ts.net" ];
             enabledPreviewProviders = [
@@ -93,7 +93,8 @@ _: {
 
         services.onlyoffice = {
           enable = true;
-          hostname = "onlyoffice";
+          hostname = "miranda.dorper-ghost.ts.net";
+          port = 8080;
           securityNonceFile = "/run/secrets/onlyoffice-nonce-file";
           jwtSecretFile = "/run/secrets/onlyoffice-jwt-secret";
         };

@@ -24,6 +24,23 @@ _: {
           group = "onlyoffice";
           mode = "0440";
         };
+        sops.secrets.cloudflare-acme-env = {
+          key = "cloudflare-acme-env";
+          sopsFile = ../../../secrets/keys.yaml;
+          owner = "acme";
+        };
+
+        security.acme = {
+          acceptTerms = true;
+          defaults.email = "aniketmail669@gmail.com";
+          defaults.dnsResolver = "1.1.1.1:53";
+          certs."onlyoffice.abhattacharyea.dev" = {
+            domain = "onlyoffice.abhattacharyea.dev";
+            dnsProvider = "cloudflare";
+            environmentFile = "/run/secrets/cloudflare-acme-env";
+            group = "nginx";
+          };
+        };
         environment.systemPackages = with pkgs; [
           nodejs
           ffmpeg
@@ -93,8 +110,7 @@ _: {
 
         services.onlyoffice = {
           enable = true;
-          hostname = "onlyoffice";
-          port = 8088;
+          hostname = "onlyoffice.abhattacharyea.dev";
           securityNonceFile = "/run/secrets/onlyoffice-nonce-file";
           jwtSecretFile = "/run/secrets/onlyoffice-jwt-secret";
         };
@@ -111,25 +127,8 @@ _: {
         };
 
         services.nginx.virtualHosts.${config.services.onlyoffice.hostname} = {
-          serverAliases = [
-            "miranda.dorper-ghost.ts.net"
-          ];
-          listen = [
-            {
-              addr = "0.0.0.0";
-              port = 8443;
-              ssl = true;
-              extraParameters = [ "default_server" ];
-            }
-          ];
           forceSSL = true;
-          sslCertificate = "/run/secrets/miranda-cert";
-          sslCertificateKey = "/run/secrets/miranda-cert-key";
-          extraConfig = ''
-            proxy_set_header Host $http_host;
-            proxy_set_header X-Forwarded-Host "miranda.dorper-ghost.ts.net:8443";
-            proxy_set_header X-Forwarded-Proto "https";
-          '';
+          useACMEHost = "onlyoffice.abhattacharyea.dev";
         };
       };
   };

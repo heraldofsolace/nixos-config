@@ -62,24 +62,25 @@
 
     networking = {
       nameservers = [
+        "192.168.0.5"
         "100.100.100.100"
-        "8.8.8.8"
         "1.1.1.1"
         "1.0.0.1"
       ];
+      search = [ "dorper-ghost.ts.net"];
     };
 
     services.resolved = {
       enable = true;
-      settings.Resolve = {
-        DNSSEC = "true";
-        Domains = [ "~." ];
-        DNSOverTLS = "true";
-        FallbackDNS = [
-          "1.1.1.1"
-          "1.0.0.1"
-        ];
-      };
+      # settings.Resolve = {
+      #   DNSSEC = "true";
+      #   Domains = [ "~." ];
+      #   DNSOverTLS = "true";
+      #   FallbackDNS = [
+      #     "1.1.1.1"
+      #     "1.0.0.1"
+      #   ];
+      # };
     };
     services.ivpn.enable = true;
     environment.systemPackages = with pkgs; [

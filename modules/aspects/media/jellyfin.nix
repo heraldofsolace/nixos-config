@@ -15,6 +15,22 @@ _: {
           type = "vaapi";
         };
       };
+
+      hardware.graphics = {
+        enable = true;
+        enable32Bit = true; # Recommended for broader application compatibility
+      };
+
+      hardware.graphics.extraPackages = [
+        pkgs.rocmPackages.clr.icd # Optional: for OpenCL tone mapping
+      ];
+
+      users.users.jellyfin = {
+        extraGroups = [
+          "video"
+          "render"
+        ];
+      };
     };
   };
 }

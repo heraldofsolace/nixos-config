@@ -4,7 +4,7 @@
   ...
 }:
 appimageTools.wrapAppImage rec {
-  pname = "join";
+  pname = "join-desktop";
   version = "1.1.3";
 
   src = appimageTools.extract {

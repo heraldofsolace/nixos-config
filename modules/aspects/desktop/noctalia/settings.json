@@ -708,7 +708,7 @@
     "resumeScreenOffCommand": "",
     "resumeLockCommand": "",
     "resumeSuspendCommand": "",
-    "customCommands": "[]"
+    "customCommands": "[{\"name\":\"Send Hass Report\",\"timeout\":300,\"command\":\"hass-report-status https://homeassistant.dorper-ghost.ts.net/api/webhook/eaea48a1-30e3-47bf-a076-30f816f0d3d1 false\",\"resumeCommand\":\"hass-report-status https://homeassistant.dorper-ghost.ts.net/api/webhook/eaea48a1-30e3-47bf-a076-30f816f0d3d1 true\\n\"}]"
   },
   "desktopWidgets": {
     "enabled": true,

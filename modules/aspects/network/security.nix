@@ -67,7 +67,7 @@
         "1.1.1.1"
         "1.0.0.1"
       ];
-      search = [ "dorper-ghost.ts.net"];
+      search = [ "dorper-ghost.ts.net" ];
     };
 
     services.resolved = {
@@ -87,6 +87,7 @@
       openvpn
       wireguard-tools
       ivpn
+      ivpn-ui
     ];
   };
 }

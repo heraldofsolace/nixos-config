@@ -32,6 +32,7 @@ _: {
           "music"
         ];
       };
+      users.groups.music = {};
     };
   };
 }

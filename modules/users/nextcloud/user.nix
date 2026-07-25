@@ -38,6 +38,7 @@
         #   neededForUsers = true;
         # };
         users.groups.nextcloud = { };
+        users.groups.music = { };
 
         users.users = {
           nextcloud = {
@@ -46,6 +47,9 @@
             isNormalUser = lib.mkForce false;
             group = "nextcloud";
             home = lib.mkForce "/var/lib/nextcloud";
+            extraGroups = [
+              "music"
+            ];
             # hashedPasswordFile = config.sops.secrets.nextcloud-password.path;
           };
         };

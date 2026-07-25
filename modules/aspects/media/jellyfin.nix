@@ -29,6 +29,7 @@ _: {
         extraGroups = [
           "video"
           "render"
+          "music"
         ];
       };
     };

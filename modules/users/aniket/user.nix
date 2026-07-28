@@ -124,7 +124,7 @@
               "scanner"
             ]
             ++ (lib.optional (host.name == "miranda") [
-              "media"
+              "music"
             ]);
 
             shell = pkgs.bash; # bash as default shell to keep myself sane. In interactive mode, bash drops into fish

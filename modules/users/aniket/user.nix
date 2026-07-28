@@ -123,9 +123,7 @@
               "lp"
               "scanner"
             ]
-            ++ (lib.optional (host.name == "miranda") [
-              "music"
-            ]);
+            ++ (lib.optional (host.name == "miranda") "music");
 
             shell = pkgs.bash; # bash as default shell to keep myself sane. In interactive mode, bash drops into fish
             openssh.authorizedKeys.keys = [

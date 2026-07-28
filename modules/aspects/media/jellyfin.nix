@@ -32,7 +32,7 @@ _: {
           "music"
         ];
       };
-      users.groups.music = {};
+      users.groups.music = { };
     };
   };
 }

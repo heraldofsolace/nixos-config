@@ -14,6 +14,12 @@
       ];
     };
 
+    users.hass = {
+      description = "Home Assistant";
+      userNameNick = "hass";
+      userNameReal = "Home Assistant";
+    };
+
     users.nextcloud = {
       description = "Nextcloud";
       userNameNick = "nextcloud";

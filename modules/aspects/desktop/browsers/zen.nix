@@ -8,7 +8,7 @@
     imports = [
       inputs.zen.homeModules.beta
     ];
-
+    stylix.targets.zen-browser.profileNames = [ "default" ];
     programs.zen-browser.enable = true;
     programs.zen-browser.profiles.default.extensions.packages =
       with pkgs.nur.repos.rycee.firefox-addons; [

@@ -71,6 +71,8 @@
         editors._.vscode
         editors._.jetbrains
 
+        utils._.obsidian
+
         games
       ])
       ++ (lib.optional (host.name == "horologium") [
@@ -93,6 +95,8 @@
         editors._.anivim
         editors._.vscode
         editors._.jetbrains
+
+        utils._.obsidian
 
         games
       ]);
@@ -122,6 +126,7 @@
               "kvm"
               "lp"
               "scanner"
+              "dialout"
             ]
             ++ (lib.optional (host.name == "miranda") "music");
 

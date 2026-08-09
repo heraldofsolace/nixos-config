@@ -4,7 +4,7 @@
       home.packages = with pkgs; [
         gimp
         imagemagick
-        inkscape
+        # inkscape
       ];
     };
   };

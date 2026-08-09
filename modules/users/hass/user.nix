@@ -43,6 +43,7 @@
         security.sudo.configFile = lib.mkMerge [
           ''
             hass ALL=NOPASSWD:${pkgs.systemd}/bin/systemctl suspend
+            hass ALL=NOPASSWD:${pkgs.systemd}/bin/systemctl poweroff
           ''
         ];
 

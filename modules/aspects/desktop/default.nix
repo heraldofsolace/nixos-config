@@ -45,8 +45,8 @@
 
             kdePackages.dolphin
             obs-studio
-          ]
-          ++ (lib.optional (host.name == "andromeda") bambu-studio);
+          ];
+          # ++ (lib.optional (host.name == "andromeda") bambu-studio);
       };
 
       services.wl-clip-persist = {

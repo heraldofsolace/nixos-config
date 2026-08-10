@@ -45,7 +45,7 @@
             users = [ "hass" ];
             commands = [
               {
-                command = "${pkgs.systemd}/bin/systemctl poweroff";
+                command = "${config.system.path}/bin/systemctl poweroff";
                 options = [ "NOPASSWD" ];
               }
             ];
@@ -54,7 +54,7 @@
             users = [ "hass" ];
             commands = [
               {
-                command = "${pkgs.systemd}/bin/systemctl suspend";
+                command = "${config.system.path}/bin/systemctl suspend";
                 options = [ "NOPASSWD" ];
               }
             ];

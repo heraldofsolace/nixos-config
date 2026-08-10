@@ -40,12 +40,33 @@
           neededForUsers = true;
         };
 
-        security.sudo.configFile = lib.mkMerge [
-          ''
-            hass ALL=NOPASSWD:${pkgs.systemd}/bin/systemctl suspend
-            hass ALL=NOPASSWD:${pkgs.systemd}/bin/systemctl poweroff
-          ''
+        security.sudo.extraRules = [
+          {
+            users = [ "hass" ];
+            commands = [
+              {
+                command = "${pkgs.systemd}/bin/systemctl poweroff";
+                options = [ "NOPASSWD" ];
+              }
+            ];
+          }
+          {
+            users = [ "hass" ];
+            commands = [
+              {
+                command = "${pkgs.systemd}/bin/systemctl suspend";
+                options = [ "NOPASSWD" ];
+              }
+            ];
+          }
         ];
+
+        # security.sudo.configFile = lib.mkMerge [
+        #   ''
+        #     hass ALL=NOPASSWD:${pkgs.systemd}/bin/systemctl suspend
+        #     hass ALL=NOPASSWD:${pkgs.systemd}/bin/systemctl poweroff
+        #   ''
+        # ];
 
         services.openssh.enable = true;
 

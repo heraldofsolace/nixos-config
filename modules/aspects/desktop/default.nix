@@ -1,52 +1,49 @@
 {
   blazar.desktop.homeManager =
     {
-      host,
       pkgs,
       ...
     }:
     {
       home = {
-        packages =
-          with pkgs;
-          [
-            appimage-run
+        packages = with pkgs; [
+          appimage-run
 
-            junction
+          junction
 
-            # inputs'.nixpkgs-local.legacyPackages.atuin-desktop
-            atuin-desktop
-            # stable.atuin-desktop
+          # inputs'.nixpkgs-local.legacyPackages.atuin-desktop
+          atuin-desktop
+          # stable.atuin-desktop
 
-            libportal-qt6
+          libportal-qt6
 
-            libreoffice
-            onlyoffice-desktopeditors
+          libreoffice
+          onlyoffice-desktopeditors
 
-            # thunderbird
-            gparted
+          # thunderbird
+          gparted
 
-            discord
+          discord
 
-            qbittorrent
-            transmission_4-qt6
+          qbittorrent
+          transmission_4-qt6
 
-            signal-desktop
+          signal-desktop
 
-            boxbuddy
+          boxbuddy
 
-            localsend
+          localsend
 
-            # megasync
+          # megasync
 
-            cameractrls
+          cameractrls
 
-            wl-clipboard
+          wl-clipboard
 
-            kdePackages.dolphin
-            obs-studio
-          ];
-          # ++ (lib.optional (host.name == "andromeda") bambu-studio);
+          kdePackages.dolphin
+          obs-studio
+        ];
+        # ++ (lib.optional (host.name == "andromeda") bambu-studio);
       };
 
       services.wl-clip-persist = {

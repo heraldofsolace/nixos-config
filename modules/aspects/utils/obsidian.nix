@@ -118,7 +118,7 @@
                           })
                           (pkgs.fetchurl {
                             url = "https://github.com/brianpetro/obsidian-smart-connections/releases/download/${version}/styles.css";
-                            sha256 = "sha256-ARkzdIh0b+cFL3+YQbkt9xUPTi9ky8joJEP6iBKjL+A=";
+                            sha256 = "sha256-chk2ZA5gjEp0AkvSKjVFiaz/Zo2caI6IN4FVMFbIj9c=";
                           })
                         ];
                         dontUnpack = true;

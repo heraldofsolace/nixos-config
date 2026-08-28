@@ -54,6 +54,7 @@
             hideMounts = true;
             directories = [
               "/etc/nix"
+              "/etc/coolercontrol"
               # "/etc/pipewire"
               "/var/log"
               "/var/lib/bluetooth"
@@ -63,6 +64,9 @@
               "/var/db/sudo"
               "/var/lib/tailscale"
               "/var/lib/postgresql"
+              "/var/lib/coolercontrol"
+              "/var/lib/qemu"
+              "/var/lib/OpenRGB"
               "/root"
             ];
             files = [

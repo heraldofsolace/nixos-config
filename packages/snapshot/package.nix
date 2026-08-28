@@ -52,4 +52,7 @@ writeShellApplication {
             --action="scriptAction:-xdg-open $recentFile=View"
     fi
   '';
+
+  meta.mainProgram = "blazar-snapshot";
+  meta.description = "A simple screenshot utility for Hyprland";
 }

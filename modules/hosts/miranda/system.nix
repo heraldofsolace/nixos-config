@@ -76,7 +76,7 @@
         };
       };
 
-      # networking.interfaces.enp6s0.wakeOnLan.enable = true;
+      networking.interfaces.enp9s0.wakeOnLan.enable = true;
       networking.hostName = "miranda";
       services = {
         openssh = {

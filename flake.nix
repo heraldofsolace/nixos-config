@@ -161,10 +161,12 @@
       url = "github:noctalia-dev/noctalia/legacy-v4";
       inputs.nixpkgs.follows = "latest";
     };
+    noctalia-v5.url = "github:noctalia-dev/noctalia/cachix";
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    phone-deck.url = "github:heraldofsolace/phone-deck";
     pkgs-by-name-for-flake-parts.url = "github:drupol/pkgs-by-name-for-flake-parts";
     quickshell = {
       url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";

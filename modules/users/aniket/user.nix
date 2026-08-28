@@ -72,6 +72,7 @@
         editors._.jetbrains
 
         utils._.obsidian
+        utils._.openrgb
 
         games
       ])

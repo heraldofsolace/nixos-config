@@ -61,9 +61,9 @@
       in
       {
         enable = true;
-        image = ./_files/wall10.jpg;
+        image = ./_files/wall.png;
         polarity = "dark";
-        base16Scheme = ./_files/everforest.yaml;
+        base16Scheme = ./_files/hornet.yaml;
         targets.grub.useWallpaper = true;
         fonts = {
           serif = {

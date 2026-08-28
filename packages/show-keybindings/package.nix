@@ -40,4 +40,6 @@ writeShellApplication {
     }' |
     walker --dmenu
   '';
+
+  meta.mainProgram = "blazar-show-keybindings";
 }

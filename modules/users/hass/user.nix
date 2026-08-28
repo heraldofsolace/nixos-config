@@ -28,9 +28,7 @@
 
     nixos =
       {
-        pkgs,
         config,
-        lib,
         ...
       }:
       {

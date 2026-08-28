@@ -1,0 +1,18 @@
+scheme: "Hornet"
+author: "OpenAI"
+base00: "#120C12" # Deep void
+base01: "#1D1118" # Cloak shadow
+base02: "#2B1820" # Dark burgundy
+base03: "#5A3038" # Muted crimson
+base04: "#8C4A4D" # Dusty red
+base05: "#D6C4B8" # Pale silk
+base06: "#E9DDD3" # Mask ivory
+base07: "#FFF3E8" # Bright silk
+base08: "#E0444E" # Hornet red
+base09: "#D66A4A" # Warm orange-red
+base0A: "#E6A15A" # Thread gold
+base0B: "#B8A06A" # Muted gold
+base0C: "#B85C68" # Rose crimson
+base0D: "#C47A7E" # Soft red
+base0E: "#A83B4B" # Deep scarlet
+base0F: "#F08A78" # Pale ember

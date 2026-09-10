@@ -175,6 +175,7 @@
         jellyfin = {
           enable = true;
           apiKey._secret = config.sops.secrets."jellyfin/api_key".path;
+          openFirewall = true;
           users = {
             admin = {
               mutable = false;

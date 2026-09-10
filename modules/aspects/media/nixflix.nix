@@ -75,7 +75,7 @@
           qbittorrent = {
             enable = true;
             password = config.sops.secrets."torrent/qbittorrent/password".path;
-            serverConfig.Preferences.WebUI.Password_PBKDF2 = "@ByteArray(YoAqbQJ+fd2g/OOgtTKXxg==:JtxIz0rwk1STLEPm0SRr6ZfarP/uSZGq69/uIg4T4azwHGZn8dgmmnNEmwRr6Jr10ifMZ3AnHPaB+aUpUpimUQ==)";
+            serverConfig.Preferences.WebUI.Password_PBKDF2 = "@ByteArray(283lbAoUgtn5pkt16VvpgA==:+e1dH4JAJg5ZoAkeC5rnQiW+hCNGSLt6ZHnYY2Oueo5rHMQU+3l8queIiGhYaJWi1Zei1iYr67vdBL7zKYpTpw==)";
           };
         };
 

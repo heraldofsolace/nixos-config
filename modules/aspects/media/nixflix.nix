@@ -149,7 +149,7 @@
             servers = [
               {
                 name = "Eweka";
-                host = "sslreader.eweka.nl";
+                host = "news.eweka.nl";
                 port = 563;
                 username._secret = config.sops.secrets."usenet/eweka/username".path;
                 password._secret = config.sops.secrets."usenet/eweka/password".path;

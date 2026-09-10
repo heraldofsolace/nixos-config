@@ -206,6 +206,10 @@
           enable = true;
           wgConfFile = config.sops.secrets."wireguard/conf".path;
           accessibleFrom = [ "192.168.0.0/24" ];
+          openVPNPorts = [ {
+            port = 60729;
+            protocol = "both";
+          }];
         };
       };
     };

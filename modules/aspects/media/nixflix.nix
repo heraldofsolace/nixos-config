@@ -40,6 +40,8 @@
         "torrent/qbittorrent/password" = { inherit sopsFile; };
       };
 
+      networking.firewall.allowedTCPPorts = [ 80 ];
+
       nixflix = {
         enable = true;
         mediaDir = "/data/media";

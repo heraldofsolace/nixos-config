@@ -55,7 +55,7 @@
         nginx = {
           enable = true;
           addHostsEntries = true; # Disable this if you have your own DNS configuration
-          domain = "miranda.lan.internal";
+          domain = "miranda";
         };
         # caddy = {
         #   enable = true;

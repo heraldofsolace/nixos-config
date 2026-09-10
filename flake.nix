@@ -154,6 +154,10 @@
     nix-maid.url = "github:viperML/nix-maid";
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
+    nixflix = {
+      url = "github:kiriwalawren/nixflix";
+      inputs.nixpkgs.follows = "latest";
+    };
     nixos.url = "github:NixOS/nixpkgs/nixos-26.05";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
@@ -168,6 +172,10 @@
     };
     phone-deck.url = "github:heraldofsolace/phone-deck";
     pkgs-by-name-for-flake-parts.url = "github:drupol/pkgs-by-name-for-flake-parts";
+    prismnix = {
+      url = "github:qacow37/prismnix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     quickshell = {
       url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
       inputs.nixpkgs.follows = "latest";

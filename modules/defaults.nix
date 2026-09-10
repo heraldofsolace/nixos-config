@@ -76,7 +76,6 @@
                 zoom
                 kstars
                 electron
-                awww
                 ;
             };
           in
@@ -99,11 +98,12 @@
             #inputs.agenix.overlays.default
 
             # Or define it inline, for example:
-            # (final: prev: {
-            #   hi = final.hello.overrideAttrs (oldAttrs: {
-            #     patches = [ ./change-hello-to-hi.patch ];
-            #   });
-            # })
+            (_final: prev: {
+              awww = prev.awww.overrideAttrs (oldAttrs: {
+                buildInputs = oldAttrs.buildInputs ++ [ pkgs.dav1d ];
+                cargoBuildFlags = [ "--features=avif" ];
+              });
+            })
           ];
         config = {
           # Disable if you don't want unfree packages

@@ -102,6 +102,8 @@
   hardware.keyboard.qmk.enable = true;
   hardware.logitech.wireless.enable = true;
   hardware.logitech.wireless.enableGraphical = true;
+  services.input-remapper.enable = true;
+  services.input-remapper.enableUdevRules = true;
 
   hardware.bluetooth.enable = true;
   services.udev.packages = [ pkgs.bazecor ];

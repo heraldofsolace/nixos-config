@@ -1,5 +1,4 @@
 .direnv/
-modules/aspects/desktop/_files/wall*
 # General
 .DS_Store
 .localized

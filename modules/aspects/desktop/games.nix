@@ -1,12 +1,67 @@
-{
+{ inputs, ... }: {
   flake-file.inputs = {
-    # rimsort = {
-    #   url = "https://github.com/RimSort/RimSort";
-    #   flake = false;
-    # };
+    prismnix = {
+      url = "github:qacow37/prismnix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   blazar.games.homeManager = { pkgs, ... }: {
+    imports = [
+      inputs.prismnix.homeModules.prismnix
+    ];
+    programs.prismnix = {
+      enable = true;
+      instances = {
+        "My Instance" = {
+          minecraft = {
+            enable = true;
+
+            version = "1.21.11";
+            mod-loader = {
+              enable = true;
+              loader = "fabric";
+            };
+            shader-loader = {
+              enable = true;
+              loader = "iris";
+              version = "fabric-1.21.11";
+            };
+
+            mods = {
+              fabric-api = {
+                enable = true;
+              };
+              sound-controller = {
+                enable = true;
+                settings = {
+                  sounds = {
+                    "minecraft:entity.enderman.ambient" = 0.3;
+                    "minecraft:entity.enderman.death" = 0.3;
+                  };
+                };
+              };
+            };
+
+            packages = with inputs.prismnix.packages.${pkgs.system}; [
+              modmenu
+              midnightcontrols
+              (sodium.override {
+                version = "pkg-mc1.21.11-0.8.7-fabric";
+              })
+
+              # Resourcepack
+              default-dark-mode
+              complementary-reimagined
+            ];
+
+            allowed-symlinks = {
+              enable = true;
+            };
+          };
+        };
+      };
+    };
     home.packages = with pkgs; [
       # (inputs.nur.repos.username.package)
 

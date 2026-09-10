@@ -157,9 +157,16 @@
       # awww-script = pkgs.writeShellScriptBin "awww" ''
       #   ${awww-command}
       # '';
-      awww-script = pkgs.writeShellScriptBin "awww" ''
-        awww img ${./_files/wall.gif}
-      '';
+      awww-script =
+        let
+          myawww = pkgs.awww.overrideAttrs (oldAttrs: {
+            buildInputs = oldAttrs.buildInputs ++ [ pkgs.dav1d ];
+            cargoBuildFlags = [ "--features=avif" ];
+          });
+        in
+        pkgs.writeShellScriptBin "awww" ''
+          ${myawww}/bin/awww img ${./_files/wall.gif}
+        '';
     in
     {
       imports = [

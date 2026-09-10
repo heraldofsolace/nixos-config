@@ -1,6 +1,7 @@
-{ writeShellApplication, ... }:
+{ writeShellApplication, awww, ... }:
 writeShellApplication {
   name = "awww-schedule";
+  runtimeInputs = [ awww ];
   text = ''
     while getopts "i:" opt; do
       case $opt in

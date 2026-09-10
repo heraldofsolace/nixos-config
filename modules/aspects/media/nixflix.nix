@@ -76,7 +76,7 @@
             enable = true;
             password._secret = config.sops.secrets."torrent/qbittorrent/password".path;
             serverConfig.Preferences.WebUI.Password_PBKDF2 = "@ByteArray(283lbAoUgtn5pkt16VvpgA==:+e1dH4JAJg5ZoAkeC5rnQiW+hCNGSLt6ZHnYY2Oueo5rHMQU+3l8queIiGhYaJWi1Zei1iYr67vdBL7zKYpTpw==)";
-            serverConfig.Preferences.WebUI.username = "admin";
+            serverConfig.Preferences.WebUI.Username = "admin";
           };
         };
 

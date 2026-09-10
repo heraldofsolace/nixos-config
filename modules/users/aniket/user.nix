@@ -75,6 +75,8 @@
         utils._.openrgb
 
         games
+      ]) ++ (lib.optional (host.name == "miranda") [
+        media._.nixflix
       ])
       ++ (lib.optional (host.name == "horologium") [
         plasma

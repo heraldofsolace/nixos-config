@@ -94,7 +94,7 @@
       stylix
       determinate-nix
       media._.plex
-      media._.jellyfin
+      # media._.jellyfin
       database._.postgresql
       utils._.nextcloud
       # plasma

@@ -25,6 +25,7 @@
         "indexer-api-keys/NZBFinder" = { inherit sopsFile; };
         "indexer-api-keys/NzbPlanet" = { inherit sopsFile; };
         "jellyfin/alice_password" = { inherit sopsFile; };
+        "jellyfin/api_key" = { inherit sopsFile; };
         "seerr/api_key" = { inherit sopsFile; };
         "wireguard/conf" = { inherit sopsFile; };
         "sabnzbd/api_key" = { inherit sopsFile; };
@@ -43,7 +44,7 @@
         enable = true;
         mediaDir = "/data/media";
         stateDir = "/data/.state";
-        mediaUsers = [ "myuser" ];
+        mediaUsers = [ "aniket" ];
 
         theme = {
           enable = true;
@@ -54,6 +55,7 @@
         nginx = {
           enable = true;
           addHostsEntries = true; # Disable this if you have your own DNS configuration
+          domain = "miranda.lan.internal";
         };
         # caddy = {
         #   enable = true;
@@ -94,7 +96,9 @@
 
         recyclarr = {
           enable = true;
-          cleanupUnmanagedProfiles = true;
+          cleanupUnmanagedProfiles = {
+            enable = true;
+          };
         };
 
         lidarr = {
@@ -127,7 +131,7 @@
           };
         };
 
-        sabnzbd = {
+        usenetClients.sabnzbd = {
           enable = true;
 
           settings = {
@@ -201,7 +205,7 @@
         vpn = {
           enable = true;
           wgConfFile = config.sops.secrets."wireguard/conf".path;
-          accessibleFrom = [ "192.168.1.0/24" ];
+          accessibleFrom = [ "192.168.0.0/24" ];
         };
       };
     };

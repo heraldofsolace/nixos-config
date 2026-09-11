@@ -24,10 +24,34 @@
     fsType = "ext4";
   };
 
-  fileSystems."/var/lib/nextcloud" = {
+  fileSystems."/mnt/storage" = {
     device = "/dev/disk/by-uuid/ee86aeac-30b6-4c48-8630-d8212cd6d942";
     fsType = "ext4";
   };
+
+  fileSystems."/var/lib/nextcloud" = {
+    device = "/mnt/storage/nextcloud";
+    fsType = "none";
+    options = [ "bind" ];
+    depends = [ "/mnt/storage" ]; # Ensures base storage is mounted first
+  };
+
+  # 3. Bind mount the *arr stack data directory
+  fileSystems."/data" = {
+    device = "/mnt/storage/data";
+    fsType = "none";
+    options = [ "bind" ];
+    depends = [ "/mnt/storage" ]; # Ensures base storage is mounted first
+  };
+
+  # Automatically create the required mount point folders on boot
+  systemd.tmpfiles.rules = [
+    "d /mnt/storage 0755 root root -"
+    # "d /mnt/storage/nextcloud 0770 nextcloud nextcloud -"
+    # "d /mnt/storage/data 0775 root root -"
+    "d /var/lib/nextcloud 0770 nextcloud nextcloud -"
+    "d /data 0775 root root -"
+  ];
 
   fileSystems."/boot/efi" = {
     device = "/dev/disk/by-uuid/D074-7B2E";

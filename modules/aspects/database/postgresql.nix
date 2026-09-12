@@ -7,6 +7,7 @@ _: {
       services.postgresql = {
         enable = true;
         enableTCPIP = true;
+        extensions = ps: with ps; [ pgvector ];
         authentication = pkgs.lib.mkOverride 10 ''
           local all all trust
           host all all 127.0.0.1/32 trust

@@ -9,10 +9,7 @@
         "gemma3"
         "qwen3"
       ];
-
-      environmentVariables = {
-        OLLAMA_HOST = "0.0.0.0:11434";
-      };
+      host = "0.0.0.0";
     };
 
     networking.firewall = {

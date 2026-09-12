@@ -8,6 +8,7 @@
         # "mistral"
         "gemma3"
         "qwen3"
+        "nomic-embed-text"
       ];
       host = "0.0.0.0";
     };

@@ -40,10 +40,20 @@ local keymaps = {
         ":<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>",
         opts = {noremap = true},
         mode = 'v'
-    }, -- Window navigation
-    {'<C-${down}>' % keys, '<C-W>j'}, {'<C-${up}>' % keys, '<C-W>k'},
-    {'<C-${left}>' % keys, '<C-W>h'}, {'<C-${right}>' % keys, '<C-W>l'}, -- Buffer and tabs
-    {'<leader>bd', ':Bclose<cr>:tabclose<cr>gT'},
+    }, -- Window navigation (tmux-aware; vim.g.tmux_navigator_no_mappings in
+    -- core/opts.lua stops vim-tmux-navigator also binding its own default
+    -- <C-h/j/k/l>, so this is the only window-nav binding active)
+    {'<C-${down}>' % keys, ':TmuxNavigateDown<cr>'},
+    {'<C-${up}>' % keys, ':TmuxNavigateUp<cr>'},
+    {'<C-${left}>' % keys, ':TmuxNavigateLeft<cr>'},
+    {'<C-${right}>' % keys, ':TmuxNavigateRight<cr>'},
+    -- Window resize on the same direction keys, one layer up (Alt instead
+    -- of Ctrl), mirroring hyprland.lua's mod/CTRL/ALT modifier layering.
+    -- Right/up grow, left/down shrink.
+    {'<A-${left}>' % keys, ':vertical resize -5<cr>'},
+    {'<A-${right}>' % keys, ':vertical resize +5<cr>'},
+    {'<A-${down}>' % keys, ':resize -5<cr>'},
+    {'<A-${up}>' % keys, ':resize +5<cr>'}, -- Buffer and tabs
     {'<leader>ba', ':bufdo bd<cr>'}, {'<leader>${right}' % keys, ':bnext<cr>'},
     {'<leader>${left}' % keys, ':bprevious<cr>'}, {'<leader>tn', ':tabnew<cr>'},
     {'<leader>tc', ':tabclose<cr>'}, {'<leader>tm', ':tabmove'},
@@ -57,16 +67,7 @@ local keymaps = {
 
     -- cd
     {'<leader>cd', ':cd %:p:h<cr>:pwd<cr>'}, -- Buffer
-    {'<leader>q', ':e ~/buffer<cr>'}, -- Command-mode
-    {'$h', 'e ~/', mode = 'c', opts = {noremap = true}},
-    {'$d', 'e ~/Desktop/', mode = 'c', opts = {noremap = true}},
-    {'$j', 'e ./', mode = 'c', opts = {noremap = true}}, {
-        '$c',
-        'e <C-\\>e CurrentFileDir("e")<cr>',
-        mode = 'c',
-        opts = {noremap = true}
-    },
-    {'$q', '<C-\\>e DeleteTillSlash()<cr>', mode = 'c', opts = {noremap = true}},
+    {'<leader>q', ':e ~/buffer<cr>'},
 
     -- Readline-like mappings
     {'<C-A>', '<Home>', mode = 'c'}, {'<C-E>', '<End>', mode = 'c'},
@@ -77,26 +78,6 @@ local keymaps = {
 require('legendary').keymaps(keymaps)
 
 vim.api.nvim_exec([[
-        command! Bclose call BufcloseCloseIt()
-        function! BufcloseCloseIt()
-            let l:currentBufNum = bufnr("%")
-            let l:alternateBufNum = bufnr("#")
-
-            if buflisted(l:alternateBufNum)
-                buffer #
-            else
-                bnext
-            endif
-
-            if bufnr("%") == l:currentBufNum
-                new
-            endif
-
-            if buflisted(l:currentBufNum)
-                execute("bdelete! ".l:currentBufNum)
-            endif
-        endfunction
-
         function! CmdLine(str)
             call feedkeys(":" . a:str)
         endfunction 
@@ -119,24 +100,6 @@ vim.api.nvim_exec([[
         endfunction
     ]], false)
 
-vim.api.nvim_exec([[
-        func! DeleteTillSlash()
-            let g:cmd = getcmdline()
-            let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*", "\\1", "")
-            
-
-            if g:cmd == g:cmd_edited
-            let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*/", "\\1", "")
-            endif
-            
-            return g:cmd_edited
-        endfunc
-
-        func! CurrentFileDir(cmd)
-            return a:cmd . " " . expand("%:p:h") . "/"
-        endfunc
-    ]], false)
-
 local autocmds = {
     {'TabLeave', function() vim.g.lasttab = vim.fn.tabpagenr() end}, {
         'BufReadPost', function()
@@ -146,27 +109,27 @@ local autocmds = {
         end
     }, {
         'WinEnter', function()
-            if (vim.bo.filetype ~= 'dashboard') then
+            if (vim.bo.filetype ~= 'ministarter') then
                 vim.opt.colorcolumn = "120"
                 vim.opt.cul = true
             end
         end
     }, {
         'WinLeave', function()
-            if (vim.bo.filetype ~= 'dashboard') then
+            if (vim.bo.filetype ~= 'ministarter') then
                 vim.opt.colorcolumn = "0"
                 vim.opt.cul = false
             end
         end
     }, {
         {'BufLeave', 'FocusLost', 'InsertEnter'}, function()
-            if (vim.bo.filetype ~= 'dashboard') then
+            if (vim.bo.filetype ~= 'ministarter') then
                 vim.opt.relativenumber = false
             end
         end
     }, {
         {'BufEnter', 'FocusGained', 'InsertLeave'}, function()
-            if (vim.bo.filetype ~= 'dashboard') then
+            if (vim.bo.filetype ~= 'ministarter') then
                 vim.opt.relativenumber = true
             end
         end

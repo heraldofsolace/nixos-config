@@ -58,10 +58,10 @@
           # To skip without creating a new repo when launching not in a repository directory: 'skip', 'create', 'prompt'.
           notARepository = "skip";
 
-          # customCommands converted from prior YAML examples follow
-          # Converted customCommands from original commented YAML. NOTE: Some keys are duplicated in the original
-          # (e.g. <c-r>, v, G, b, t, <c-c>, <c-a>, <c-e>) but appear in different contexts. Lazygit matches on context
-          # so they can coexist; duplicates within the same context were kept only once.
+          # customCommands converted from prior YAML examples. Keys only need
+          # to be unique within a context (lazygit matches on context), and
+          # a systematic scan of every (context, key) pair below confirmed
+          # there are no remaining collisions.
           customCommands = [
             # Comparing a file in a previous revision with the working copy.
             {
@@ -134,7 +134,7 @@
             }
             # Open existing GitLab MR in browser.
             {
-              key = "G";
+              key = "L";
               command = "glab mr view -w {{.SelectedLocalBranch.UpstreamBranch}}";
               context = "localBranches";
               description = "Go to MR in GitLab";
@@ -197,11 +197,11 @@
             }
             # Pruning branches no longer on the remote.
             {
-              key = "G";
+              key = "P";
               command = ''git fetch -p && for branch in $(git for-each-ref --format '%(refname) %(upstream:track)' refs/heads | awk '$2 == "[gone]" {sub("refs/heads/", "", $1); print $1}'); do git branch -D $branch; done'';
               context = "localBranches";
               loadingText = "Pruning...";
-              description = "Prune local branches no longer on its remote; (G)one.";
+              description = "Prune local branches no longer on its remote.";
             }
 
             # TODO: Process the rest and convert from the compendium of documented custom commands on the Lazygit repo wiki.
@@ -291,14 +291,6 @@
                 }
               ];
             }
-            # Push specific commit (and all preceding)
-            {
-              key = "<c-O>";
-              command = "git push {{.SelectedRemote.RefName}} {{.SelectedLocalCommit.Sha}}:{{.SelectedLocalBranch.RefName}}";
-              context = "commits";
-              loadingText = "Pushing commit...";
-              description = "Push a specific commit (and all preceding) commits";
-            }
             # Create annotated tag
             {
               key = "N";
@@ -323,53 +315,6 @@
               context = "global";
               loadingText = "Creating pull request on GitHub";
             }
-            # View GitLab MR in browser
-            {
-              key = "G";
-              command = "glab mr view -w {{.SelectedLocalBranch.UpstreamBranch}}";
-              context = "localBranches";
-              description = "Go to MR in gitlab";
-              output = "log";
-            }
-            # Checkout PR by ID (hub)
-            {
-              key = "v";
-              prompts = [
-                {
-                  type = "input";
-                  title = "PR id:";
-                }
-              ];
-              command = "hub pr checkout {{index .PromptResponses 0}}";
-              context = "localBranches";
-              loadingText = "checking out PR";
-            }
-            # Interactive GH PR selection checkout (gh)
-            {
-              key = "v";
-              context = "localBranches";
-              loadingText = "Checking out GitHub Pull Request...";
-              command = "gh pr checkout {{.Form.PullRequestNumber}}";
-              prompts = [
-                {
-                  type = "menuFromCommand";
-                  title = "Which PR do you want to check out?";
-                  key = "PullRequestNumber";
-                  command = ''gh pr list --json number,title,headRefName,updatedAt --template '{{`{{range .}}{{printf "#%v: %s - %s (%s)" .number .title .headRefName (timeago .updatedAt)}}{{end}}`}}'';
-                  filter = "#(?P<number>[0-9]+): (?P<title>.+) - (?P<ref_name>[^ ]+).*";
-                  valueFormat = "{{.number}}";
-                  labelFormat = ''{{"#" | black | bold}}{{.number | white | bold}} {{.title | yellow | bold}}{{" [" | black | bold}}{{.ref_name | green}}{{"]" | black | bold}}'';
-                }
-              ];
-            }
-            # Open git mergetool for selected file
-            {
-              key = "M";
-              command = "git mergetool {{ .SelectedFile.Name }}";
-              context = "files";
-              loadingText = "Opening git mergetool";
-              output = "log";
-            }
             # Open git mergetool for repo
             {
               key = "<c-e>";
@@ -377,30 +322,6 @@
               context = "files";
               loadingText = "Opening git mergetool in the project repository";
               output = "log";
-            }
-            # Prune deleted remote branches
-            {
-              key = "<c-e>";
-              command = "git remote prune {{.SelectedRemote.Name}}";
-              context = "remotes";
-              loadingText = "Pruning...";
-              description = "prune deleted remote branches";
-            }
-            # Prune merged local branches
-            {
-              key = "b";
-              command = "git branch --merged master | grep -v '^[ *]*master$' | xargs -r git branch -d";
-              context = "localBranches";
-              loadingText = "Pruning...";
-              description = "prune local branches that have been merged to master";
-            }
-            # Prune gone branches
-            {
-              key = "G";
-              command = ''git fetch -p && for branch in $(git for-each-ref --format '%(refname) %(upstream:track)' refs/heads | awk '$2 == "[gone]" {sub("refs/heads/", "", $1); print $1}'); do git branch -D $branch; done'';
-              context = "localBranches";
-              description = "Prune local branches no longer on its remote; (G)one.";
-              loadingText = "Pruning gone...";
             }
             # Commit via Commitizen
             {
@@ -463,7 +384,7 @@
             }
             # Commit as non-default author
             {
-              key = "<c-c>";
+              key = "<c-n>";
               description = "commit as non-default author";
               command = "git commit -m \"{{index .PromptResponses 0}}\" --author=\"{{index .PromptResponses 1}} <{{index .PromptResponses 2}}>\"";
               context = "files";
@@ -488,7 +409,7 @@
             }
             # Amend author of last commit
             {
-              key = "<c-a>";
+              key = "<c-A>";
               description = "amend the author of last commit";
               command = "git commit --amend --author=\"{{index .PromptResponses 0}} <{{index .PromptResponses 1}}>\"";
               context = "commits";

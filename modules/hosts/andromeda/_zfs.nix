@@ -60,7 +60,16 @@
     # TODO: autoReplication
   };
   boot.zfs.devNodes = "/dev/disk/by-partuuid";
+  boot.zfs.forceImportRoot = false;
   systemd.services.zfs-mount.enable = false;
+
+  # ZFS ARC is uncapped by default (up to ~50%+ of RAM). Measured 38GiB
+  # (61%) in use on this 62GiB machine with only 3.8GiB genuinely free -
+  # cap it so games/Ollama/VMs have real headroom, while still leaving
+  # plenty for caching.
+  boot.extraModprobeConfig = ''
+    options zfs zfs_arc_max=${toString (24 * 1024 * 1024 * 1024)}
+  '';
 
   # boot.initrd.postDeviceCommands = lib.mkAfter ''
   #   zpool import -a -d ${config.boot.zfs.devNodes}

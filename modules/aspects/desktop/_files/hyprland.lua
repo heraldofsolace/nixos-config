@@ -391,6 +391,7 @@ hl.bind(mod .. " + escape", hl.dsp.exec_cmd("noctalia msg session lock"))
 hl.bind(mod .. " + SHIFT + escape", hl.dsp.exec_cmd("noctalia msg panel-toggle session"))
 hl.bind(mod .. " + z", hl.dsp.workspace.toggle_special("term"))
 hl.bind(mod .. " + j", hl.dsp.workspace.toggle_special("file"))
+hl.bind(mod .. " + c", hl.dsp.workspace.toggle_special("cheatsheet"))
 
 -- Audio and brightness
 hl.bind("XF86AudioRaiseVolume",
@@ -521,6 +522,18 @@ hl.window_rule({
     stay_focused = true,
     center = true,
     size = "1800 1000"
+})
+
+hl.window_rule({
+    -- Firefox has no --class flag, so match on the page title instead
+    -- (set in modules/aspects/desktop/_files/cheatsheet.html's <title>).
+    match = {
+        title = "Aniket's Cheatsheet"
+    },
+    float = true,
+    stay_focused = true,
+    center = true,
+    size = "1800 1100"
 })
 
 hl.window_rule({
@@ -783,6 +796,11 @@ hl.workspace_rule({
 hl.workspace_rule({
     workspace = "special:file",
     on_created_empty = "dolphin"
+})
+
+hl.workspace_rule({
+    workspace = "special:cheatsheet",
+    on_created_empty = "firefox --kiosk --profile /home/aniket/.local/share/cheatsheet-ff-profile file:///home/aniket/.local/share/cheatsheet/index.html"
 })
 
 hl.workspace_rule({

@@ -19,7 +19,7 @@ return {
     {'tpope/vim-speeddating'}, {'gcmt/wildfire.vim'},
     {'gpanders/editorconfig.nvim'}, {'rktjmp/lush.nvim'},
     {"christoomey/vim-tmux-navigator"}, {'direnv/direnv.vim'},
-    {'junegunn/vim-peekaboo'}, {'b3nj5m1n/kommentary'}, {
+    {'junegunn/vim-peekaboo'}, {
         "m4xshen/hardtime.nvim",
         dependencies = {"MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim"},
         opts = {}

@@ -147,35 +147,36 @@ return {
             vim.api.nvim_create_autocmd('LspAttach', {
                 group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
                 callback = function(event)
+                    local lsp_pick = require('mini.extra').pickers.lsp
                     local keymaps = {
                         {
                             'gd',
-                            require('telescope.builtin').lsp_definitions,
+                            function() lsp_pick {scope = 'definition'} end,
                             description = "[G]oto [D]efinition",
                             opts = {noremap = true}
                         }, {
                             'gr',
-                            require('telescope.builtin').lsp_references,
+                            function() lsp_pick {scope = 'references'} end,
                             description = "[G]oto [R]eferences",
                             opts = {noremap = true}
                         }, {
                             'gI',
-                            require('telescope.builtin').lsp_implementations,
+                            function() lsp_pick {scope = 'implementation'} end,
                             description = "[G]oto [I]mplementation",
                             opts = {noremap = true}
                         }, {
                             '<leader>D',
-                            require('telescope.builtin').lsp_type_definitions,
+                            function() lsp_pick {scope = 'type_definition'} end,
                             description = "Type [D]efinition",
                             opts = {noremap = true}
                         }, {
                             '<leader>ds',
-                            require('telescope.builtin').lsp_document_symbols,
+                            function() lsp_pick {scope = 'document_symbol'} end,
                             description = "[D]ocument [S]ymbols",
                             opts = {noremap = true}
                         }, {
                             '<leader>ws',
-                            require('telescope.builtin').lsp_dynamic_workspace_symbols,
+                            function() lsp_pick {scope = 'workspace_symbol'} end,
                             description = "[W]orkspace [S]ymbols",
                             opts = {noremap = true}
                         }, {

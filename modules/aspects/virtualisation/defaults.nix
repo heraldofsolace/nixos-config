@@ -55,7 +55,7 @@
           ++ (lib.optional config.virtualisation.virtualbox.host.enable "vboxusers");
       };
 
-    blazar.virtualisation.homeManager = {
+    homeManager = {
       # services.podman = { };
       programs.distrobox = {
         enable = true;

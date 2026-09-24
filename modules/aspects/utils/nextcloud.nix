@@ -37,7 +37,7 @@ _: {
           certs."onlyoffice.abhattacharyea.dev" = {
             domain = "onlyoffice.abhattacharyea.dev";
             dnsProvider = "cloudflare";
-            environmentFile = "/run/secrets/cloudflare-acme-env";
+            environmentFile = config.sops.secrets.cloudflare-acme-env.path;
             group = "nginx";
           };
         };
@@ -72,7 +72,7 @@ _: {
           };
           config = {
             dbtype = "pgsql";
-            adminpassFile = "/run/secrets/nextcloud-password";
+            adminpassFile = config.sops.secrets.nextcloud-password.path;
             defaultPhoneRegion = "IN";
           };
           extraApps = with config.services.nextcloud.package.packages.apps; {
@@ -111,19 +111,23 @@ _: {
         services.onlyoffice = {
           enable = true;
           hostname = "onlyoffice.abhattacharyea.dev";
-          securityNonceFile = "/run/secrets/onlyoffice-nonce-file";
-          jwtSecretFile = "/run/secrets/onlyoffice-jwt-secret";
+          securityNonceFile = config.sops.secrets.onlyoffice-nonce-file.path;
+          jwtSecretFile = config.sops.secrets.onlyoffice-jwt-secret.path;
         };
 
         networking.firewall.interfaces.tailscale0.allowedTCPPorts = [
           8443
+          # onlyoffice's forceSSL virtualHost below needs 443; scoped to
+          # tailscale0 to match nextcloud's own privacy posture rather than
+          # opening it globally.
+          443
         ];
 
         services.nginx.validateConfigFile = false;
         services.nginx.virtualHosts.${config.services.nextcloud.hostName} = {
           forceSSL = true;
-          sslCertificate = "/run/secrets/miranda-cert";
-          sslCertificateKey = "/run/secrets/miranda-cert-key";
+          sslCertificate = config.sops.secrets.miranda-cert.path;
+          sslCertificateKey = config.sops.secrets.miranda-cert-key.path;
         };
 
         services.nginx.virtualHosts.${config.services.onlyoffice.hostname} = {

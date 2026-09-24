@@ -36,20 +36,23 @@ let
   src = fetchFromGitHub {
     owner = "sgtaziz";
     repo = "lian-li-linux";
-    rev = "v0.8.7";
-    hash = "sha256-OnpXvStAN9YrRzPMgGD7wDyjis7LgPmUnBAy+MOSL3M=";
+    rev = "v1.1.1";
+    hash = "sha256-+5bM+ECoBZqGGDMM3f25Myjt7s0Im1hPThvAoQA5Uoc=";
     fetchSubmodules = true;
   };
 
   frontend = buildNpmPackage {
     pname = "lianli-linux-frontend";
-    version = "0.8.7";
+    version = "1.1.1";
 
     inherit src;
 
     sourceRoot = "${src.name}/crates/lianli-gui";
 
-    npmDepsHash = "sha256-p1x1c6NwrpleYXVLUn9ec16Mah+pODLUvLfPEZ36eio=";
+    npmDepsHash = "sha256-jvYMN/Mi79pNGykg3Yd52n4Pzruh9UxtzV67WR+cm6g=";
+    npmFlags = [ "--legacy-peer-deps" ];
+    makeCacheWritable = true;
+    npmDepsFetcherVersion = 2;
     postPatch = ''
       cp ${./package-lock.json} package-lock.json
     '';
@@ -66,9 +69,10 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "lianli-linux";
-  version = "0.8.7";
+  version = "1.1.1";
 
   inherit src;
+  doCheck = false;
 
   cargoLock = {
     lockFile = "${src}/Cargo.lock";
@@ -113,6 +117,12 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     substituteInPlace packaging/udev/60-lianli.rules \
     --replace-fail "/bin/chmod" "${coreutils}/bin/chmod"
+
+    cp ${./package-lock.json} crates/lianli-gui/package-lock.json
+     substituteInPlace packaging/udev/60-lianli.rules \
+    --replace-fail \
+      ', TAG+="uaccess", RUN{builtin}+="uaccess"' \
+      ', TAG+="uaccess"'
   '';
 
   preBuild = ''

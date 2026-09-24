@@ -25,7 +25,6 @@
       with blazar;
       [
         # from the aspect tree
-        ai
         security._.sops
         security._.onepassword
         virtualisation
@@ -51,6 +50,7 @@
         # (<den/user-shell> "dash") # default user shell # Cannot be used for `dash`.
       ]
       ++ (lib.optional (host.name == "andromeda") [
+        ai
         hyprland
         desktop
         desktop._.image
@@ -75,8 +75,12 @@
         utils._.openrgb
 
         games
-      ]) ++ (lib.optional (host.name == "miranda") [
+      ])
+      ++ (lib.optional (host.name == "miranda") [
+        ai
         media._.nixflix
+        utils._.monitoring
+        utils._.backup
       ])
       ++ (lib.optional (host.name == "horologium") [
         plasma

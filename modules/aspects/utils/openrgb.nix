@@ -1,13 +1,17 @@
-{ self, ... }: {
+{ inputs, ... }: {
+  flake-file.inputs = {
+    lian-li-linux = {
+      url = "git+file:///home/aniket/lian-li-linux";
+    };
+  };
   blazar.utils._.openrgb = {
     nixos = { pkgs, ... }: {
-      environment.systemPackages = with pkgs; [
-        openrgb-with-all-plugins
-        self.packages.${pkgs.stdenv.hostPlatform.system}.lian-li-linux
+      imports = [
+        inputs.lian-li-linux.nixosModules.default
       ];
 
-      services.udev.packages = [
-        self.packages.${pkgs.stdenv.hostPlatform.system}.lian-li-linux
+      environment.systemPackages = with pkgs; [
+        openrgb-with-all-plugins
       ];
 
       programs.coolercontrol.enable = true;
@@ -30,29 +34,38 @@
         motherboard = "amd";
         server.port = 6742;
       };
+
+      services.lianli-linux = {
+        enable = true;
+        daemonMode = "user";
+      };
     };
 
-    homeManager = { pkgs, ... }: {
-      systemd.user.services.lianli-daemon = {
-        Unit = {
-          Description = "Lian Li Device Daemon";
-          After = [ "graphical-session.target" ];
-          PartOf = [ "graphical-session.target" ];
-        };
+    homeManager = { ... }: {
+      imports = [
+        inputs.lian-li-linux.homeManagerModules.default
+      ];
+      services.lianli-linux.session.enable = true;
+      # systemd.user.services.lianli-daemon = {
+      #   Unit = {
+      #     Description = "Lian Li Device Daemon";
+      #     After = [ "graphical-session.target" ];
+      #     PartOf = [ "graphical-session.target" ];
+      #   };
 
-        Service = {
-          Type = "simple";
+      #   Service = {
+      #     Type = "simple";
 
-          ExecStart = "${self.packages.${pkgs.stdenv.hostPlatform.system}.lian-li-linux}/bin/lianli-daemon";
+      #     ExecStart = "${self.packages.${pkgs.stdenv.hostPlatform.system}.lian-li-linux}/bin/lianli-daemon";
 
-          Restart = "on-failure";
-          RestartSec = 5;
-        };
+      #     Restart = "on-failure";
+      #     RestartSec = 5;
+      #   };
 
-        Install = {
-          WantedBy = [ "default.target" ];
-        };
-      };
+      #   Install = {
+      #     WantedBy = [ "default.target" ];
+      #   };
+      # };
     };
   };
 }

@@ -52,7 +52,7 @@
 
               # Resourcepack
               default-dark-mode
-              complementary-reimagined
+              # complementary-reimagined
             ];
 
             allowed-symlinks = {
@@ -122,8 +122,20 @@
       ];
     };
 
-    hardware.amdgpu.overdrive.enable = true;
     systemd.packages = with pkgs; [ lact ];
     systemd.services.lactd.wantedBy = [ "multi-user.target" ];
   };
+
+  # GPU overdrive/overclocking is only safe on hosts with a proper
+  # desktop-class GPU and cooling (andromeda, miranda) - not horologium, a
+  # laptop. A global default (independent of whether the games aspect
+  # itself is included) so it still applies on miranda, which doesn't.
+  den.default.nixos =
+    { host, lib, ... }:
+    {
+      hardware.amdgpu.overdrive.enable = lib.mkIf (builtins.elem host.name [
+        "andromeda"
+        "miranda"
+      ]) true;
+    };
 }

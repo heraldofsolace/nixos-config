@@ -1,10 +1,11 @@
 {
   blazar,
+  inputs,
   ...
 }:
 {
   den.hosts.x86_64-linux.miranda = _: {
-    description = "NixOS workstation for Work notebook Lenovo ThinkPad T14 Gen 4 Ryzen";
+    description = "NixOS workstation";
     users.aniket = {
       description = "Aniket";
       userNameNick = "Aniket";
@@ -47,6 +48,8 @@
     nixos = { ... }: {
       imports = [
         ./_hardware-configuration.nix
+        inputs.disko.nixosModules.disko
+        ./_disko.nix
       ];
 
       sops.secrets.miranda-cert = {
@@ -81,7 +84,6 @@
       services = {
         openssh = {
           enable = true;
-          settings.PermitRootLogin = "no";
           settings.PasswordAuthentication = false;
         };
       };

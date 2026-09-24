@@ -8,6 +8,14 @@
     url = "github:nicknovitski/make-shell";
     inputs.flake-compat.follows = "flake-compat";
   };
+  flake-file.inputs.nixos-anywhere = {
+    url = "github:nix-community/nixos-anywhere";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
+  flake-file.inputs.omnix = {
+    url = "github:juspay/omnix";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
 
   imports = [
     inputs.make-shell.flakeModules.default
@@ -19,6 +27,7 @@
       pkgs,
       lib,
       self',
+      inputs',
       ...
     }:
     {
@@ -33,8 +42,8 @@
             lib.splitString "\n" config.files.generatedWarningMessage.text
           )}
 
-          use flake
-          #use flake path:. --impure
+          #use flake
+          use flake path:. --impure
 
           dotenv_if_exists .env.private
           source_env_if_exists .envrc.private
@@ -60,6 +69,12 @@
           alejandra
           shfmt
           deploy-rs
+          claude-code
+          nix-du
+          nurl
+          cachix
+          inputs'.nixos-anywhere.packages.default
+          inputs'.omnix.packages.default
         ];
         shellHook = "${self'.checks.pre-commit}";
       };

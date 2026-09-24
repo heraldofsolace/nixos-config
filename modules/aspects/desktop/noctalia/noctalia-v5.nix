@@ -38,7 +38,7 @@
       programs.noctalia =
         let
           noctaliaCustomSettings = (builtins.fromTOML (builtins.readFile ./noctalia-full-config.toml)) // {
-            theme.mode = if config.stylix.polarity == "dark" then config.stylix.polarity else "light";
+            theme.mode = config.stylix.polarity;
             dock.background_opacity = config.stylix.opacity.desktop;
             notification.background_opacity = config.stylix.opacity.popups;
             osd.background_opacity = config.stylix.opacity.popups;

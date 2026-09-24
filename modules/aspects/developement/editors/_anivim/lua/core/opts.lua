@@ -5,9 +5,6 @@ vim.opt.relativenumber = true
 vim.opt.nu = true
 vim.opt.rnu = true
 
--- put numbers and signs in the same column
-vim.opt.signcolumn = 'number'
-
 -- >> editor <<--
 
 -- shell
@@ -21,8 +18,6 @@ if vim.opt.guifont then vim.opt.guifont = 'Fira Code' end
 vim.opt.splitright = true
 -- split new buffer to the bottom
 vim.opt.splitbelow = true
--- briefly jump to matching seperator
-vim.opt.showmatch = true
 -- case insensitive search
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
@@ -39,8 +34,9 @@ vim.opt.hidden = true
 -- some language servers dont like backup files
 vim.opt.backup = false
 vim.opt.writebackup = false
--- more space for coc messages
-vim.opt.cmdheight = 3
+-- noice.nvim renders the cmdline itself in a floating window, so no
+-- reserved rows are needed at the bottom for it
+vim.opt.cmdheight = 0
 -- more responsiveness
 vim.opt.updatetime = 300
 -- avoid some prompts?
@@ -81,6 +77,11 @@ vim.g.mapleader = ' '
 vim.b.mapleader = ' '
 
 vim.g.lasttab = 1
+
+-- window nav is bound to this config's own custom direction keys in
+-- core/keys.lua via :TmuxNavigate*, so stop vim-tmux-navigator from also
+-- claiming its own default <C-h/j/k/l>
+vim.g.tmux_navigator_no_mappings = 1
 
 vim.opt.undofile = true
 

@@ -14,6 +14,55 @@
 
         It utilizes the [Dentritic](https://vic.github.io/dendrix/Dendritic.html) pattern using
         [github:vic/den](https://github.com/vic/den) configuration library.
+
+        ## Project templates
+
+        `templates/` holds [flake templates](https://nix.dev/manual/nix/stable/command-ref/new-cli/nix3-flake-init)
+        for scaffolding new projects with a [devenv](https://devenv.sh)-based dev shell:
+
+        ```sh
+        nix flake init -t github:heraldofsolace/nixos-config#typst  # typst, typstyle, tinymist LSP
+        nix flake init -t github:heraldofsolace/nixos-config#rails  # ruby, bundler, solargraph LSP, PostgreSQL service
+        ```
+
+        Run in an empty directory, then `direnv allow` (or `devenv shell`).
+
+        ## Disaster recovery (disko)
+
+        Each host under `modules/hosts/<host>/_disko.nix` has a
+        [disko](https://github.com/nix-community/disko) config describing its disk layout,
+        kept in sync with the real partition UUIDs so it also drives the live `fileSystems`/
+        `swapDevices` (no reformatting on a normal `nixos-rebuild switch`). To actually
+        reinstall a host from scratch onto blank disks, use
+        [nixos-anywhere](https://github.com/nix-community/nixos-anywhere) (available in the
+        devshell):
+
+        ```sh
+        nixos-anywhere --flake .#<host> root@<target-ip>
+        ```
+
+        ## Devshell tools
+
+        Beyond the usual formatters/linters (`nixfmt`, `statix`, `deadnix`, `treefmt`), `nix develop`
+        also provides:
+
+        - [`nix-du`](https://github.com/symphorien/nix-du) - visualize what's actually taking up
+          space in `/nix/store` (dependency-aware, unlike plain `du`):
+          `nix-du -s=1MB | dot -Tsvg > store.svg`
+        - [`nurl`](https://github.com/nix-community/nurl) - generate a `fetchFromGitHub`/`fetchurl`
+          source expression from a plain URL: `nurl https://github.com/owner/repo v1.0.0`
+        - [`cachix`](https://github.com/cachix/cachix) - push/pull from the personal binary cache
+          (see below): `cachix push heraldofsolace <store-path>`
+        - [`omnix`](https://github.com/juspay/omnix) - `om show .` for a nicer flake overview than
+          `nix flake show`, `om ci` for flake health checks
+        - `nixos-anywhere` - see disaster recovery above
+
+        ## Binary cache
+
+        Builds of everything under `packages/` are pushed automatically by CI to a personal
+        [Cachix](https://heraldofsolace.cachix.org) cache (scoped to just those packages, not
+        full system/devshell closures, to stay within the free tier). It's already wired in as
+        a substituter for this flake, so no extra setup is needed to pull from it.
       '';
   };
 }

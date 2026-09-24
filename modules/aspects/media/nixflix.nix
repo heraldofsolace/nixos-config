@@ -12,33 +12,37 @@
       imports = [
         inputs.nixflix.nixosModules.default
       ];
-      sops.secrets = let sopsFile = ../../../secrets/nixflix-keys.yaml; in {
-        "sonarr/api_key" = { inherit sopsFile; };
-        "sonarr/password" = { inherit sopsFile; };
-        "radarr/api_key" = { inherit sopsFile; };
-        "radarr/password" = { inherit sopsFile; };
-        "lidarr/api_key" = { inherit sopsFile; };
-        "lidarr/password" = { inherit sopsFile; };
-        "prowlarr/api_key" = { inherit sopsFile; };
-        "prowlarr/password" = { inherit sopsFile; };
-        "indexer-api-keys/DrunkenSlug" = { inherit sopsFile; };
-        "indexer-api-keys/NZBFinder" = { inherit sopsFile; };
-        "indexer-api-keys/NzbPlanet" = { inherit sopsFile; };
-        "jellyfin/alice_password" = { inherit sopsFile; };
-        "jellyfin/api_key" = { inherit sopsFile; };
-        "seerr/api_key" = { inherit sopsFile; };
-        "wireguard/conf" = { inherit sopsFile; };
-        "sabnzbd/api_key" = { inherit sopsFile; };
-        "sabnzbd/nzb_key" = { inherit sopsFile; };
-        "sabnzbd/username" = { inherit sopsFile; };
-        "sabnzbd/password" = { inherit sopsFile; };
-        "usenet/eweka/username" = { inherit sopsFile; };
-        "usenet/eweka/password" = { inherit sopsFile; };
-        "usenet/newsgroupdirect/username" = { inherit sopsFile; };
-        "usenet/newsgroupdirect/password" = { inherit sopsFile; };
-        "navidrome/password" = { inherit sopsFile; };
-        "torrent/qbittorrent/password" = { inherit sopsFile; };
-      };
+      sops.secrets =
+        let
+          sopsFile = ../../../secrets/nixflix-keys.yaml;
+        in
+        {
+          "sonarr/api_key" = { inherit sopsFile; };
+          "sonarr/password" = { inherit sopsFile; };
+          "radarr/api_key" = { inherit sopsFile; };
+          "radarr/password" = { inherit sopsFile; };
+          "lidarr/api_key" = { inherit sopsFile; };
+          "lidarr/password" = { inherit sopsFile; };
+          "prowlarr/api_key" = { inherit sopsFile; };
+          "prowlarr/password" = { inherit sopsFile; };
+          "indexer-api-keys/DrunkenSlug" = { inherit sopsFile; };
+          "indexer-api-keys/NZBFinder" = { inherit sopsFile; };
+          "indexer-api-keys/NzbPlanet" = { inherit sopsFile; };
+          "jellyfin/alice_password" = { inherit sopsFile; };
+          "jellyfin/api_key" = { inherit sopsFile; };
+          "seerr/api_key" = { inherit sopsFile; };
+          "wireguard/conf" = { inherit sopsFile; };
+          "sabnzbd/api_key" = { inherit sopsFile; };
+          "sabnzbd/nzb_key" = { inherit sopsFile; };
+          "sabnzbd/username" = { inherit sopsFile; };
+          "sabnzbd/password" = { inherit sopsFile; };
+          "usenet/eweka/username" = { inherit sopsFile; };
+          "usenet/eweka/password" = { inherit sopsFile; };
+          "usenet/newsgroupdirect/username" = { inherit sopsFile; };
+          "usenet/newsgroupdirect/password" = { inherit sopsFile; };
+          "navidrome/password" = { inherit sopsFile; };
+          "torrent/qbittorrent/password" = { inherit sopsFile; };
+        };
 
       networking.firewall.allowedTCPPorts = [ 80 ];
 
@@ -211,10 +215,12 @@
           enable = true;
           wgConfFile = config.sops.secrets."wireguard/conf".path;
           accessibleFrom = [ "192.168.0.0/24" ];
-          openVPNPorts = [ {
-            port = 60729;
-            protocol = "both";
-          }];
+          openVPNPorts = [
+            {
+              port = 60729;
+              protocol = "both";
+            }
+          ];
         };
       };
     };

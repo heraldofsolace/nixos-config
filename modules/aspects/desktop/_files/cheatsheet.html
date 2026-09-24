@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Aniket's Cheatsheet</title>
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --bg-elevated: #ffffff;
+    --bg-inset: #efebe0;
+    --border: #ddd8cc;
+    --text: #201d18;
+    --text-muted: #6b6558;
+    --accent: #a8650a;
+    --accent-soft: #f0dcb8;
+    --kbd-bg: #ffffff;
+    --kbd-border: #d3ccba;
+    --kbd-shadow: #c9c2b0;
+    --radius: 6px;
+    --font-sans: ui-sans-serif, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: "JetBrains Mono", "Cascadia Code", "SF Mono", Consolas, ui-monospace, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12141a;
+      --bg-elevated: #1a1d26;
+      --bg-inset: #161821;
+      --border: #2a2e3a;
+      --text: #e4e2dc;
+      --text-muted: #8f93a0;
+      --accent: #e0a458;
+      --accent-soft: #3a2f1e;
+      --kbd-bg: #20232d;
+      --kbd-border: #343948;
+      --kbd-shadow: #05060a;
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #f7f5f0;
+    --bg-elevated: #ffffff;
+    --bg-inset: #efebe0;
+    --border: #ddd8cc;
+    --text: #201d18;
+    --text-muted: #6b6558;
+    --accent: #a8650a;
+    --accent-soft: #f0dcb8;
+    --kbd-bg: #ffffff;
+    --kbd-border: #d3ccba;
+    --kbd-shadow: #c9c2b0;
+  }
+  :root[data-theme="dark"] {
+    --bg: #12141a;
+    --bg-elevated: #1a1d26;
+    --bg-inset: #161821;
+    --border: #2a2e3a;
+    --text: #e4e2dc;
+    --text-muted: #8f93a0;
+    --accent: #e0a458;
+    --accent-soft: #3a2f1e;
+    --kbd-bg: #20232d;
+    --kbd-border: #343948;
+    --kbd-shadow: #05060a;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    line-height: 1.45;
+  }
+  a { color: var(--accent); }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 0.9rem 1.5rem;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .topbar h1 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0;
+    white-space: nowrap;
+  }
+  .topbar .sub {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+  }
+  .filter-wrap { margin-left: auto; position: relative; flex: 1 1 260px; max-width: 360px; }
+  #filter {
+    width: 100%;
+    font: inherit;
+    font-size: 0.85rem;
+    padding: 0.5rem 0.7rem 0.5rem 2rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--bg-elevated);
+    color: var(--text);
+  }
+  #filter:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .filter-wrap::before {
+    content: "⌕";
+    position: absolute;
+    left: 0.6rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 1rem;
+  }
+  #match-count { font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); white-space: nowrap; }
+
+  .jumpnav {
+    position: sticky;
+    top: 53px;
+    z-index: 19;
+    display: flex;
+    gap: 0.4rem;
+    padding: 0.6rem 1.5rem;
+    overflow-x: auto;
+    background: color-mix(in srgb, var(--bg) 94%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .jumpnav a {
+    flex: none;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--text-muted);
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--bg-elevated);
+  }
+  .jumpnav a:hover, .jumpnav a:focus-visible { color: var(--accent); border-color: var(--accent); }
+
+  main { max-width: 980px; margin: 0 auto; padding: 1.5rem; }
+
+  details.category {
+    margin-bottom: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg-elevated);
+    overflow: hidden;
+  }
+  details.category summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 0.9rem 1.1rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+  }
+  details.category summary::-webkit-details-marker { display: none; }
+  details.category summary::before {
+    content: "▸";
+    color: var(--accent);
+    transition: transform 0.15s ease;
+    font-size: 0.8em;
+  }
+  details.category[open] summary::before { transform: rotate(90deg); }
+  details.category summary .count {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--text-muted);
+  }
+  details.category summary .note {
+    font-size: 0.78rem;
+    font-weight: 400;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+  }
+  .category-body { padding: 0 1.1rem 1.1rem; border-top: 1px solid var(--border); }
+  .category-intro {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin: 0.9rem 0 0.2rem;
+    max-width: 68ch;
+  }
+  .category-intro code { font-family: var(--font-mono); background: var(--bg-inset); padding: 0.1em 0.35em; border-radius: 4px; }
+
+  h3.group {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin: 1.3rem 0 0.5rem;
+    font-weight: 700;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 0.35rem 0.9rem;
+  }
+  .entry {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.32rem 0;
+    font-size: 0.85rem;
+  }
+  .entry.hidden { display: none; }
+  .keys { display: inline-flex; align-items: center; gap: 0.15rem; flex: none; }
+  kbd {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    background: var(--kbd-bg);
+    border: 1px solid var(--kbd-border);
+    border-bottom: 2px solid var(--kbd-shadow);
+    border-radius: 5px;
+    padding: 0.15rem 0.4rem;
+    white-space: nowrap;
+    color: var(--text);
+  }
+  .plus { color: var(--text-muted); font-size: 0.72rem; }
+  .desc { color: var(--text-muted); }
+  .desc b, .desc strong { color: var(--text); font-weight: 600; }
+
+  .alias-table {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 0.3rem 1.2rem;
+    margin-top: 0.6rem;
+  }
+  .alias-row {
+    display: grid;
+    grid-template-columns: minmax(3.5rem, auto) 1fr;
+    gap: 0.6rem;
+    align-items: baseline;
+    padding: 0.2rem 0;
+    font-size: 0.82rem;
+  }
+  .alias-row.hidden { display: none; }
+  .alias-key { font-family: var(--font-mono); font-weight: 700; color: var(--accent); }
+  .alias-val { font-family: var(--font-mono); color: var(--text-muted); overflow-wrap: anywhere; }
+
+  .context-tag {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    background: var(--bg-inset);
+    border-radius: 4px;
+    padding: 0.05rem 0.35rem;
+    flex: none;
+  }
+
+  footer {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem 3rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 600px) {
+    .topbar { padding: 0.7rem 1rem; }
+    .topbar .sub { display: none; }
+    main { padding: 1rem; }
+    .grid, .alias-table { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <h1>⌨ Cheatsheet</h1>
+  <span class="sub">hyprland · fish · tmux · neovim · git</span>
+  <div class="filter-wrap">
+    <input id="filter" type="text" placeholder="Filter keybinds…" autocomplete="off" />
+  </div>
+  <span id="match-count"></span>
+</div>
+
+<nav class="jumpnav">
+  <a href="#hyprland">Hyprland</a>
+  <a href="#fish">Fish</a>
+  <a href="#tmux">Tmux</a>
+  <a href="#neovim">Neovim</a>
+  <a href="#git">Git &amp; VCS</a>
+</nav>
+
+<main>
+
+<p class="category-intro" style="max-width:72ch;margin:0 0 1.2rem">
+  Pulled straight from <code>my-nix</code>. Your kanata "thumb-down" home row remaps
+  <kbd>h</kbd><kbd>j</kbd><kbd>k</kbd><kbd>l</kbd> to <kbd>s</kbd><kbd>n</kbd><kbd>m</kbd><kbd>t</kbd>
+  (left/down/up/right) — that mapping shows up consistently across Hyprland, tmux's no-prefix pane nav, and Neovim's core motions.
+</p>
+
+<!-- ============ HYPRLAND ============ -->
+<details class="category" id="hyprland" open>
+  <summary>Hyprland <span class="note">mod = SUPER</span><span class="count">38 binds</span></summary>
+  <div class="category-body">
+
+    <h3 class="group">Focus &amp; layout <span style="text-transform:none;letter-spacing:0;color:var(--text-muted);font-weight:400">(thumb-down: s/t/m/n)</span></h3>
+    <div class="grid">
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>S</kbd></span><span class="desc">focus left</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>T</kbd></span><span class="desc">focus right</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>M</kbd></span><span class="desc">focus up</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>N</kbd></span><span class="desc">focus down</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>ALT</kbd><span class="plus">+</span><kbd>S/T/M/N</kbd></span><span class="desc">move window left/right/up/down</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>CTRL</kbd><span class="plus">+</span><kbd>S/T</kbd></span><span class="desc">roll/move column (layout-dependent)</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>CTRL</kbd><span class="plus">+</span><kbd>M/N</kbd></span><span class="desc">move window up/down</span></div>
+      <div class="entry"><span class="keys"><kbd>CTRL</kbd><span class="plus">+</span><kbd>ALT</kbd><span class="plus">+</span><kbd>T/S</kbd></span><span class="desc">mfact ±0.2 / column resize</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>SHIFT</kbd><span class="plus">+</span><kbd>S/T</kbd></span><span class="desc">swap with master / swap column</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>SHIFT</kbd><span class="plus">+</span><kbd>M/N</kbd></span><span class="desc">swap window up/down</span></div>
+    </div>
+
+    <h3 class="group">Workspaces</h3>
+    <div class="grid">
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>1–9</kbd></span><span class="desc">focus workspace</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>SHIFT</kbd><span class="plus">+</span><kbd>1–9</kbd></span><span class="desc">move window to workspace</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>0</kbd></span><span class="desc">toggle special workspace</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>SHIFT</kbd><span class="plus">+</span><kbd>0</kbd></span><span class="desc">move window to special workspace</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>,</kbd> / <kbd>.</kbd></span><span class="desc">workspace ±1 (relative)</span></div>
+      <div class="entry"><span class="keys">mouse wheel <span class="plus">+</span><kbd>SUPER</kbd></span><span class="desc">workspace ±1 on empty area</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>SHIFT</kbd><span class="plus">+</span><kbd>,</kbd>/<kbd>.</kbd></span><span class="desc">focus monitor's workspace ±1</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>CTRL</kbd><span class="plus">+</span><kbd>,</kbd>/<kbd>.</kbd></span><span class="desc">focus monitor left/right</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>SHIFT</kbd><span class="plus">+</span><kbd>ALT</kbd><span class="plus">+</span><kbd>,</kbd>/<kbd>.</kbd></span><span class="desc">move window to monitor left/right</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>Z</kbd></span><span class="desc">toggle special workspace "term"</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>J</kbd></span><span class="desc">toggle special workspace "file"</span></div>
+    </div>
+
+    <h3 class="group">Apps &amp; actions</h3>
+    <div class="grid">
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>↵</kbd></span><span class="desc">terminal (waveterm)</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>ALT</kbd><span class="plus">+</span><kbd>↵</kbd></span><span class="desc">Firefox</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>L</kbd></span><span class="desc">walker (launcher)</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>V</kbd></span><span class="desc">CopyQ toggle</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>Q</kbd></span><span class="desc">close window</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>G</kbd></span><span class="desc">toggle group</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>SHIFT</kbd><span class="plus">+</span><kbd>N/P</kbd></span><span class="desc">next/prev group</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>X</kbd></span><span class="desc">toggle noctalia notification panel</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>Esc</kbd></span><span class="desc">lock session (noctalia)</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>SHIFT</kbd><span class="plus">+</span><kbd>Esc</kbd></span><span class="desc">toggle noctalia session panel</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span><kbd>SHIFT</kbd><span class="plus">+</span><kbd>ALT</kbd><span class="plus">+</span><kbd>CTRL</kbd><span class="plus">+</span><kbd>C</kbd></span><span class="desc">open clipboard URL in mpv</span></div>
+    </div>
+
+    <h3 class="group">Screenshot &amp; system</h3>
+    <div class="grid">
+      <div class="entry"><span class="keys"><kbd>PrtSc</kbd></span><span class="desc">screenshot area</span></div>
+      <div class="entry"><span class="keys"><kbd>CTRL</kbd><span class="plus">+</span><kbd>PrtSc</kbd></span><span class="desc">screenshot active window</span></div>
+      <div class="entry"><span class="keys"><kbd>ALT</kbd><span class="plus">+</span><kbd>PrtSc</kbd></span><span class="desc">screenshot output</span></div>
+      <div class="entry"><span class="keys"><kbd>CTRL</kbd><span class="plus">+</span><kbd>ALT</kbd><span class="plus">+</span><kbd>Del</kbd></span><span class="desc">exit Hyprland</span></div>
+    </div>
+
+    <h3 class="group">Media &amp; mouse <span style="text-transform:none;letter-spacing:0;color:var(--text-muted);font-weight:400">(media keys work even when locked)</span></h3>
+    <div class="grid">
+      <div class="entry"><span class="keys"><kbd>Vol ▲/▼</kbd></span><span class="desc">volume ±5% (repeating)</span></div>
+      <div class="entry"><span class="keys"><kbd>Mute</kbd></span><span class="desc">mute toggle</span></div>
+      <div class="entry"><span class="keys"><kbd>▶/⏸/⏭/⏮</kbd></span><span class="desc">playerctl</span></div>
+      <div class="entry"><span class="keys"><kbd>Bright ▲/▼</kbd></span><span class="desc">brightness ±5% (repeating)</span></div>
+      <div class="entry"><span class="keys"><kbd>SUPER</kbd><span class="plus">+</span>drag</span><span class="desc">move window</span></div>
+      <div class="entry"><span class="keys"><kbd>ALT</kbd><span class="plus">+</span>drag</span><span class="desc">resize window</span></div>
+    </div>
+
+  </div>
+</details>
+
+<!-- ============ FISH ============ -->
+<details class="category" id="fish" open>
+  <summary>Fish shell <span class="count">24 aliases</span></summary>
+  <div class="category-body">
+    <p class="category-intro">Vi key bindings are enabled. <code>bash</code> itself defines zero aliases — it only auto-execs into tmux then hands off to fish.</p>
+
+    <h3 class="group">System &amp; nix</h3>
+    <div class="alias-table">
+      <div class="alias-row"><span class="alias-key">nrb</span><span class="alias-val">sudo nixos-rebuild</span></div>
+      <div class="alias-row"><span class="alias-key">ctl</span><span class="alias-val">systemctl</span></div>
+      <div class="alias-row"><span class="alias-key">utl</span><span class="alias-val">systemctl --user</span></div>
+      <div class="alias-row"><span class="alias-key">stl</span><span class="alias-val">sudo systemctl</span></div>
+      <div class="alias-row"><span class="alias-key">ut / un</span><span class="alias-val">systemctl --user start / stop</span></div>
+      <div class="alias-row"><span class="alias-key">up / dn</span><span class="alias-val">sudo systemctl start / stop</span></div>
+      <div class="alias-row"><span class="alias-key">jtl</span><span class="alias-val">journalctl</span></div>
+      <div class="alias-row"><span class="alias-key">n</span><span class="alias-val">nix</span></div>
+      <div class="alias-row"><span class="alias-key">np / ni / nr</span><span class="alias-val">nix profile / install / remove</span></div>
+      <div class="alias-row"><span class="alias-key">ns</span><span class="alias-val">nix search --no-update-lock-file</span></div>
+      <div class="alias-row"><span class="alias-key">nf</span><span class="alias-val">nix flake</span></div>
+      <div class="alias-row"><span class="alias-key">nepl</span><span class="alias-val">nix repl &lt;nixpkgs&gt;</span></div>
+      <div class="alias-row"><span class="alias-key">srch / orch</span><span class="alias-val">ns nixos / ns override</span></div>
+      <div class="alias-row"><span class="alias-key">mn</span><span class="alias-val">fuzzy-search nixpkgs docs (manix + sk)</span></div>
+    </div>
+
+    <h3 class="group">Everyday</h3>
+    <div class="alias-table">
+      <div class="alias-row"><span class="alias-key">.. / ... / ....</span><span class="alias-val">cd up 1–4 levels</span></div>
+      <div class="alias-row"><span class="alias-key">g</span><span class="alias-val">git</span></div>
+      <div class="alias-row"><span class="alias-key">grep</span><span class="alias-val">rg (ripgrep)</span></div>
+      <div class="alias-row"><span class="alias-key">gi</span><span class="alias-val">grep -i</span></div>
+      <div class="alias-row"><span class="alias-key">cat</span><span class="alias-val">bat (header/snip/changes style)</span></div>
+      <div class="alias-row"><span class="alias-key">top</span><span class="alias-val">htop</span></div>
+      <div class="alias-row"><span class="alias-key">myip</span><span class="alias-val">dig public IP via OpenDNS</span></div>
+      <div class="alias-row"><span class="alias-key">s / si / se</span><span class="alias-val">sudo -E / sudo -i / sudoedit</span></div>
+    </div>
+
+    <h3 class="group">Functions</h3>
+    <p class="category-intro"><code>update-system</code> (flake update + nh os/home switch + television/tealdeer updates) · <code>home-manager-news</code> · <code>list-desktop-files</code> · <code>fzf-open-edit</code></p>
+  </div>
+</details>
+
+<!-- ============ TMUX ============ -->
+<details class="category" id="tmux" open>
+  <summary>Tmux <span class="note">prefix = C-b (C-a also works)</span><span class="count">27 binds</span></summary>
+  <div class="category-body">
+    <p class="category-intro">Base config is oh-my-tmux, overridden locally only for pane navigation below.</p>
+
+    <h3 class="group">Pane navigation <span style="text-transform:none;letter-spacing:0;color:var(--text-muted);font-weight:400">(no prefix, thumb-down — forwards to Neovim's TmuxNavigate if active pane is vim)</span></h3>
+    <div class="grid">
+      <div class="entry"><span class="keys"><kbd>C-s</kbd></span><span class="desc">left</span></div>
+      <div class="entry"><span class="keys"><kbd>C-n</kbd></span><span class="desc">down</span></div>
+      <div class="entry"><span class="keys"><kbd>C-m</kbd></span><span class="desc">up</span></div>
+      <div class="entry"><span class="keys"><kbd>C-t</kbd></span><span class="desc">right</span></div>
+    </div>
+
+    <h3 class="group">Sessions &amp; windows</h3>
+    <div class="grid">
+      <div class="entry"><span class="keys"><kbd>prefix</kbd><span class="plus">+</span><kbd>C-c</kbd></span><span class="desc">new session</span></div>
+      <div class="entry"><span class="keys"><kbd>prefix</kbd><span class="plus">+</span><kbd>C-f</kbd></span><span class="desc">find session</span></div>
+      <div class="entry"><span class="keys"><kbd>prefix</kbd><span class="plus">+</span><kbd>⇧Tab</kbd></span><span class="desc">switch to last session</span></div>
+      <div class="entry"><span class="keys"><kbd>prefix</kbd><span class="plus">+</span><kbd>e</kbd></span><span class="desc">edit local config, reload on save</span></div>
+      <div class="entry"><span class="keys"><kbd>prefix</kbd><span class="plus">+</span><kbd>r</kbd></span><span class="desc">reload config</span></div>
+      <div class="entry"><span class="keys"><kbd>prefix</kbd><span class="plus">+</span><kbd>C-h</kbd>/<kbd>C-l</kbd></span><span class="desc">previous/next window</span></div>
+      <div class="entry"><span class="keys"><kbd>prefix</kbd><span class="plus">+</span><kbd>C-⇧h</kbd>/<kbd>C-⇧l</kbd></span><span class="desc">swap window with prev/next</span></div>
+      <div class="entry"><span class="keys"><kbd>prefix</kbd><span class="plus">+</span><kbd>Tab</kbd></span><span class="desc">last active window</span></div>
+      <div class="entry"><span class="keys"><kbd>prefix</kbd><span class="plus">+</span><kbd>0</kbd></span><span class="desc">select window index 10</span></div>
+    </div>
+
+    <h3 class="group">Panes</h3>
+    <div class="grid">
+      <div class="entry"><span class="keys"><kbd>prefix</kbd><span class="plus">+</span><kbd>-</kbd></span><span class="desc">split vertical (stacked)</span></div>
+      <div class="entry"><span class="keys"><kbd>prefix</kbd><span class="plus">+</span><kbd>_</kbd></span><span class="desc">split horizontal (side by side)</span></div>
+      <div class="entry"><span class="keys"><kbd>prefix</kbd><span class="plus">+</span><kbd>h/j/k/l</kbd></span><span class="desc">move pane (base config, qwerty)</span></div>
+      <div class="entry"><span class="keys"><kbd>prefix</kbd><span class="plus">+</span><kbd>&gt;</kbd>/<kbd>&lt;</kbd></span><span class="desc">swap pane with next/previous</span></div>
+      <div class="entry"><span class="keys"><kbd>prefix</kbd><span class="plus">+</span><kbd>+</kbd></span><span class="desc">maximize/restore pane</span></div>
+      <div class="entry"><span class="keys"><kbd>prefix</kbd><span class="plus">+</span><kbd>H/J/K/L</kbd></span><span class="desc">resize pane (repeatable)</span></div>
+      <div class="entry"><span class="keys"><kbd>prefix</kbd><span class="plus">+</span><kbd>m</kbd></span><span class="desc">toggle mouse on/off</span></div>
+      <div class="entry"><span class="keys"><kbd>prefix</kbd><span class="plus">+</span><kbd>F</kbd></span><span class="desc">open fpp (facsimile paste picker)</span></div>
+    </div>
+
+    <h3 class="group">Copy mode &amp; buffers</h3>
+    <div class="grid">
+      <div class="entry"><span class="keys"><kbd>prefix</kbd><span class="plus">+</span><kbd>↵</kbd></span><span class="desc">enter copy mode</span></div>
+      <div class="entry"><span class="keys"><kbd>v</kbd></span><span class="desc">begin selection</span></div>
+      <div class="entry"><span class="keys"><kbd>C-v</kbd></span><span class="desc">rectangle toggle</span></div>
+      <div class="entry"><span class="keys"><kbd>y</kbd></span><span class="desc">copy selection, exit</span></div>
+      <div class="entry"><span class="keys"><kbd>H</kbd>/<kbd>L</kbd></span><span class="desc">start/end of line</span></div>
+      <div class="entry"><span class="keys"><kbd>prefix</kbd><span class="plus">+</span><kbd>b</kbd></span><span class="desc">list paste buffers</span></div>
+      <div class="entry"><span class="keys"><kbd>prefix</kbd><span class="plus">+</span><kbd>p</kbd></span><span class="desc">paste from top buffer</span></div>
+      <div class="entry"><span class="keys"><kbd>prefix</kbd><span class="plus">+</span><kbd>P</kbd></span><span class="desc">choose buffer to paste</span></div>
+    </div>
+  </div>
+</details>
+
+<!-- ============ NEOVIM ============ -->
+<details class="category" id="neovim" open>
+  <summary>Neovim <span class="note">leader = Space</span><span class="count">mini.nvim + core</span></summary>
+  <div class="category-body">
+    <p class="category-intro">Thumb-down scheme (<code>s</code>=left, <code>n</code>=down, <code>m</code>=up, <code>t</code>=right) is the default direction mapping — <code>h/j/k/l</code> still work identically alongside it, bound bidirectionally.</p>
+
+    <h3 class="group">Core</h3>
+    <div class="grid">
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;w</kbd></span><span class="desc">save (:w!)</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;|</kbd> / <kbd>&lt;leader&gt;-</kbd></span><span class="desc">vsplit / split</span></div>
+      <div class="entry"><span class="keys"><kbd>C-s/n/m/t</kbd></span><span class="desc">tmux-aware window nav</span></div>
+      <div class="entry"><span class="keys"><kbd>M-s/t/n/m</kbd></span><span class="desc">resize window in that direction</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;ba</kbd></span><span class="desc">close all buffers</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;t</kbd> / <kbd>&lt;leader&gt;s</kbd></span><span class="desc">next / previous buffer</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;tn/tc/tm/tt/tl/te</kbd></span><span class="desc">tab new/close/move/next/last/edit</span></div>
+      <div class="entry"><span class="keys"><kbd>n</kbd> / <kbd>m</kbd></span><span class="desc">gj / gk (display-line scroll)</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;sn/sp/sa/s?</kbd></span><span class="desc">spell next/prev/add/suggest</span></div>
+      <div class="entry"><span class="keys"><kbd>C-l</kbd> <span class="context-tag">insert</span></span><span class="desc">fix last spelling error</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;cd</kbd></span><span class="desc">cd to current file's directory</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;q</kbd></span><span class="desc">open ~/buffer scratch file</span></div>
+      <div class="entry"><span class="keys"><kbd>C-a/C-e/C-k/C-p/C-n</kbd> <span class="context-tag">cmdline</span></span><span class="desc">home/end/kill/history</span></div>
+    </div>
+
+    <h3 class="group">mini.pick <span style="text-transform:none;letter-spacing:0;color:var(--text-muted);font-weight:400">(telescope replacement)</span></h3>
+    <div class="grid">
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;ff</kbd></span><span class="desc">find files</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;fg</kbd></span><span class="desc">live grep</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;fb</kbd></span><span class="desc">buffers</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;fh</kbd></span><span class="desc">help tags</span></div>
+    </div>
+
+    <h3 class="group">mini.extra <span style="text-transform:none;letter-spacing:0;color:var(--text-muted);font-weight:400">(extra pickers)</span></h3>
+    <div class="grid">
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;fo</kbd></span><span class="desc">old files</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;fr</kbd></span><span class="desc">registers</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;fk</kbd></span><span class="desc">keymaps</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;fc</kbd></span><span class="desc">commands</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;fgc</kbd></span><span class="desc">git commits</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;fgb</kbd></span><span class="desc">git buffer commits</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;fcf</kbd></span><span class="desc">fuzzy find in buffer</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;fbm</kbd></span><span class="desc">marks</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;ccs</kbd></span><span class="desc">colorscheme picker</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;frc</kbd></span><span class="desc">pick by frecency (mini.visits)</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;&lt;leader&gt;</kbd></span><span class="desc">toggle smart-open</span></div>
+    </div>
+
+    <h3 class="group">mini.diff <span style="text-transform:none;letter-spacing:0;color:var(--text-muted);font-weight:400">(gitsigns replacement)</span></h3>
+    <div class="grid">
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;hs</kbd></span><span class="desc">stage hunk</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;hr</kbd></span><span class="desc">reset hunk</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;hS</kbd></span><span class="desc">stage whole buffer</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;hR</kbd></span><span class="desc">reset whole buffer</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;hp</kbd></span><span class="desc">preview hunk</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;td</kbd></span><span class="desc">toggle deleted-lines overlay</span></div>
+      <div class="entry"><span class="keys"><kbd>[c</kbd> / <kbd>]c</kbd></span><span class="desc">prev/next hunk</span></div>
+      <div class="entry"><span class="keys"><kbd>ih</kbd></span><span class="desc">hunk textobject</span></div>
+    </div>
+
+    <h3 class="group">mini.surround <span style="text-transform:none;letter-spacing:0;color:var(--text-muted);font-weight:400">(rebound to g-prefix — s conflicts with thumb-down left)</span></h3>
+    <div class="grid">
+      <div class="entry"><span class="keys"><kbd>gsa</kbd></span><span class="desc">add</span></div>
+      <div class="entry"><span class="keys"><kbd>gsd</kbd></span><span class="desc">delete</span></div>
+      <div class="entry"><span class="keys"><kbd>gsf</kbd> / <kbd>gsF</kbd></span><span class="desc">find right/left</span></div>
+      <div class="entry"><span class="keys"><kbd>gsh</kbd></span><span class="desc">highlight</span></div>
+      <div class="entry"><span class="keys"><kbd>gsr</kbd></span><span class="desc">replace</span></div>
+      <div class="entry"><span class="keys"><kbd>gsn</kbd></span><span class="desc">update n-lines</span></div>
+    </div>
+
+    <h3 class="group">Other mini.nvim</h3>
+    <div class="grid">
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;bd</kbd></span><span class="desc">mini.bufremove — delete buffer, keep layout</span></div>
+      <div class="entry"><span class="keys"><kbd>-</kbd></span><span class="desc">mini.files — open explorer at current file</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;mm</kbd></span><span class="desc">mini.map — toggle minimap</span></div>
+      <div class="entry"><span class="keys"><kbd>M-s/t/n/m</kbd> <span class="context-tag">visual</span></span><span class="desc">mini.move — move selection</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;Ss/Sl/Sd</kbd></span><span class="desc">mini.sessions — save/load/delete</span></div>
+      <div class="entry"><span class="keys"><kbd>gS</kbd></span><span class="desc">mini.splitjoin — toggle single/multi-line</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;tw</kbd></span><span class="desc">mini.trailspace — trim trailing whitespace</span></div>
+      <div class="entry"><span class="keys"><kbd>ga</kbd> / <kbd>gA</kbd></span><span class="desc">mini.align — interactive align</span></div>
+      <div class="entry"><span class="keys"><kbd>gcc</kbd> / <kbd>gc</kbd></span><span class="desc">mini.comment (default)</span></div>
+      <div class="entry"><span class="keys"><kbd>[x</kbd> / <kbd>]x</kbd></span><span class="desc">mini.bracketed — buffers/diagnostics/files/jumps/etc.</span></div>
+      <div class="entry"><span class="keys"><kbd>di"</kbd> / <kbd>daf</kbd> / …</span><span class="desc">mini.ai — treesitter text objects (defaults)</span></div>
+    </div>
+  </div>
+</details>
+
+<!-- ============ GIT / VCS ============ -->
+<details class="category" id="git" open>
+  <summary>Git, Jujutsu &amp; Lazygit <span class="count">80+ git aliases</span></summary>
+  <div class="category-body">
+
+    <h3 class="group">Git — staging &amp; committing</h3>
+    <div class="alias-table">
+      <div class="alias-row"><span class="alias-key">a / aa / aaa</span><span class="alias-val">add / add -u / add -A</span></div>
+      <div class="alias-row"><span class="alias-key">ap</span><span class="alias-val">add --patch</span></div>
+      <div class="alias-row"><span class="alias-key">c / ca</span><span class="alias-val">commit -v / commit -a -v</span></div>
+      <div class="alias-row"><span class="alias-key">cs / csa</span><span class="alias-val">commit -S -v / -S -a -v</span></div>
+      <div class="alias-row"><span class="alias-key">cso / csoa</span><span class="alias-val">commit --signoff (-a)</span></div>
+      <div class="alias-row"><span class="alias-key">css / cssa</span><span class="alias-val">commit -S --signoff (-a)</span></div>
+      <div class="alias-row"><span class="alias-key">ar</span><span class="alias-val">commit --amend --reset-author -v</span></div>
+      <div class="alias-row"><span class="alias-key">ars / arso / arss</span><span class="alias-val">ar + gpg-sign / signoff / both</span></div>
+      <div class="alias-row"><span class="alias-key">aar / aaar</span><span class="alias-val">aa+ar / aaa+ar</span></div>
+      <div class="alias-row"><span class="alias-key">wip</span><span class="alias-val">add -A &amp;&amp; commit -m 'WIP'</span></div>
+      <div class="alias-row"><span class="alias-key">undo / u</span><span class="alias-val">reset --soft HEAD^ &amp;&amp; reset</span></div>
+    </div>
+
+    <h3 class="group">Git — branches &amp; checkout</h3>
+    <div class="alias-table">
+      <div class="alias-row"><span class="alias-key">br / bra</span><span class="alias-val">branch -v / branch -a -v</span></div>
+      <div class="alias-row"><span class="alias-key">brd / brdf</span><span class="alias-val">branch -d / -D -v</span></div>
+      <div class="alias-row"><span class="alias-key">brm</span><span class="alias-val">branch -m -v</span></div>
+      <div class="alias-row"><span class="alias-key">co / cob / cop</span><span class="alias-val">checkout / -b / -p</span></div>
+      <div class="alias-row"><span class="alias-key">cm / com</span><span class="alias-val">checkout master</span></div>
+      <div class="alias-row"><span class="alias-key">dc / dca</span><span class="alias-val">checkout -- / checkout -- :/</span></div>
+      <div class="alias-row"><span class="alias-key">db &lt;b&gt;</span><span class="alias-val">delete branch local + origin</span></div>
+    </div>
+
+    <h3 class="group">Git — diff, log &amp; inspect</h3>
+    <div class="alias-table">
+      <div class="alias-row"><span class="alias-key">d / da / ds</span><span class="alias-val">diff / diff HEAD / diff --staged</span></div>
+      <div class="alias-row"><span class="alias-key">l</span><span class="alias-val">last 20, one-line colored log</span></div>
+      <div class="alias-row"><span class="alias-key">ll / lp</span><span class="alias-val">full colored log / log --patch --fuller</span></div>
+      <div class="alias-row"><span class="alias-key">lg / lga</span><span class="alias-val">graph log / graph log --all</span></div>
+      <div class="alias-row"><span class="alias-key">lf / lfn / lfna</span><span class="alias-val">log w/ files · list files at master · files ever added</span></div>
+      <div class="alias-row"><span class="alias-key">hist</span><span class="alias-val">oneline graph w/ date &amp; author</span></div>
+      <div class="alias-row"><span class="alias-key">today</span><span class="alias-val">git ll --since=midnight</span></div>
+      <div class="alias-row"><span class="alias-key">bl / sw / sf</span><span class="alias-val">blame · show (signed) · show name-status</span></div>
+      <div class="alias-row"><span class="alias-key">cc / cca</span><span class="alias-val">rev-list --count (branch / --all)</span></div>
+      <div class="alias-row"><span class="alias-key">authors</span><span class="alias-val">commit count per author</span></div>
+      <div class="alias-row"><span class="alias-key">conflicts</span><span class="alias-val">unmerged files</span></div>
+      <div class="alias-row"><span class="alias-key">ignored</span><span class="alias-val">list ignored files</span></div>
+      <div class="alias-row"><span class="alias-key">tags / showtag</span><span class="alias-val">tag --list -n1 / show --quiet</span></div>
+      <div class="alias-row"><span class="alias-key">rf / rv</span><span class="alias-val">reflog / remote -v</span></div>
+      <div class="alias-row"><span class="alias-key">la</span><span class="alias-val">list all aliases</span></div>
+    </div>
+
+    <h3 class="group">Git — sync, rebase &amp; stash</h3>
+    <div class="alias-table">
+      <div class="alias-row"><span class="alias-key">f</span><span class="alias-val">fetch --all --prune</span></div>
+      <div class="alias-row"><span class="alias-key">pl</span><span class="alias-val">pull --rebase=merges --autostash --prune</span></div>
+      <div class="alias-row"><span class="alias-key">p / pa</span><span class="alias-val">push / push all</span></div>
+      <div class="alias-row"><span class="alias-key">pf / pfa</span><span class="alias-val">push --force-with-lease (all)</span></div>
+      <div class="alias-row"><span class="alias-key">pff / pffa</span><span class="alias-val">push --force (all)</span></div>
+      <div class="alias-row"><span class="alias-key">pb</span><span class="alias-val">push --set-upstream origin &lt;current&gt;</span></div>
+      <div class="alias-row"><span class="alias-key">sync-fork</span><span class="alias-val">fetch upstream, rebase, push</span></div>
+      <div class="alias-row"><span class="alias-key">rb / rbi / rbis</span><span class="alias-val">rebase --rebase-merges / -i / -i -S</span></div>
+      <div class="alias-row"><span class="alias-key">rba / rbc / rbim</span><span class="alias-val">rebase --abort / --continue / -i master</span></div>
+      <div class="alias-row"><span class="alias-key">m / ma</span><span class="alias-val">merge --no-ff / merge --abort</span></div>
+      <div class="alias-row"><span class="alias-key">r / rh</span><span class="alias-val">reset / reset HEAD~</span></div>
+      <div class="alias-row"><span class="alias-key">clear</span><span class="alias-val">reset --hard</span></div>
+      <div class="alias-row"><span class="alias-key">sh/sha/shd/shl/shp/shs</span><span class="alias-val">stash / apply / drop / list / pop / show -p</span></div>
+      <div class="alias-row"><span class="alias-key">sm / sma / smf / sms / smu</span><span class="alias-val">submodule (add/foreach/status/update)</span></div>
+      <div class="alias-row"><span class="alias-key">cl / cl1</span><span class="alias-val">clone / clone --depth=1</span></div>
+      <div class="alias-row"><span class="alias-key">gh pc / pv</span><span class="alias-val">gh pr checkout / gh pr view</span></div>
+    </div>
+
+    <h3 class="group">Jujutsu (jj)</h3>
+    <div class="alias-table">
+      <div class="alias-row"><span class="alias-key">n / e / d / a</span><span class="alias-val">new / edit / describe / abandon</span></div>
+      <div class="alias-row"><span class="alias-key">tug</span><span class="alias-val">move closest bookmark to @-</span></div>
+      <div class="alias-row"><span class="alias-key">fu</span><span class="alias-val">fetch upstream master+main</span></div>
+      <div class="alias-row"><span class="alias-key">revset "wip"</span><span class="alias-val">matches [wip]/[TODO]-style descriptions</span></div>
+    </div>
+    <p class="category-intro"><b>jjui</b> (revisions): <kbd>U</kbd> show diff · <kbd>M</kbd> show-after-revisions · <kbd>C-o</kbd> oplog diff · <kbd>R</kbd> resolve with meld · <kbd>C-t</kbd> tug</p>
+
+    <h3 class="group">Lazygit — overrides &amp; custom commands</h3>
+    <div class="grid">
+      <div class="entry"><span class="keys"><kbd>R</kbd>/<kbd>r</kbd> <span class="context-tag">commits</span></span><span class="desc">rename commit / w editor</span></div>
+      <div class="entry"><span class="keys"><kbd>C</kbd>/<kbd>c</kbd> <span class="context-tag">files</span></span><span class="desc">commit / commit w editor</span></div>
+      <div class="entry"><span class="keys"><kbd>a</kbd> <span class="context-tag">files</span></span><span class="desc">toggle staged/unstaged</span></div>
+      <div class="entry"><span class="keys"><kbd>M</kbd> <span class="context-tag">files</span></span><span class="desc">open mergetool for file</span></div>
+      <div class="entry"><span class="keys"><kbd>f</kbd> <span class="context-tag">commitFiles</span></span><span class="desc">difftool vs local copy</span></div>
+      <div class="entry"><span class="keys"><kbd>C-e</kbd> <span class="context-tag">global</span></span><span class="desc">create Gerrit review</span></div>
+      <div class="entry"><span class="keys"><kbd>C-⇧p</kbd> <span class="context-tag">global</span></span><span class="desc">push to specific remote</span></div>
+      <div class="entry"><span class="keys"><kbd>C-g</kbd> <span class="context-tag">global</span></span><span class="desc">push to specific branch</span></div>
+      <div class="entry"><span class="keys"><kbd>C-⇧r</kbd> <span class="context-tag">commits</span></span><span class="desc">push up to a specific commit</span></div>
+      <div class="entry"><span class="keys"><kbd>C-⇧r</kbd> <span class="context-tag">global</span></span><span class="desc">create GitHub PR (fill+web)</span></div>
+      <div class="entry"><span class="keys"><kbd>C-⇧v</kbd> <span class="context-tag">global</span></span><span class="desc">conventional-commit helper</span></div>
+      <div class="entry"><span class="keys"><kbd>G</kbd>/<kbd>L</kbd> <span class="context-tag">branches</span></span><span class="desc">open PR in GitHub / MR in GitLab</span></div>
+      <div class="entry"><span class="keys"><kbd>v</kbd>/<kbd>V</kbd> <span class="context-tag">branches</span></span><span class="desc">checkout PR by id / picker</span></div>
+      <div class="entry"><span class="keys"><kbd>b</kbd> <span class="context-tag">branches</span></span><span class="desc">prune merged-to-master branches</span></div>
+      <div class="entry"><span class="keys"><kbd>P</kbd> <span class="context-tag">branches</span></span><span class="desc">prune branches gone from remote</span></div>
+      <div class="entry"><span class="keys"><kbd>n</kbd> <span class="context-tag">branches</span></span><span class="desc">start git-flow branch</span></div>
+      <div class="entry"><span class="keys"><kbd>D</kbd> <span class="context-tag">branches</span></span><span class="desc">extract diff into index</span></div>
+      <div class="entry"><span class="keys"><kbd>K</kbd> <span class="context-tag">branches</span></span><span class="desc">squash + rebase onto selected</span></div>
+      <div class="entry"><span class="keys"><kbd>r</kbd> <span class="context-tag">remotes</span></span><span class="desc">checkout remote branch as FETCH_HEAD</span></div>
+      <div class="entry"><span class="keys"><kbd>C-e</kbd> <span class="context-tag">remotes</span></span><span class="desc">prune deleted remote branches</span></div>
+      <div class="entry"><span class="keys"><kbd>C-f</kbd> <span class="context-tag">remotes</span></span><span class="desc">fetch remote branch as new local</span></div>
+      <div class="entry"><span class="keys"><kbd>C-p</kbd> <span class="context-tag">files</span></span><span class="desc">pull from specific remote</span></div>
+      <div class="entry"><span class="keys"><kbd>C-c</kbd> <span class="context-tag">files</span></span><span class="desc">commit via Commitizen</span></div>
+      <div class="entry"><span class="keys"><kbd>C-n</kbd> <span class="context-tag">files</span></span><span class="desc">commit as non-default author</span></div>
+      <div class="entry"><span class="keys"><kbd>f1</kbd> <span class="context-tag">files</span></span><span class="desc">soft reset to upstream</span></div>
+      <div class="entry"><span class="keys"><kbd>N</kbd> <span class="context-tag">tags</span></span><span class="desc">create annotated tag</span></div>
+      <div class="entry"><span class="keys"><kbd>E</kbd> <span class="context-tag">commits</span></span><span class="desc">add empty commit</span></div>
+      <div class="entry"><span class="keys"><kbd>C-a</kbd> <span class="context-tag">commits</span></span><span class="desc">search history for expression in file</span></div>
+      <div class="entry"><span class="keys"><kbd>C-⇧a</kbd> <span class="context-tag">commits</span></span><span class="desc">amend author of last commit</span></div>
+      <div class="entry"><span class="keys"><kbd>b</kbd> <span class="context-tag">files/commitFiles</span></span><span class="desc">tig blame (tree/revision)</span></div>
+      <div class="entry"><span class="keys"><kbd>t</kbd> <span class="context-tag">commits/branches/files</span></span><span class="desc">tig show/history</span></div>
+    </div>
+  </div>
+</details>
+
+</main>
+
+<footer>
+  Generated from <code>my-nix</code> · thumb-down layout: <kbd>s</kbd> left · <kbd>n</kbd> down · <kbd>m</kbd> up · <kbd>t</kbd> right
+</footer>
+
+<script>
+  const filter = document.getElementById('filter');
+  const countEl = document.getElementById('match-count');
+  const details = Array.from(document.querySelectorAll('details.category'));
+  const wasOpen = new Map(details.map(d => [d, d.open]));
+
+  function normalize(s) { return s.toLowerCase(); }
+
+  filter.addEventListener('input', () => {
+    const q = normalize(filter.value.trim());
+    let total = 0, shown = 0;
+
+    details.forEach(d => {
+      const rows = Array.from(d.querySelectorAll('.entry, .alias-row'));
+      let anyVisible = false;
+      rows.forEach(row => {
+        total++;
+        const match = q === '' || normalize(row.textContent).includes(q);
+        row.classList.toggle('hidden', !match);
+        if (match) { anyVisible = true; shown++; }
+      });
+      if (q === '') {
+        d.open = wasOpen.get(d);
+      } else {
+        d.open = anyVisible;
+        d.style.display = anyVisible ? '' : 'none';
+      }
+      if (q === '') d.style.display = '';
+    });
+
+    countEl.textContent = q === '' ? '' : `${shown} / ${total}`;
+  });
+</script>
+</body>
+</html>

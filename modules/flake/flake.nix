@@ -16,41 +16,12 @@
       };
     };
     latest.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixos.url = "github:NixOS/nixpkgs/nixos-26.05";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
 
-    # nixpkgs-local.url = "path:/home/adda/documents/it/nixos/nixpkgs";
-    determinate = {
-      url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
-      # url = "path:/home/adda/documents/it/nixos/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    nix-maid.url = "github:viperML/nix-maid";
-
-    # # We recommend following our Hjem input
-    hjem.follows = "hjem-rum/hjem";
-
-    # # You can also manage your own Hjem version, but this may come with breakage (read the admonition above)
-    # hjem = {
-    # url = "github:feel-co/hjem";
-    # You may want hjem to use your defined nixpkgs input to
-    # minimize redundancies.
-    # inputs.nixpkgs.follows = "nixpkgs";
-    # };
-    hjem-rum = {
-      url = "github:snugnug/hjem-rum";
-      # You may want hjem-rum to use your defined nixpkgs input to
-      # minimize redundancies.
-      inputs.nixpkgs.follows = "nixpkgs";
-      # Same goes for hjem, to avoid discrepancies between the version
-      # you use directly and the one hjem-rum uses.
-      # inputs.hjem.follows = "hjem";
     };
 
     flake-utils = {
@@ -62,16 +33,10 @@
       url = "github:nix-community/flake-compat";
       # flake = false;
     };
-    nix-formatter-pack = {
-      url = "github:Gerschtli/nix-formatter-pack";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    dolphin-overlay.url = "github:rumboon/dolphin-overlay";
   };
 
   imports = [
@@ -87,9 +52,6 @@
     # inputs.devshell.flakeModule
 
     inputs.home-manager.flakeModules.home-manager
-
-    # inputs.nix-maid.nixosModules.default
-    # inputs.hjem.nixosModules.default
 
     inputs.git-hooks-nix.flakeModule
   ];

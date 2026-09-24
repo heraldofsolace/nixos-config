@@ -1,4 +1,4 @@
-# DO-NOT-EDIT. This file was auto-generated using github:vic/flake-file.
+# DO-NOT-EDIT. This file was auto-generated using github:denful/flake-file.
 # Use `nix run .#write-flake` to regenerate it.
 {
   description = "My personal Nix configuration, built with Dendritic.";
@@ -25,6 +25,7 @@
       "recursive-nix"
     ];
     extra-substituters = [
+      "https://heraldofsolace.cachix.org"
       "https://nix-community.cachix.org"
       "https://cache.flox.dev"
       "https://numtide.cachix.org"
@@ -33,6 +34,7 @@
       "https://nyx-cache.chaotic.cx/"
     ];
     extra-trusted-public-keys = [
+      "heraldofsolace.cachix.org-1:9lDlToY337Al15dD5qga1RUkc98rhYKlFhPxxaD4I+s="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "flox-cache-public-1:7F4OyH7ZCnFhcze3fJdfyXYLQw/aV7GEed86nQ7IsOs="
       "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE"
@@ -60,26 +62,23 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     den.url = "github:denful/den";
-    dendrix.url = "github:vic/dendrix";
     deploy-rs.url = "github:serokell/deploy-rs";
-    determinate = {
-      url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     determinate-nix.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
     dgop = {
       url = "github:AvengeMedia/dgop";
       inputs.nixpkgs.follows = "latest";
     };
-    dolphin-overlay.url = "github:rumboon/dolphin-overlay";
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     elephant.url = "github:abenz1267/elephant";
     files = {
       url = "github:mightyiam/files/bec7bba1cfd70a6305c8a690b33dac5771812a28";
       flake = false;
     };
-    flake-aspects.url = "github:denful/flake-aspects";
     flake-compat.url = "github:nix-community/flake-compat";
-    flake-file.url = "github:vic/flake-file";
+    flake-file.url = "github:denful/flake-file";
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
@@ -98,11 +97,6 @@
     github-gitignore = {
       url = "github:github/gitignore";
       flake = false;
-    };
-    hjem.follows = "hjem-rum/hjem";
-    hjem-rum = {
-      url = "github:snugnug/hjem-rum";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
@@ -129,7 +123,7 @@
       };
     };
     impermanence.url = "github:nix-community/impermanence";
-    import-tree.url = "github:vic/import-tree";
+    import-tree.url = "github:denful/import-tree";
     jjui = {
       url = "github:idursun/jjui/main";
       inputs = {
@@ -138,36 +132,34 @@
       };
     };
     latest.url = "github:NixOS/nixpkgs/nixos-unstable";
+    lian-li-linux.url = "git+file:///home/aniket/lian-li-linux";
     make-shell = {
       url = "github:nicknovitski/make-shell";
       inputs.flake-compat.follows = "flake-compat";
     };
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
-    nix-formatter-pack = {
-      url = "github:Gerschtli/nix-formatter-pack";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-maid.url = "github:viperML/nix-maid";
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
     nixflix = {
       url = "github:kiriwalawren/nixflix";
       inputs.nixpkgs.follows = "latest";
     };
-    nixos.url = "github:NixOS/nixpkgs/nixos-26.05";
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
-    noctalia = {
-      url = "github:noctalia-dev/noctalia/legacy-v4";
-      inputs.nixpkgs.follows = "latest";
+    nixos-anywhere = {
+      url = "github:nix-community/nixos-anywhere";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     noctalia-v5.url = "github:noctalia-dev/noctalia/cachix";
     nur = {
       url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    omnix = {
+      url = "github:juspay/omnix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     phone-deck.url = "github:heraldofsolace/phone-deck";

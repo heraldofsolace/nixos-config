@@ -46,10 +46,6 @@
         # ++ (lib.optional (host.name == "andromeda") bambu-studio);
       };
 
-      services.wl-clip-persist = {
-        enable = false;
-      };
-
       # Nicely reload system units when changing configs
       #systemd.user.startServices = lib.mkIf isLinux "sd-switch";
 

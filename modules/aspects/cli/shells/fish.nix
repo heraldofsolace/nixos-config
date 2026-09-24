@@ -26,22 +26,12 @@
         television
         dig
         manix
+        claude-code
         # protonup
       ];
-      programs.bash.bashrcExtra = ''
-        if [ -x "$(command -v tmux)" ] && [ -n "''${DISPLAY}" ] && [ -z "''${TMUX}" ]; then
-            exec tmx ''${USER} 1 >/dev/null 2>&1
-        fi
-        case "$(${pkgs.procps}/bin/ps --no-header --pid=$PPID --format=comm)" in
-          "fish"|"systemd")
-            ;;
-          *)
-          if [[ -z ''${BASH_EXECUTION_STRING} ]]; then
-            shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
-            exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
-          fi ;;
-        esac
-      '';
+      # tmux auto-launch and bash->fish handoff live in bash.nix's
+      # programs.bash.bashrcExtra, not here (this used to be duplicated in
+      # both files).
       programs.fish = {
         enable = true;
         preferAbbrs = true;
@@ -142,27 +132,6 @@
         ];
         shellInitLast = lib.mkMerge [
           ''
-            function go-up-directories
-              set -l path ""
-              set -l limit $arvg[1]
-
-              # Default to limit of 1.
-              if test -z "$limit" || test "$limit" -le 0
-                set -l limit 1
-              end
-
-              for i in (seq 1 $limit)
-                set -l path = "../$path"
-              end
-
-              # Perform cd. Show error if cd fails.
-              if test ! cd "$path"
-                echo "Couldn't go up $limit dirs.";
-              end
-            end
-          ''
-
-          ''
             # (builtins.readFile (
             #   builtins.fetchurl {
             #     url = "https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish";
@@ -204,8 +173,8 @@
             description = "Custom user key bindings";
             body = ''
               bind --user --mode insert ctrl-l clear_screen_newlines
-              # FIXME: Seems to not work in the command mode for some reason.
-              bind --user --mode command ctrl-l clear_screen_newlines
+              # fish_vi_key_bindings calls vi's normal/command mode "default", not "command"
+              bind --user --mode default ctrl-l clear_screen_newlines
             '';
           };
 
@@ -213,7 +182,7 @@
             description = "Update all system components";
             body = ''
               # System.
-              nix flake update --flake ${config.home.homeDirectory}/.nixos-config
+              nix flake update --flake ${config.home.homeDirectory}/my-nix
               ${getExe pkgs.nh} os switch -- --impure
               ${getExe pkgs.nh} home switch -- --impure
               # ${getExe pkgs.flatpak} update --assumeyes
@@ -242,6 +211,17 @@
                 ls /run/current-system/sw/share/applications # For global packages.
                 ls ~/.nix-profile/share/applications # For home-manager packages.
               end | sort
+            '';
+          };
+
+          update-cheatsheet = {
+            description = "Resume the dedicated cheatsheet-maintenance Claude Code session";
+            body = ''
+              set -l msg (string join ' ' $argv)
+              if test -z "$msg"
+                set msg "Check git status/diff for what changed and update the cheatsheet accordingly."
+              end
+              ${getExe pkgs.claude-code} --resume bcd27ae9-5246-4211-816e-2ff5702bd1e3 "$msg"
             '';
           };
 

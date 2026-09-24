@@ -1,8 +1,8 @@
 _: {
   blazar.database._.postgresql = {
-    nixos = {pkgs, ...}: {
+    nixos = { pkgs, ... }: {
       networking.firewall = {
-        allowedTCPPorts = [5432];
+        allowedTCPPorts = [ 5432 ];
       };
       services.postgresql = {
         enable = true;

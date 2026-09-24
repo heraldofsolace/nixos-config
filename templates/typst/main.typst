@@ -1,0 +1,5 @@
+#set document(title: "Untitled")
+#set page(paper: "a4", margin: 2.5cm)
+#set text(size: 11pt)
+
+= Untitled

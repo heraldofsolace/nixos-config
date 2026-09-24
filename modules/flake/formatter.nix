@@ -81,9 +81,12 @@
         settings.formatter.ruff-check.priority = 1;
         settings.formatter.ruff-format.priority = 2;
 
+        # toml-sort used to also run here, but it and taplo both targeting
+        # every .toml file meant one of them rewrote files unconditionally
+        # (even with no real change), which tripped treefmt's --fail-on-change
+        # safety check under --no-cache (only exercised by the pre-commit
+        # hook, not regular `nix fmt`). taplo alone covers formatting fine.
         programs.taplo.enable = true;
-
-        programs.toml-sort.enable = true;
 
         programs.mdformat.enable = true;
 

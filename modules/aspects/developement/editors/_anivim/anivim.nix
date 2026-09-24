@@ -50,7 +50,7 @@ let
   ];
 
   categoryDefinitions =
-    { pkgs, ... }@packageDef:
+    { pkgs, ... }:
     {
       lspsAndRuntimeDeps = {
         general = with pkgs; [
@@ -128,8 +128,6 @@ let
             fidget-nvim
             lualine-nvim
             gitsigns-nvim
-            which-key-nvim
-            comment-nvim
             vim-sleuth
             vim-fugitive
             vim-rhubarb
@@ -139,42 +137,24 @@ let
             vim-eunuch
             vim-projectionist
             vim-speeddating
-            indent-blankline-nvim
             wildfire-vim
             editorconfig-nvim
             lush-nvim
             vim-tmux-navigator
-            alpha-nvim
             twilight-nvim
             direnv-vim
             vim-peekaboo
-            kommentary
             sqlite-lua
             legendary-nvim
-            bufferline-nvim
             auto-save-nvim
             dressing-nvim
             hardtime-nvim
-            oil-nvim
             noice-nvim
             nvim-notify
             nui-nvim
-            pkgs.nixCatsBuilds.vim-schlepp
+            mini-nvim
           ];
         };
-        # You can retreive information from the
-        # packageDefinitions of the package this was packaged with.
-        # :help nixCats.flake.outputs.categoryDefinitions.scheme
-        themer =
-          with pkgs.vimPlugins;
-          (builtins.getAttr packageDef.categories.colorscheme {
-            # Theme switcher without creating a new category
-            "onedark" = onedark-nvim;
-            # "catppuccin" = catppuccin-nvim;
-            "tokyonight" = tokyonight-nvim;
-            "nord" = nord-nvim;
-            "nightfox" = nightfox-nvim;
-          });
       };
 
       optionalPlugins = {
@@ -193,11 +173,7 @@ let
           nvim-treesitter.withAllGrammars
         ];
         telescope = with pkgs.vimPlugins; [
-          telescope-frecency-nvim
           plenary-nvim
-          telescope-nvim
-          telescope-fzf-native-nvim
-          smart-open-nvim
         ];
 
         cmp = with pkgs.vimPlugins; [
@@ -216,8 +192,6 @@ let
         ];
         general = with pkgs.vimPlugins; [
           zen-mode-nvim
-          nvim-web-devicons
-          todo-comments-nvim
           vimtex
           trouble-nvim
           flash-nvim
@@ -308,11 +282,9 @@ let
         # this does not have an associated category of plugins,
         # but lua can still check for it
         lspDebugMode = false;
-        # you could also pass something else:
-        themer = true;
-        colorscheme = "nightfox";
       };
-      extra = { };
+      extra = {
+      };
     };
   };
   # In this section, the main thing you will need to do is change the default package name

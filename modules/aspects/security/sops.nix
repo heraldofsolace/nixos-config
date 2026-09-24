@@ -52,11 +52,8 @@
         neededForUsers = true;
       };
 
-      hass-password = {
-        key = "hass";
-        sopsFile = ../../../secrets/user-passwords.yaml;
-        neededForUsers = true;
-      };
+      # hass-password is declared in modules/users/hass/user.nix, next to
+      # where it's actually consumed.
 
       # nextcloud-password = {
       #   key = "nextcloud";

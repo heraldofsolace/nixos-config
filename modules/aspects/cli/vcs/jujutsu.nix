@@ -77,7 +77,7 @@
           signing = {
             behavior = "own";
             backend = "gpg";
-            key = "chocholaty.david@protonmail.com";
+            key = "aniket@abhattacharyea.dev";
             # key = "22146EBAB4684AE2907DDC228FC8E68432148DCA";
           };
           git = {
@@ -99,7 +99,7 @@
             # "immutable_heads()" = "builtin_immutable_heads() | ghp"
 
             # 'HEAD' = '@-'
-            "user()" = "user(\"chocholaty.david@protonmail.com\")";
+            "user()" = "user(\"aniket@abhattacharyea.dev\")";
             "user(x)" = "author(x) | committer(x)";
           };
           template-aliases = {

@@ -4,6 +4,8 @@
       allow-import-from-derivation = true;
       # Flake-specific substituters and trusted-public-keys, not affecting the system configuration.
       extra-substituters = [
+        # Personal cache server (packages/* custom packages are pushed here from CI).
+        "https://heraldofsolace.cachix.org"
         # Nix community cache server.
         "https://nix-community.cachix.org"
         # Flox cache server.
@@ -15,6 +17,8 @@
         "https://nyx-cache.chaotic.cx/"
       ];
       extra-trusted-public-keys = [
+        # Personal cache server public key.
+        "heraldofsolace.cachix.org-1:9lDlToY337Al15dD5qga1RUkc98rhYKlFhPxxaD4I+s="
         # Nix community cache server public key.
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         # Flox cache server public key.

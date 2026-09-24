@@ -10,6 +10,10 @@ _: {
           "music"
         ];
       };
+      # Declared here too (not just jellyfin.nix) so this aspect doesn't
+      # depend on jellyfin.nix also being active to actually create the
+      # group extraGroups above references.
+      users.groups.music = { };
     };
   };
 }

@@ -25,8 +25,15 @@ _: {
           };
           Service = {
             Type = "simple";
-            ExecStart = "${pkgs.kanata}/bin/kanata --cfg ${configFile}";
-            Restart = "no";
+            # --no-wait: kanata's default "press enter to exit" prompt on
+            # exit is meaningless under systemd (no attached terminal), so
+            # skip it and exit cleanly instead.
+            # --emergency-exit-code 1: the built-in emergency-exit hotkey
+            # (LCtrl+Space+Escape) exits 0 by default, which Restart =
+            # "on-failure" wouldn't treat as worth restarting.
+            ExecStart = "${pkgs.kanata}/bin/kanata --cfg ${configFile} --no-wait --emergency-exit-code 1";
+            Restart = "on-failure";
+            RestartSec = 2;
             Environment = [
               "PATH=${
                 lib.makeBinPath [
@@ -34,7 +41,6 @@ _: {
                   pkgs.kanata
                 ]
               }"
-              "DISPLAY=:0"
             ];
           };
           Install = {

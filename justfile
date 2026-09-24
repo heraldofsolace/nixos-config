@@ -41,7 +41,7 @@ fmt:
 
 # TODO: Implement.
 ci:
-  @ error make "Unimplemented"
+  {{ error("Unimplemented") }}
 
 alias h := help
 help:

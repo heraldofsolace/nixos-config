@@ -1,6 +1,6 @@
 { inputs, ... }: {
   flake-file.inputs = {
-    # Neovim NvChad.
+    # nixCats-nvim: nix-driven lazy.nvim wrapper this anivim config builds on.
     nixCats = {
       url = "github:BirdeeHub/nixCats-nvim";
     };
@@ -8,7 +8,10 @@
   };
 
   blazar.editors._.anivim.homeManager =
-    _:
+    {
+      config,
+      ...
+    }:
     let
       anivim = import ./_anivim/anivim.nix { inherit inputs; };
     in
@@ -17,5 +20,14 @@
         anivim.homeModules.default
       ];
       anivim.enable = true;
+      anivim.packageDefinitions.merge = {
+        anivim = { pkgs, ... }: {
+          extra = {
+            base16colors = pkgs.lib.filterAttrs (
+              k: _v: builtins.match "base0[0-9A-F]" k != null
+            ) config.lib.stylix.colors.withHashtag;
+          };
+        };
+      };
     };
 }

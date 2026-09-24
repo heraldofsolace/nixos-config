@@ -46,11 +46,6 @@
                 command = "${config.system.path}/bin/systemctl poweroff";
                 options = [ "NOPASSWD" ];
               }
-            ];
-          }
-          {
-            users = [ "hass" ];
-            commands = [
               {
                 command = "${config.system.path}/bin/systemctl suspend";
                 options = [ "NOPASSWD" ];
@@ -65,8 +60,6 @@
         #     hass ALL=NOPASSWD:${pkgs.systemd}/bin/systemctl poweroff
         #   ''
         # ];
-
-        services.openssh.enable = true;
 
         users.users = {
           hass = {

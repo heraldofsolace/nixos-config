@@ -149,24 +149,63 @@
     }:
     let
       terminal = "waveterm";
+      generate-wallpapers =
+        { pkgs, ... }:
+        {
+          name,
+          colors,
+          directory,
+        }:
+        let
+          jsonContent = builtins.toJSON {
+            inherit name;
+            inherit colors;
+          };
+          themeFile = pkgs.writeText "stylix.json" jsonContent;
+        in
+        pkgs.runCommand "generate-wallpapers"
+          {
+            buildInputs = [ pkgs.gowall ];
+          }
+          ''
+            export HOME=$(mktemp -d)
+            mkdir -p $out
+            echo "${themeFile}"
+            gowall convert --dir ${directory} -t ${themeFile} --output $out
+          '';
       red = config.lib.stylix.colors.base08;
       mauve = config.lib.stylix.colors.base0E;
       green = config.lib.stylix.colors.base0B;
-      lavender = config.lib.stylix.colors.base08;
-      blue = config.lib.stylix.colors.base0A;
-      # awww-script = pkgs.writeShellScriptBin "awww" ''
-      #   ${awww-command}
-      # '';
-      awww-script =
-        let
-          myawww = pkgs.awww.overrideAttrs (oldAttrs: {
-            buildInputs = oldAttrs.buildInputs ++ [ pkgs.dav1d ];
-            cargoBuildFlags = [ "--features=avif" ];
-          });
-        in
-        pkgs.writeShellScriptBin "awww" ''
-          ${myawww}/bin/awww img ${./_files/wall.gif}
-        '';
+      # base16 has no dedicated lavender slot (mauve already claims the one
+      # purple/magenta slot, base0E); base0C (cyan) is the closest distinct,
+      # cool-toned color left, was previously a duplicate of `red`.
+      lavender = config.lib.stylix.colors.base0C;
+      blue = config.lib.stylix.colors.base0D;
+      colors = config.lib.stylix.colors.withHashtag;
+      baseNames = builtins.genList (i: lib.toUpper (lib.fixedWidthNumber 2 (lib.toHexString i))) 16;
+      colorValues = map (n: colors."base${n}") baseNames;
+      wallpapers = generate-wallpapers { inherit config pkgs; } {
+        colors = colorValues;
+        name = "stylix";
+        directory = ./_files/walls;
+      };
+      padString = n: if n < 10 then "0" + builtins.toString n else builtins.toString n;
+      wallpaper-name = i: "${wallpapers}/${builtins.toString i}.png";
+      awww-args = builtins.map (i: "-i \"${wallpaper-name i};${padString i}:00\" ") (lib.range 0 23);
+      awww-command = "awww-schedule ${lib.concatStrings awww-args}";
+      awww-script = pkgs.writeShellScriptBin "awww" ''
+        ${awww-command}
+      '';
+      # awww-script =
+      #   let
+      #     myawww = pkgs.awww.overrideAttrs (oldAttrs: {
+      #       buildInputs = oldAttrs.buildInputs ++ [ pkgs.dav1d ];
+      #       cargoBuildFlags = [ "--features=avif" ];
+      #     });
+      #   in
+      #   pkgs.writeShellScriptBin "awww" ''
+      #     ${myawww}/bin/awww img ${./_files/wall.gif}
+      #   '';
     in
     {
       imports = [
@@ -293,6 +332,20 @@
       # };
       home.file.".config/hypr/config.lua".source =
         config.lib.file.mkOutOfStoreSymlink "/home/aniket/my-nix/modules/aspects/desktop/_files/hyprland.lua";
+      # Keybind cheatsheet, opened as a floating overlay by SUPER+C (see hyprland.lua).
+      xdg.dataFile."cheatsheet/index.html".source = ./_files/cheatsheet.html;
+      # Isolated Firefox profile for the cheatsheet overlay - kept separate from the
+      # real browsing profile so this HUD never touches its history/extensions/cookies.
+      # user.js (not prefs.js) so Firefox can still write its own prefs.js alongside it.
+      xdg.dataFile."cheatsheet-ff-profile/user.js".text = ''
+        user_pref("browser.shell.checkDefaultBrowser", false);
+        user_pref("browser.startup.page", 0);
+        user_pref("browser.startup.homepage", "about:blank");
+        user_pref("browser.aboutwelcome.enabled", false);
+        user_pref("browser.tabs.warnOnClose", false);
+        user_pref("datareporting.policy.dataSubmissionEnabled", false);
+        user_pref("toolkit.telemetry.reportingpolicy.firstRun", false);
+      '';
       wayland.windowManager.hyprland.extraConfig =
         let
           yt = pkgs.writeShellScriptBin "yt" ''

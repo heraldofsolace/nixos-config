@@ -19,7 +19,7 @@
         historyFileSize = null;
         enableCompletion = true;
         bashrcExtra = ''
-          if [ -x "$(command -v tmux)" ] && [ -n "''${DISPLAY}" ] && [ -z "''${TMUX}" ]; then
+          if [ -x "$(command -v tmux)" ] && { [ -n "''${DISPLAY}" ] || [ -n "''${WAYLAND_DISPLAY}" ]; } && [ -z "''${TMUX}" ]; then
               exec ${self.packages.${pkgs.stdenv.hostPlatform.system}.tmx}/bin/tmx ''${USER} 1 >/dev/null 2>&1
           fi
           case "$(${pkgs.procps}/bin/ps --no-header --pid=$PPID --format=comm)" in

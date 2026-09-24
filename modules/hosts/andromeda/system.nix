@@ -35,6 +35,8 @@
     nixos.imports = with inputs; [
       ./_hardware-configuration.nix
       ./_zfs.nix
+      ./_disko.nix
+      disko.nixosModules.disko
       dankMaterialShell.nixosModules.greeter
       chaotic.nixosModules.default
     ];
@@ -89,7 +91,6 @@
         gvfs.enable = true;
         openssh = {
           enable = true;
-          settings.PermitRootLogin = "no";
           settings.PasswordAuthentication = false;
           hostKeys = [
             {

@@ -64,8 +64,6 @@
             dc = "checkout --";
             dca = "checkout -- :/";
             ds = "diff --staged";
-            # https://github.com/s3rvac/git-edit-index
-            ei = "edit-index";
             f = "fetch --all --prune";
             g = "grep";
             hist = "log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short";
@@ -225,24 +223,9 @@
           ];
           include.path = ".gitconfig.local";
 
-          # Settings for the `git-edit-index` script.
-          # https://github.com/s3rvac/git-edit-index
           credential.helper = "cache --timeout=0";
 
-          # Settings for the `git-edit-index` script.
-          # https://github.com/s3rvac/git-edit-index
-          git-edit-index.onEmptyBuffer = "act";
-          # "git-up rebase" = {
-          # Settings for the `git-up` script.
-          # https://github.com/aanand/git-up
-
-          #	arguments = --preserve-merges
-          #	log-hook = "echo \"* changes on $1:\"; git log --pretty='format:%C(yellow)%h %C(green)%ai %C(bold blue)%an %C(red)%d%C(reset) %s' $1..$2"
-          # };
-          # Using PyGitUp: https://github.com/msiemens/PyGitUp
-          PyGitUp = { };
-
-          advie = {
+          advice = {
             # Make git a little less verbose.
             # pushNonFastForward = false
             # statusHints = false
@@ -259,11 +242,6 @@
             # confirm = always
             # ; Don't send every patch as a reply to the previous patch.
             # chainreplyto = false
-          };
-          cola = {
-            startupmode = "list";
-            spellcheck = false;
-            statusshowtotals = true;
           };
         };
         signing = {

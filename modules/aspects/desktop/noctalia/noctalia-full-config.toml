@@ -43,7 +43,7 @@ end = [
   "brightness",
   "battery",
   "control-center",
-  "session"
+  "session",
 ]
 font_weight = 500
 hover_highlight = true
@@ -96,7 +96,7 @@ end = [
   "brightness",
   "battery",
   "control-center",
-  "session"
+  "session",
 ]
 font_weight = 500
 hover_highlight = true
@@ -147,7 +147,7 @@ end = [
   "clipboard",
   "control-center",
   "widget",
-  "session"
+  "session",
 ]
 font_weight = 500
 hover_highlight = true
@@ -366,7 +366,7 @@ schema_version = 2
 widget_order = [
   "lockscreen-login-box@FALLBACK",
   "lockscreen-login-box@HDMI-A-1",
-  "lockscreen-login-box@DP-3"
+  "lockscreen-login-box@DP-3",
 ]
 
 [lockscreen_widgets.grid]
@@ -476,7 +476,7 @@ auto_update = "all"
 enabled = [
   "davemhammer/tailscale",
   "icefish/phone-connect",
-  "alexander/screen-toolkit"
+  "alexander/screen-toolkit",
 ]
 
 [[plugins.source]]

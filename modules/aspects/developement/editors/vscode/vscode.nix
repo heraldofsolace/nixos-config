@@ -15,7 +15,6 @@
         extensions =
           with pkgs.vscode-marketplace;
           [
-            # ms-vscode-remote.remote-ssh
             # github.vscode-pull-request-github
             coolbear.systemd-unit-file
             davidanson.vscode-markdownlint
@@ -34,10 +33,8 @@
             # redhat.vscode-yaml
             whi-tw.klipper-config-syntax
             roscop.activefileinstatusbar
-            pkief.material-icon-theme
             tamasfe.even-better-toml
             mads-hartmann.bash-ide-vscode
-            ericadamski.carbon-now-sh
             ms-vscode-remote.remote-ssh
             ms-vscode-remote.remote-ssh-edit
             mkhl.direnv
@@ -84,6 +81,8 @@
     };
     home.packages = with pkgs; [
       nil
+      # nix.serverSettings in vscode-settings.json has nil call this to format
+      alejandra
     ];
   };
 }

@@ -3,21 +3,25 @@
 -- MIT license, see LICENSE for more details.
 
 -- Main configuration for setting up lualine.nvim statusline plugin
-local palette = require('nightfox.palette').load('nightfox')
+-- Colors come from the stylix base16 palette injected by nix (see
+-- plugins/mini/base16.lua for the other consumer of this same palette).
+local base16 = require('nixCats').extra('base16colors')
 
 -- Default Theme Colors: Define a set of base colors for your theme
+-- base16 only has one purple/magenta slot (base0E), so VIOLET and MAGENTA
+-- share it, and BLUE/DARKBLUE both fall back to base0D.
 local colors = {
-  BG = palette.bg0, -- Dark background
-  FG = palette.fg1, -- Light foreground for contrast
-  YELLOW = palette.yellow.base, -- Vibrant yellow
-  CYAN = palette.cyan.dim, -- Soft cyan
-  DARKBLUE = palette.cyan.bright, -- Deep blue
-  GREEN = palette.green.base, -- Bright green
-  ORANGE = palette.orange.bright, -- Warm orange
-  VIOLET = palette.pink.base, -- Strong violet
-  MAGENTA = palette.magenta.bright, -- Deep magenta
-  BLUE = palette.blue.dim, -- Light-medium blue
-  RED = palette.red.bright, -- Strong red
+  BG = base16.base00, -- Dark background
+  FG = base16.base05, -- Light foreground for contrast
+  YELLOW = base16.base0A, -- Vibrant yellow
+  CYAN = base16.base0C, -- Soft cyan
+  DARKBLUE = base16.base0D, -- Deep blue
+  GREEN = base16.base0B, -- Bright green
+  ORANGE = base16.base09, -- Warm orange
+  VIOLET = base16.base0E, -- Strong violet
+  MAGENTA = base16.base0E, -- Deep magenta
+  BLUE = base16.base0D, -- Light-medium blue
+  RED = base16.base08, -- Strong red
 }
 
 -- Function to get the color associated with the current mode in Vim
@@ -27,13 +31,13 @@ local function get_mode_color()
     n = colors.DARKBLUE,
     i = colors.VIOLET,
     v = colors.RED,
-    [''] = colors.BLUE,
+    [''] = colors.BLUE,
     V = colors.RED,
     c = colors.MAGENTA,
     no = colors.RED,
     s = colors.ORANGE,
     S = colors.ORANGE,
-    [''] = colors.ORANGE,
+    [''] = colors.ORANGE,
     ic = colors.YELLOW,
     R = colors.ORANGE,
     Rv = colors.ORANGE,
@@ -177,7 +181,7 @@ local icon_sets = {
   }, -- Set of rune-like symbols
   hearts = { '❤', '♥', '♡', '❦', '❧' }, -- Set of heart-shaped icons
   waves = { '≈', '∿', '≋', '≀', '⌀', '≣', '⌇' }, -- Set of wave-like symbols
-  crosses = { '☨', '✟', '♰', '♱', '⛨', '' }, -- Set of cross-like symbols
+  crosses = { '☨', '✟', '♰', '♱', '⛨', '' }, -- Set of cross-like symbols
 }
 
 -- Function to select a random icon from a given set
@@ -218,7 +222,7 @@ local reversed_icon_sets = reverse_table(icon_sets_list)
 local function create_separator(side, use_mode_color)
   return {
     function()
-      return side == 'left' and '' or '' -- Choose separator symbol based on side
+      return side == 'left' and '' or '' -- Choose separator symbol based on side
     end,
     color = function()
       -- Set color based on mode or opposite color
@@ -258,7 +262,7 @@ local function mode()
     n = 'N', -- Normal mode
     i = 'I', -- Insert mode
     v = 'V', -- Visual mode
-    [''] = 'V', -- Visual block mode
+    [''] = 'V', -- Visual block mode
     V = 'V', -- Visual line mode
     c = 'C', -- Command-line mode
     no = 'N', -- NInsert mode
@@ -373,7 +377,7 @@ ins_left {
   function()
     return vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
   end,
-  icon = ' ',
+  icon = ' ',
   color = function()
     local virtual_env = vim.env.VIRTUAL_ENV
     if virtual_env then
@@ -398,7 +402,7 @@ ins_left(create_separator('left'))
 
 ins_left {
   function()
-    return ''
+    return ''
   end,
   color = function()
     return {
@@ -514,7 +518,7 @@ ins_right {
     end
     return msg
   end,
-  icon = ' ',
+  icon = ' ',
   color = {
     fg = colors.YELLOW,
     gui = 'bold',
@@ -523,7 +527,7 @@ ins_right {
 
 ins_right {
   function()
-    return ''
+    return ''
   end,
   color = function()
     return { fg = get_middle_color() }
@@ -539,7 +543,7 @@ ins_right(create_separator('left'))
 
 ins_right {
   'branch',
-  icon = ' ',
+  icon = ' ',
   --[[ Truncates and formats Git branch names for display in lualine:
     First segment: Uppercase, truncated to 1 character.
     Middle segments: Lowercase, truncated to 1 character.
@@ -613,6 +617,5 @@ ins_right(create_mode_based_component('progress', nil, colors.BG))
 
 return {
   'nvim-lualine/lualine.nvim',
-  dependencies = { 'nvim-tree/nvim-web-devicons' },
   opts = config
 }

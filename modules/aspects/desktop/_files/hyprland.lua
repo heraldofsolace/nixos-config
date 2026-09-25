@@ -108,12 +108,6 @@ hl.animation({
     style = "slide top 20%"
 })
 hl.animation({
-    leaf = "fadeIn",
-    enabled = true,
-    speed = 8,
-    bezier = "default"
-})
-hl.animation({
     leaf = "fadeOut",
     enabled = true,
     speed = 8,
@@ -454,7 +448,6 @@ hl.env("XDG_DATA_DIRS", os.getenv("XDG_DATA_DIRS") .. ":" .. os.getenv("HOME") .
     "/.nix-profile/share:/nix/var/nix/profiles/default/share")
 hl.env("XCOMPOSEFILE", "~/.XCompose")
 hl.env("EDITOR", "nvim")
-hl.env("GTK_THEME", "Adwaita:dark")
 
 -- Layer rules
 hl.layer_rule({
@@ -858,6 +851,10 @@ hl.config({
         rounding = 20,
         dim_inactive = false,
         active_opacity = 0.98,
+        -- No shader by default. shaderBurst() below briefly switches this
+        -- on for _files/shaders/grain-animated.glsl on window move/focus,
+        -- then switches it back off.
+        screen_shader = "",
         blur = {
             enabled = true,
             size = 3,
@@ -897,11 +894,11 @@ hl.config({
     group = {
         groupbar = {
             col = {
-                active = "rgb(7fbbb3)",
-                inactive = "rgb(859289)"
+                active = nix.vars.blue,
+                inactive = nix.vars.base03
             },
             font_size = 10,
-            text_color = nix.vars.textcolor
+            text_color = nix.vars.base05
         },
         col = {
             border_active = {
@@ -923,7 +920,7 @@ hl.config({
         }
     },
     misc = {
-        background_color = "rgb(272e33)",
+        background_color = nix.vars.base00,
         disable_hyprland_logo = true,
         disable_splash_rendering = true,
         force_default_wallpaper = 0,
@@ -938,6 +935,13 @@ hl.config({
     scrolling = {
         column_width = 0.8,
         focus_fit_method = 0
+    },
+    plugin = {
+        hyprfocus = {
+            enable = true,
+            keyboard_focus_animation = "flash",
+            mouse_focus_animation = "flash"
+        }
     }
 })
 
@@ -959,5 +963,59 @@ hl.on("monitor.added", monitor_set)
 hl.on("config.reloaded", function()
     hl.exec_cmd("hass-report-status http://homeassistant.local/api/webhook/eaea48a1-30e3-47bf-a076-30f816f0d3d1 true")
     workspaces_set()
+end)
+
+-- Screen shader is off by default (decoration.screen_shader = "" above) and
+-- only appears for a brief burst on window move/focus, then switches off
+-- again - never left running while idle.
+local shaderAnimated = "/home/aniket/my-nix/modules/aspects/desktop/_files/shaders/grain-animated.glsl"
+local shaderBurstTimer = nil
+
+local function shaderBurst()
+    hl.config({
+        debug = {damage_tracking = false},
+        decoration = {screen_shader = shaderAnimated}
+    })
+    if shaderBurstTimer then
+        shaderBurstTimer:cancel()
+    end
+    shaderBurstTimer = hl.timer(function()
+        hl.config({
+            decoration = {screen_shader = ""},
+            debug = {damage_tracking = true}
+        })
+        shaderBurstTimer = nil
+    end, {timeout = 600, type = "oneshot"})
+end
+
+hl.on("window.open", shaderBurst)
+hl.on("window.active", shaderBurst)
+hl.on("window.move_to_workspace", shaderBurst)
+hl.on("workspace.active", shaderBurst)
+
+-- Static per-workspace accent color pushed to the Dygma Defy's LEDs over
+-- Focus (see keyboardAccent in hyprland.nix). Cycles through the 7 base16
+-- accent slots by workspace id; skips scratchpad/special workspaces and
+-- redundant repeats of the color already showing (led.setAll writes to the
+-- keyboard's flash every call, so avoid firing it needlessly).
+local accentSlots = {"base08", "base09", "base0A", "base0B", "base0C", "base0D", "base0E"}
+local lastAccentSlot = nil
+
+local function hexToRGB(rgbVar)
+    local hex = rgbVar:match("rgb%((%x+)%)")
+    return tonumber(hex:sub(1, 2), 16), tonumber(hex:sub(3, 4), 16), tonumber(hex:sub(5, 6), 16)
+end
+
+hl.on("workspace.active", function(ws)
+    if ws.special then
+        return
+    end
+    local slot = accentSlots[((ws.id - 1) % #accentSlots) + 1]
+    if slot == lastAccentSlot then
+        return
+    end
+    lastAccentSlot = slot
+    local r, g, b = hexToRGB(nix.vars[slot])
+    hl.exec_cmd(nix.pkgs.keyboardAccent .. " " .. r .. " " .. g .. " " .. b)
 end)
 

@@ -281,7 +281,7 @@
 <body>
 <div class="topbar">
   <h1>⌨ Cheatsheet</h1>
-  <span class="sub">hyprland · fish · tmux · neovim · git</span>
+  <span class="sub">hyprland · fish · tmux · neovim · yazi · git</span>
   <div class="filter-wrap">
     <input id="filter" type="text" placeholder="Filter keybinds…" autocomplete="off" />
   </div>
@@ -293,6 +293,7 @@
   <a href="#fish">Fish</a>
   <a href="#tmux">Tmux</a>
   <a href="#neovim">Neovim</a>
+  <a href="#yazi">Yazi</a>
   <a href="#git">Git &amp; VCS</a>
 </nav>
 
@@ -301,7 +302,7 @@
 <p class="category-intro" style="max-width:72ch;margin:0 0 1.2rem">
   Pulled straight from <code>my-nix</code>. Your kanata "thumb-down" home row remaps
   <kbd>h</kbd><kbd>j</kbd><kbd>k</kbd><kbd>l</kbd> to <kbd>s</kbd><kbd>n</kbd><kbd>m</kbd><kbd>t</kbd>
-  (left/down/up/right) — that mapping shows up consistently across Hyprland, tmux's no-prefix pane nav, and Neovim's core motions.
+  (left/down/up/right) — that mapping shows up consistently across Hyprland, tmux's no-prefix pane nav, Neovim's core motions, and yazi's file list.
 </p>
 
 <!-- ============ HYPRLAND ============ -->
@@ -477,17 +478,18 @@
     <h3 class="group">Core</h3>
     <div class="grid">
       <div class="entry"><span class="keys"><kbd>&lt;leader&gt;w</kbd></span><span class="desc">save (:w!)</span></div>
-      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;|</kbd> / <kbd>&lt;leader&gt;-</kbd></span><span class="desc">vsplit / split</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;vs</kbd> / <kbd>&lt;leader&gt;-</kbd></span><span class="desc">vsplit / split</span></div>
       <div class="entry"><span class="keys"><kbd>C-s/n/m/t</kbd></span><span class="desc">tmux-aware window nav</span></div>
       <div class="entry"><span class="keys"><kbd>M-s/t/n/m</kbd></span><span class="desc">resize window in that direction</span></div>
       <div class="entry"><span class="keys"><kbd>&lt;leader&gt;ba</kbd></span><span class="desc">close all buffers</span></div>
-      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;t</kbd> / <kbd>&lt;leader&gt;s</kbd></span><span class="desc">next / previous buffer</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;bn</kbd> / <kbd>&lt;leader&gt;bp</kbd></span><span class="desc">next / previous buffer</span></div>
       <div class="entry"><span class="keys"><kbd>&lt;leader&gt;tn/tc/tm/tt/tl/te</kbd></span><span class="desc">tab new/close/move/next/last/edit</span></div>
       <div class="entry"><span class="keys"><kbd>n</kbd> / <kbd>m</kbd></span><span class="desc">gj / gk (display-line scroll)</span></div>
-      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;sn/sp/sa/s?</kbd></span><span class="desc">spell next/prev/add/suggest</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;sn/sp/sa/su</kbd></span><span class="desc">spell next/prev/add/suggest</span></div>
       <div class="entry"><span class="keys"><kbd>C-l</kbd> <span class="context-tag">insert</span></span><span class="desc">fix last spelling error</span></div>
-      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;cd</kbd></span><span class="desc">cd to current file's directory</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;cD</kbd></span><span class="desc">cd to current file's directory</span></div>
       <div class="entry"><span class="keys"><kbd>&lt;leader&gt;q</kbd></span><span class="desc">open ~/buffer scratch file</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;Db</kbd></span><span class="desc">open DBUI (vim-dadbod-ui)</span></div>
       <div class="entry"><span class="keys"><kbd>C-a/C-e/C-k/C-p/C-n</kbd> <span class="context-tag">cmdline</span></span><span class="desc">home/end/kill/history</span></div>
     </div>
 
@@ -498,7 +500,7 @@
       <div class="entry"><span class="keys"><kbd>gI</kbd></span><span class="desc">goto implementation</span></div>
       <div class="entry"><span class="keys"><kbd>gD</kbd></span><span class="desc">goto declaration</span></div>
       <div class="entry"><span class="keys"><kbd>&lt;leader&gt;D</kbd></span><span class="desc">type definition</span></div>
-      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;ds</kbd></span><span class="desc">document symbols</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;ls</kbd></span><span class="desc">document symbols (list)</span></div>
       <div class="entry"><span class="keys"><kbd>&lt;leader&gt;ws</kbd></span><span class="desc">workspace symbols</span></div>
       <div class="entry"><span class="keys"><kbd>&lt;leader&gt;rn</kbd></span><span class="desc">rename</span></div>
       <div class="entry"><span class="keys"><kbd>&lt;leader&gt;ca</kbd></span><span class="desc">code action</span></div>
@@ -572,6 +574,35 @@
       <div class="entry"><span class="keys"><kbd>gcc</kbd> / <kbd>gc</kbd></span><span class="desc">mini.comment (default)</span></div>
       <div class="entry"><span class="keys"><kbd>[x</kbd> / <kbd>]x</kbd></span><span class="desc">mini.bracketed — buffers/diagnostics/files/jumps/etc.</span></div>
       <div class="entry"><span class="keys"><kbd>di"</kbd> / <kbd>daf</kbd> / …</span><span class="desc">mini.ai — treesitter text objects (defaults)</span></div>
+    </div>
+  </div>
+</details>
+
+<!-- ============ YAZI ============ -->
+<details class="category" id="yazi" open>
+  <summary>Yazi <span class="note">shell wrapper = yy (cd-on-exit)</span><span class="count">10 binds</span></summary>
+  <div class="category-body">
+    <p class="category-intro">Thumb-down scheme (<code>s</code>=left, <code>n</code>=down, <code>m</code>=up, <code>t</code>=right) prepended alongside yazi's default <code>h/j/k/l</code>, which still work identically.</p>
+
+    <h3 class="group">Movement</h3>
+    <div class="grid">
+      <div class="entry"><span class="keys"><kbd>s</kbd></span><span class="desc">leave / parent directory</span></div>
+      <div class="entry"><span class="keys"><kbd>n</kbd></span><span class="desc">next file</span></div>
+      <div class="entry"><span class="keys"><kbd>m</kbd></span><span class="desc">previous file</span></div>
+      <div class="entry"><span class="keys"><kbd>t</kbd></span><span class="desc">enter child directory</span></div>
+    </div>
+
+    <h3 class="group">Plugins</h3>
+    <div class="grid">
+      <div class="entry"><span class="keys"><kbd>cm</kbd></span><span class="desc">chmod on selected files</span></div>
+      <div class="entry"><span class="keys"><kbd>gj</kbd></span><span class="desc">run jjui</span></div>
+      <div class="entry"><span class="keys"><kbd>gl</kbd></span><span class="desc">run lazygit</span></div>
+    </div>
+
+    <h3 class="group">Search <span style="text-transform:none;letter-spacing:0;color:var(--text-muted);font-weight:400">(relocated from s/n/N — displaced by thumb-down movement)</span></h3>
+    <div class="grid">
+      <div class="entry"><span class="keys"><kbd>gs</kbd></span><span class="desc">search files by name (fd)</span></div>
+      <div class="entry"><span class="keys"><kbd>gn</kbd> / <kbd>gN</kbd></span><span class="desc">next / previous found</span></div>
     </div>
   </div>
 </details>

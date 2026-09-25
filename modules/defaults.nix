@@ -187,6 +187,21 @@
         clean.extraArgs = "--keep-since 4d --keep 3";
         flake = "/home/aniket/my-nix";
       };
+
+      # Cleans up stray GC roots (result symlinks, .direnv) by age - nh.clean
+      # above already owns system-generation retention, so profile-policies
+      # is deliberately left unset here.
+      programs.direnv.enable = true;
+      services.angrr = {
+        enable = true;
+        timer.enable = true;
+        settings.temporary-root-policies = {
+          result.path-regex = "/result[^/]*$";
+          result.period = "7d";
+          direnv.path-regex = "/\\.direnv/";
+          direnv.period = "14d";
+        };
+      };
       hardware.uinput.enable = true;
 
       hardware.graphics.enable = true;

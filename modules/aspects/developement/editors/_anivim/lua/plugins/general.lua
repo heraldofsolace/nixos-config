@@ -8,7 +8,7 @@ return {
         'kristijanhusak/vim-dadbod-ui',
         config = function()
             require('legendary').keymap({
-                '<leader>db',
+                '<leader>Db',
                 ':DBUI<cr>',
                 description = 'Open DBUI',
                 opts = {silent = true, noremap = true}

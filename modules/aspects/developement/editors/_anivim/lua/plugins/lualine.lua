@@ -457,7 +457,7 @@ ins_right {
     return reg ~= '' and '[' .. reg .. ']' or ''
   end,
   color = {
-    fg = '#ff3344',
+    fg = colors.RED,
     gui = 'bold',
   },
   cond = function()

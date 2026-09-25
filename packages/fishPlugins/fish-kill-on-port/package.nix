@@ -19,7 +19,11 @@ pkgs.stdenv.mkDerivation {
     set -euo pipefail
 
     latest="$(${pkgs.curl}/bin/curl -s "https://api.github.com/repos/${owner}/${repo}/commits?per_page=1" | ${pkgs.jq}/bin/jq -r ".[0].sha")"
+    hash="$(${pkgs.nurl}/bin/nurl -H "https://github.com/${owner}/${repo}" "$latest")"
 
-    drift rewrite --auto-hash --new-version "$latest"
+    ${pkgs.gnused}/bin/sed -i \
+      -e "s|version = \".*\";|version = \"$latest\";|" \
+      -e "s|hash = \".*\";|hash = \"$hash\";|" \
+      "/home/aniket/my-nix/packages/fishPlugins/fish-kill-on-port/package.nix"
   '';
 }

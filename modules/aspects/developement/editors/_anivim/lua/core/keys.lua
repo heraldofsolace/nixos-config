@@ -23,7 +23,7 @@ local keymaps = {
     {'k', keys.up, opts = {noremap = true}},
     {'l', keys.right, opts = {noremap = true}}, 
     -- Splits
-    {'<leader>|', ':vsplit<cr>'}, {'<leader>-', ':split<cr>'},
+    {'<leader>vs', ':vsplit<cr>'}, {'<leader>-', ':split<cr>'},
     -- No-op for arrows
     -- {'<Up>', ''}, {'<Down>', ''}, {'<Left>', ''}, {'<Right>', ''}, 
     -- Save
@@ -54,8 +54,8 @@ local keymaps = {
     {'<A-${right}>' % keys, ':vertical resize +5<cr>'},
     {'<A-${down}>' % keys, ':resize -5<cr>'},
     {'<A-${up}>' % keys, ':resize +5<cr>'}, -- Buffer and tabs
-    {'<leader>ba', ':bufdo bd<cr>'}, {'<leader>${right}' % keys, ':bnext<cr>'},
-    {'<leader>${left}' % keys, ':bprevious<cr>'}, {'<leader>tn', ':tabnew<cr>'},
+    {'<leader>ba', ':bufdo bd<cr>'}, {'<leader>bn', ':bnext<cr>'},
+    {'<leader>bp', ':bprevious<cr>'}, {'<leader>tn', ':tabnew<cr>'},
     {'<leader>tc', ':tabclose<cr>'}, {'<leader>tm', ':tabmove'},
     {'<leader>tt', ':tabnext<cr>'},
     {'<leader>tl', ':exe "tabn ".g:lasttab<CR>'},
@@ -63,10 +63,10 @@ local keymaps = {
     -- Scrolling with j and k
     {keys.down, 'gj'}, {keys.up, 'gk'}, -- Spell
     {'<leader>sn', ']s'}, {'<leader>sp', '[s'}, {'<leader>sa', 'zg'},
-    {'<leader>s?', 'z='}, {'<C-l>', '<c-g>u<Esc>[s1z=`]a<c-g>u', mode = 'i'},
+    {'<leader>su', 'z='}, {'<C-l>', '<c-g>u<Esc>[s1z=`]a<c-g>u', mode = 'i'},
 
     -- cd
-    {'<leader>cd', ':cd %:p:h<cr>:pwd<cr>'}, -- Buffer
+    {'<leader>cD', ':cd %:p:h<cr>:pwd<cr>'}, -- Buffer
     {'<leader>q', ':e ~/buffer<cr>'},
 
     -- Readline-like mappings

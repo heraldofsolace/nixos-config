@@ -184,6 +184,16 @@
       colors = config.lib.stylix.colors.withHashtag;
       baseNames = builtins.genList (i: lib.toUpper (lib.fixedWidthNumber 2 (lib.toHexString i))) 16;
       colorValues = map (n: colors."base${n}") baseNames;
+      # Full base16 passthrough (rgb(...), no leading #) so hyprland.lua can
+      # reach any palette slot by name (e.g. nix.vars.base00 for background,
+      # nix.vars.base05 for foreground) instead of hardcoding hex that would
+      # silently drift from stylix.base16Scheme on a theme change.
+      stylixVars = lib.listToAttrs (
+        map (n: {
+          name = "base${n}";
+          value = "rgb(${config.lib.stylix.colors."base${n}"})";
+        }) baseNames
+      );
       wallpapers = generate-wallpapers { inherit config pkgs; } {
         colors = colorValues;
         name = "stylix";
@@ -323,6 +333,9 @@
         package = null;
         portalPackage = null;
         configType = "lua";
+        plugins = [
+          inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system}.hyprfocus
+        ];
       };
       wayland.windowManager.hyprland.systemd.variables = [ "--all" ];
       # wayland.windowManager.hyprland.extraLuaFiles = {
@@ -353,6 +366,23 @@
             ${lib.getExe pkgs.mpv} "$(wl-paste)"
           '';
 
+          # Pushes a flat RGB color to every LED on the Dygma Defy over its
+          # Focus-protocol serial port (led.setAll, see FOCUS_API.md). No-ops
+          # silently if the keyboard isn't plugged in (e.g. on horologium).
+          # led.setAll writes to the keyboard's flash on every call, so this
+          # is meant to be called on discrete events (workspace switches),
+          # not continuously.
+          # Nix binding name must stay hyphen-free: it's exposed to Lua as
+          # nix.pkgs.<name>, and `nix.pkgs.keyboard-accent` would parse as
+          # subtraction in Lua. The binary itself is still named
+          # keyboard-accent.
+          keyboardAccent = pkgs.writeShellScriptBin "keyboard-accent" ''
+            set -euo pipefail
+            device="/dev/serial/by-id/usb-DYGMA_DEFY_C49AE5F2FDE93A35-if00"
+            [ -e "$device" ] || exit 0
+            printf 'led.setAll %s %s %s\n' "$1" "$2" "$3" > "$device"
+          '';
+
           myPkgs = with pkgs; [
             playerctl
             brightnessctl
@@ -360,7 +390,7 @@
             copyq
           ];
           namedPkgs = {
-            inherit yt;
+            inherit yt keyboardAccent;
             snapshot = self.packages.${pkgs.stdenv.hostPlatform.system}.snapshot;
             awww = awww-script;
             kwallet = pkgs.kdePackages.kwallet-pam;
@@ -378,7 +408,8 @@
             green = "rgb(${green})";
             lavender = "rgb(${lavender})";
             blue = "rgb(${blue})";
-          };
+          }
+          // stylixVars;
 
           pkgsSet = lib.genAttrs (map (p: p.pname) myPkgs) (
             name: lib.findFirst (p: p.pname == name) null myPkgs

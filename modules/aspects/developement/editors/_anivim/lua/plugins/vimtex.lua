@@ -27,15 +27,15 @@ return {
         }
 
         local keymaps = {
-            {'<leader>cl', '<plug>(vimtex-compile)'},
-            {'<leader>cL', '<plug>(vimtex-compile-selected)'},
-            {'<leader>vl', ':VimtexView<cr>'}, {
+            {'<leader>xc', '<plug>(vimtex-compile)'},
+            {'<leader>xC', '<plug>(vimtex-compile-selected)'},
+            {'<leader>xv', ':VimtexView<cr>'}, {
                 '<C-f> <Esc>',
                 [[: silent exec '.!inkscape-figures create "'.getline('.').'" "'.b:vimtex.root.'/figures/"'<CR><CR>:w<CR>]],
                 mode = 'i',
                 opts = {noremap = true}
             }, {
-                '<leader><C-f>',
+                '<leader>xf',
                 [[: silent exec '!inkscape-figures edit "'.b:vimtex.root.'/figures/" > /dev/null 2>&1 &'<CR><CR>:redraw!<CR>]],
                 opts = {noremap = true}
             }

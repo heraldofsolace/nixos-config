@@ -27,6 +27,7 @@
         dig
         manix
         claude-code
+        mcp-nixos
         # protonup
       ];
       # tmux auto-launch and bash->fish handoff live in bash.nix's

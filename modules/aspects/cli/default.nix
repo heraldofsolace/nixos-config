@@ -353,6 +353,59 @@
               run = "plugin lazygit";
               desc = "run lazygit";
             }
+
+            # Thumb-down movement (s/n/m/t = left/down/up/right), mirroring
+            # h/j/k/l exactly - matches Hyprland/tmux/Neovim's bidirectional
+            # bindings elsewhere in this config. `s` and `n` shadow yazi's
+            # built-in fd-search and next-found here, so those two move to
+            # the g-prefix below (matching this file's own gj/gl convention)
+            # rather than being lost.
+            {
+              on = "s";
+              run = "leave";
+              desc = "Back to the parent directory";
+            }
+            {
+              on = "n";
+              run = "arrow next";
+              desc = "Next file";
+            }
+            {
+              on = "m";
+              run = "arrow prev";
+              desc = "Previous file";
+            }
+            {
+              on = "t";
+              run = "enter";
+              desc = "Enter the child directory";
+            }
+
+            # Displaced by thumb-down movement above.
+            {
+              on = [
+                "g"
+                "s"
+              ];
+              run = "plugin fd";
+              desc = "Search files by name via fd";
+            }
+            {
+              on = [
+                "g"
+                "n"
+              ];
+              run = "find_arrow";
+              desc = "Next found";
+            }
+            {
+              on = [
+                "g"
+                "N"
+              ];
+              run = "find_arrow --previous";
+              desc = "Previous found";
+            }
           ];
         };
       };

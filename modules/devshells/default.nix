@@ -73,6 +73,9 @@
           nix-du
           nurl
           cachix
+          nix-melt
+          nixpkgs-hammering
+          angrr
           inputs'.nixos-anywhere.packages.default
           inputs'.omnix.packages.default
         ];

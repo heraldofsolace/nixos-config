@@ -1,4 +1,5 @@
 {
+  pkgs,
   lib,
   fetchFromGitHub,
   buildNpmPackage,
@@ -197,4 +198,25 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
   };
+
+  passthru.update = pkgs.writeShellScriptBin "update-lian-li-linux" ''
+    set -euo pipefail
+
+    tag="$(${pkgs.curl}/bin/curl -s "https://api.github.com/repos/sgtaziz/lian-li-linux/releases/latest" | ${pkgs.jq}/bin/jq -r ".tag_name")"
+    version="''${tag#v}"
+    hash="$(${pkgs.nurl}/bin/nurl -H --submodules=true "https://github.com/sgtaziz/lian-li-linux" "$tag")"
+
+    ${pkgs.gnused}/bin/sed -i \
+      -e "s|rev = \".*\";|rev = \"$tag\";|" \
+      -e "s|version = \".*\";|version = \"$version\";|" \
+      -e "s|hash = \".*\";|hash = \"$hash\";|" \
+      "/home/aniket/my-nix/packages/lian-li-linux/package.nix"
+
+    echo ""
+    echo "Updated to $tag. npmDepsHash was NOT touched - nurl can't compute it"
+    echo "(it hashes package-lock.json's fetched deps, not the source tree)."
+    echo "Regenerate it separately, e.g. with prefetch-npm-deps against the"
+    echo "new source's crates/lianli-gui/package-lock.json, or build once and"
+    echo "take the hash Nix reports as expected."
+  '';
 }

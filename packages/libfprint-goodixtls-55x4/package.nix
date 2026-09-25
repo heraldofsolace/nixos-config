@@ -1,4 +1,5 @@
 {
+  pkgs,
   lib,
   git,
   stdenv,
@@ -88,4 +89,18 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     homepage = "https://github.com/TheWeirdDev/libfprint";
   };
+
+  passthru.update = pkgs.writeShellScriptBin "update-libfprint-goodixtls-55x4" ''
+    set -euo pipefail
+
+    # Pinned to the 55b4-experimental branch, not the default branch - poll
+    # that branch specifically rather than /commits?per_page=1.
+    latest="$(${pkgs.curl}/bin/curl -s "https://api.github.com/repos/TheWeirdDev/libfprint/commits/55b4-experimental" | ${pkgs.jq}/bin/jq -r ".sha")"
+    hash="$(${pkgs.nurl}/bin/nurl -H "https://github.com/TheWeirdDev/libfprint" "$latest")"
+
+    ${pkgs.gnused}/bin/sed -i \
+      -e "s|rev = \".*\";|rev = \"$latest\";|" \
+      -e "s|sha256 = \".*\";|sha256 = \"$hash\";|" \
+      "/home/aniket/my-nix/packages/libfprint-goodixtls-55x4/package.nix"
+  '';
 }

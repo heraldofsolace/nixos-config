@@ -172,9 +172,9 @@ return {
                             description = "Type [D]efinition",
                             opts = {noremap = true}
                         }, {
-                            '<leader>ds',
+                            '<leader>ls',
                             function() lsp_pick {scope = 'document_symbol'} end,
-                            description = "[D]ocument [S]ymbols",
+                            description = "[L]ist [S]ymbols (document)",
                             opts = {noremap = true}
                         }, {
                             '<leader>ws',

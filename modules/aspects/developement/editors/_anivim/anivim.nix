@@ -66,6 +66,8 @@ let
           clang
           clang-tools
           tree-sitter
+          solargraph
+          tinymist
         ];
 
         nix-dev = with pkgs; [
@@ -276,7 +278,12 @@ let
         telescope = true;
         treesitter = true;
         org = true;
-        dev = true;
+        # ruby.lua checks enableForCategory('dev.ruby'), which does a nested
+        # vim.tbl_get lookup - a plain `dev = true;` boolean can't satisfy
+        # that (vim-rails never loaded as a result).
+        dev = {
+          ruby = true;
+        };
         cmp = true;
         markdown = true;
         # this does not have an associated category of plugins,

@@ -221,6 +221,7 @@
               if test -z "$msg"
                 set msg "Check git status/diff for what changed and update the cheatsheet accordingly."
               end
+              set msg "$msg After updating modules/aspects/desktop/_files/cheatsheet.html, also republish it to the existing claude.ai artifact at https://claude.ai/code/artifact/3d5ffbb7-f8ac-454f-a93b-4ed444b92a50 (same URL, so it keeps updating in place) - strip the standalone <!DOCTYPE>/<html>/<head>/<body> wrapper first, since the Artifact tool adds its own."
               ${getExe pkgs.claude-code} --resume bcd27ae9-5246-4211-816e-2ff5702bd1e3 "$msg"
             '';
           };

@@ -119,6 +119,8 @@ return {
                 html = {filetypes = {'html', 'twig', 'hbs'}},
                 nixd = {},
                 nil_ls = {},
+                solargraph = {},
+                tinymist = {},
                 lua_ls = {
                     Lua = {
                         formatters = {ignoreComments = true},

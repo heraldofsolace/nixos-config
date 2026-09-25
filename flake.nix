@@ -153,6 +153,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+    nixpkgs-multiverse.url = "github:fzakaria/nixpkgs-multiverse";
     noctalia-v5.url = "github:noctalia-dev/noctalia/cachix";
     nur = {
       url = "github:nix-community/NUR";

@@ -491,6 +491,21 @@
       <div class="entry"><span class="keys"><kbd>C-a/C-e/C-k/C-p/C-n</kbd> <span class="context-tag">cmdline</span></span><span class="desc">home/end/kill/history</span></div>
     </div>
 
+    <h3 class="group">LSP <span style="text-transform:none;letter-spacing:0;color:var(--text-muted);font-weight:400">(on LspAttach — servers: clangd, gopls, pyright, rust_analyzer, tsserver, html, nixd, nil_ls, lua_ls, solargraph, tinymist)</span></h3>
+    <div class="grid">
+      <div class="entry"><span class="keys"><kbd>gd</kbd></span><span class="desc">goto definition</span></div>
+      <div class="entry"><span class="keys"><kbd>gr</kbd></span><span class="desc">goto references</span></div>
+      <div class="entry"><span class="keys"><kbd>gI</kbd></span><span class="desc">goto implementation</span></div>
+      <div class="entry"><span class="keys"><kbd>gD</kbd></span><span class="desc">goto declaration</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;D</kbd></span><span class="desc">type definition</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;ds</kbd></span><span class="desc">document symbols</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;ws</kbd></span><span class="desc">workspace symbols</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;rn</kbd></span><span class="desc">rename</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;ca</kbd></span><span class="desc">code action</span></div>
+      <div class="entry"><span class="keys"><kbd>K</kbd></span><span class="desc">hover documentation</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;th</kbd></span><span class="desc">toggle inlay hints (if supported)</span></div>
+    </div>
+
     <h3 class="group">mini.pick <span style="text-transform:none;letter-spacing:0;color:var(--text-muted);font-weight:400">(telescope replacement)</span></h3>
     <div class="grid">
       <div class="entry"><span class="keys"><kbd>&lt;leader&gt;ff</kbd></span><span class="desc">find files</span></div>
@@ -514,7 +529,7 @@
       <div class="entry"><span class="keys"><kbd>&lt;leader&gt;&lt;leader&gt;</kbd></span><span class="desc">toggle smart-open</span></div>
     </div>
 
-    <h3 class="group">mini.diff <span style="text-transform:none;letter-spacing:0;color:var(--text-muted);font-weight:400">(gitsigns replacement)</span></h3>
+    <h3 class="group">mini.diff <span style="text-transform:none;letter-spacing:0;color:var(--text-muted);font-weight:400">(replaces gitsigns' hunk staging/gutter)</span></h3>
     <div class="grid">
       <div class="entry"><span class="keys"><kbd>&lt;leader&gt;hs</kbd></span><span class="desc">stage hunk</span></div>
       <div class="entry"><span class="keys"><kbd>&lt;leader&gt;hr</kbd></span><span class="desc">reset hunk</span></div>
@@ -524,6 +539,14 @@
       <div class="entry"><span class="keys"><kbd>&lt;leader&gt;td</kbd></span><span class="desc">toggle deleted-lines overlay</span></div>
       <div class="entry"><span class="keys"><kbd>[c</kbd> / <kbd>]c</kbd></span><span class="desc">prev/next hunk</span></div>
       <div class="entry"><span class="keys"><kbd>ih</kbd></span><span class="desc">hunk textobject</span></div>
+    </div>
+
+    <h3 class="group">gitsigns <span style="text-transform:none;letter-spacing:0;color:var(--text-muted);font-weight:400">(kept alongside mini.diff for blame/diff-vs-commit only, own gutter disabled)</span></h3>
+    <div class="grid">
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;hb</kbd></span><span class="desc">blame line</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;hd</kbd></span><span class="desc">diff against index</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;hD</kbd></span><span class="desc">diff against last commit</span></div>
+      <div class="entry"><span class="keys"><kbd>&lt;leader&gt;tb</kbd></span><span class="desc">toggle current-line blame</span></div>
     </div>
 
     <h3 class="group">mini.surround <span style="text-transform:none;letter-spacing:0;color:var(--text-muted);font-weight:400">(rebound to g-prefix — s conflicts with thumb-down left)</span></h3>

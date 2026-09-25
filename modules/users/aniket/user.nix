@@ -73,6 +73,7 @@
 
         utils._.obsidian
         utils._.openrgb
+        utils._.cryfs
 
         games
       ])

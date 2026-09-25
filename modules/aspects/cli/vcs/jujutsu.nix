@@ -76,9 +76,13 @@
           };
           signing = {
             behavior = "own";
-            backend = "gpg";
-            key = "aniket@abhattacharyea.dev";
-            # key = "22146EBAB4684AE2907DDC228FC8E68432148DCA";
+            # Matches git's setup (security/op.nix): sign via SSH through
+            # 1Password rather than GPG - the GPG key (aniket@abhattacharyea.dev)
+            # expired 2024-11-18 and jj's gpg backend refuses expired keys
+            # by default, which is what broke `jj git init --colocate`.
+            backend = "ssh";
+            key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA3GRcKkyXAJvKjyovyzkPzV9aaT7FRBSbnR1t1bmwqP";
+            backends.ssh.program = lib.getExe' pkgs._1password-gui "op-ssh-sign";
           };
           git = {
             auto-local-bookmark = false;

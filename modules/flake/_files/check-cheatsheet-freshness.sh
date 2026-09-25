@@ -10,6 +10,8 @@ sources=(
   "modules/aspects/cli/tmux/default.nix"
   "modules/aspects/cli/tmux/_files/tmux.conf"
   "modules/aspects/developement/editors/_anivim/lua/core/keys.lua"
+  "modules/aspects/developement/editors/_anivim/lua/plugins/nvim_lsp.lua"
+  "modules/aspects/developement/editors/_anivim/lua/plugins/gitsigns.lua"
   "modules/aspects/cli/vcs/git.nix"
   "modules/aspects/cli/vcs/jujutsu.nix"
   "modules/aspects/cli/vcs/lazygit.nix"

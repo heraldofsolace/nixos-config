@@ -2056,6 +2056,21 @@
         "type": "github"
       }
     },
+    "nixpkgs-multiverse": {
+      "locked": {
+        "lastModified": 1790255862,
+        "narHash": "sha256-IrSW6vJtG332HvF0t50NaO6h3+9WkzJ+KSpJ1CbNWYo=",
+        "owner": "fzakaria",
+        "repo": "nixpkgs-multiverse",
+        "rev": "fba6691c6c064212a8683ba81708076c7f8f683c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "fzakaria",
+        "repo": "nixpkgs-multiverse",
+        "type": "github"
+      }
+    },
     "nixpkgs-regression": {
       "locked": {
         "lastModified": 1643052045,
@@ -2595,6 +2610,7 @@
         "nixflix": "nixflix",
         "nixos-anywhere": "nixos-anywhere",
         "nixpkgs": "nixpkgs_14",
+        "nixpkgs-multiverse": "nixpkgs-multiverse",
         "noctalia-v5": "noctalia-v5",
         "nur": "nur",
         "omnix": "omnix",

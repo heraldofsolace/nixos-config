@@ -1,3 +1,10 @@
 inputs:
   nixpkgs:
     url: github:cachix/devenv-nixpkgs/rolling
+
+# See secretspec.toml for what's declared. `keyring` needs no setup (OS
+# keyring); switch per-shell with `devenv --secretspec-provider onepassword
+# shell` if you'd rather use 1Password - no need to edit this file for that.
+secretspec:
+  enable: true
+  provider: keyring

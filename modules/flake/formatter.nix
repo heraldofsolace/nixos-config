@@ -60,7 +60,7 @@
       treefmt = {
         # Used to find the project root
         # projectRootFile = "flake.nix";
-        projectRootFile = ".git/config";
+        projectRootFile = "flake.nix";
         enableDefaultExcludes = true;
 
         programs.nixfmt = {

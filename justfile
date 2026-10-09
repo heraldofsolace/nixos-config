@@ -39,6 +39,19 @@ alias f := fmt
 fmt:
   nix fmt
 
+# The gate `worktree::land` runs as its test_cmd: formatting is already a no-op and
+# the tree is fully committed, so the flake evaluates exactly what lands. Cheap, and
+# green on any tree that is actually ready to merge.
+gate:
+  nix fmt
+  test -z "$(git status --porcelain)"
+
+# `gate` plus the flake's own checks, evaluated but not built (minutes: the options
+# evaluation of three hosts dominates). This is where `nix flake check` belongs once
+# the tree is green under it — see the kanban ticket about unfree packages.
+gate-full: gate
+  nix flake check --no-build --accept-flake-config
+
 # TODO: Implement.
 ci:
   {{ error("Unimplemented") }}

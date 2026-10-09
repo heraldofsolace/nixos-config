@@ -52,6 +52,8 @@
         # iii compose runtime state — the engine writes it; keep it out of the flake source
         /.iii/
         /data/
+        # git worktrees minted by the worktree worker (worktree_root: worktrees)
+        /worktrees/
         /skills/*
         !/skills/iii/
         #  .editorconfig

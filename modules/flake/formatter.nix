@@ -108,6 +108,14 @@
             "**/*.gitmodules"
             "**/LICENSE"
             "**/.direnv"
+            # Agent profiles and downloaded skill docs carry YAML frontmatter;
+            # mdformat rewrites the `---` delimiters into a thematic break, after
+            # which the directory worker skips the file entirely. Keep both trees
+            # out of every formatter.
+            "agents/**"
+            "**/agents/**"
+            "skills/**"
+            "**/skills/**"
             "**/node_modules/*"
             "node_modules/*"
             "**/*.code-workspace"

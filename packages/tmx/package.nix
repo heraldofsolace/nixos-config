@@ -26,7 +26,13 @@ writeShellApplication {
 
     base_session="$1"
     # This actually works without the trim() on all systems except OSX
-    tmux_nb=$(trim "$(${tmux}/bin/tmux ls | grep -c ^"""$base_session""" )")
+    # `tmux ls` exits non-zero (and `grep -c` on its empty output does too)
+    # when no server is running yet - the expected case on a first login.
+    # With writeShellApplication's errexit+pipefail, that would otherwise
+    # kill this script before it ever reaches the "launch base session"
+    # branch below, silently exiting tmx and, since bash.nix invokes it via
+    # `exec`, closing the terminal with it.
+    tmux_nb=$(trim "$(${tmux}/bin/tmux ls 2>/dev/null | grep -c ^"""$base_session""" || true)")
     if [[ "$tmux_nb" == "0" ]]; then
         echo "Launching tmux base session $base_session ..."
         ${tmux}/bin/tmux new-session -s "$base_session"

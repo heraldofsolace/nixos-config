@@ -1,0 +1,6 @@
+id: default-llm-router
+name: LLM Router
+description: Provider credentials, routing heuristics, and stream budgets for llm-router.
+metadata:
+  ui_form: llm-router
+value: null

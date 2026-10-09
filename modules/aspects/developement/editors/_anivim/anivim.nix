@@ -68,6 +68,7 @@ let
           tree-sitter
           solargraph
           tinymist
+          vscode-langservers-extracted # html + jsonls (and css/eslint) servers
         ];
 
         nix-dev = with pkgs; [

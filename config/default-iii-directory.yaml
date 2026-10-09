@@ -1,0 +1,28 @@
+id: default-iii-directory
+name: iii-directory
+description: Skills and agent-skills folders, workers-registry URL, download timeouts, skill-visibility filters, and the function-search knobs (inject_hint, hint_min_workers, registry_search, function_search_mode, function_search_model_path, function_search_judge_timeout_ms, function_search_judge_min_relevance, function_search_judge_side_lane_min_relevance, function_search_judge_question, function_search_judge_choice_min_probability) for the iii-directory worker.
+metadata:
+  ui_form: iii-directory
+value:
+  agents_folder: agents
+  agents_skills_folder: .agents/skills
+  auto_download: true
+  download_timeout_ms: 60000
+  filter_unregistered: true
+  function_search_judge_choice_min_probability: 0.1
+  function_search_judge_min_relevance: 0.5
+  function_search_judge_question: choice
+  function_search_judge_side_lane_min_relevance: 0.3
+  function_search_judge_timeout_ms: 3000
+  function_search_mode: judge
+  function_search_model_download: true
+  function_search_model_path: ~/.cache/iii/all-MiniLM-L6-v2-c9745ed1d9f207416be6d2e6f8de32d1f16199bf
+  global_agents_folder: ~/.iii/agents
+  global_agents_skills_folder: ~/.agents/skills
+  hint_min_workers: 2
+  inject_hint: false
+  local_skills_folder: skills/iii
+  registry_cache_ttl_ms: 60000
+  registry_search: true
+  registry_url: https://api.workers.iii.dev
+  skills_folder: skills

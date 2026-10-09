@@ -63,6 +63,36 @@
         [Cachix](https://heraldofsolace.cachix.org) cache (scoped to just those packages, not
         full system/devshell closures, to stay within the free tier). It's already wired in as
         a substituter for this flake, so no extra setup is needed to pull from it.
+
+        ## iii engine (agents, skills, worker config)
+
+        This repository also hosts the [iii](https://iii.dev) engine that runs the local agent
+        stack; the compose project is rooted here, next to the NixOS configuration:
+
+        | Path | What it is |
+        | --- | --- |
+        | `worker-compose.yaml` | Which workers run (`iii compose --up`); `config.yaml` is the compose-level config. |
+        | `config/<id>.yaml` | Persistent configuration per worker; the `id:` inside the file is the key `configuration::get` / `configuration::set` take. |
+        | `data/`, `.iii/`, `worker-compose.lock` | Runtime state — generated, not edited, not committed. |
+        | `skills/` | Worker skill docs; repo-local skills live under `skills/iii/`. |
+        | `agents/<id>.md` | Agent profiles: frontmatter `name`, emoji `logo`, optional `extends`, `skills` and `functions`. |
+        | `.env` | Provider keys `llm-router` reads through its `env_file`; gitignored. |
+
+        The engine binaries (`iii`, `iii-worker`, `iii-init`, `iii-console`) are pinned in
+        `modules/devshells/default.nix` with hashes from the upstream `iii/vX.Y.Z` release, so
+        `nix develop` is all it takes to run the stack; the console serves on
+        `http://127.0.0.1:3113`.
+
+        Agent profiles in this repo: `nixos` (aspects, `just` recipes, SOPS, hosts) and `iii-ops`
+        (workers, config values, skills). Both extend the built-in `iii` identity and preload a
+        small set of skills and function contracts; list them with `directory::agents::list`.
+
+        Read a live value with `configuration::get`, its field set with `configuration::schema`,
+        and apply a change with `configuration::set`. The YAML files under `config/` are read at
+        compose boot, while `set` notifies consumers immediately, so most changes need no restart.
+        The ide worker's filesystem jail currently runs unjailed (`fs.allow_unjailed: true`), with
+        `**/.env`, `**/*.pem`, `**/*.key`, `**/secrets/**` and `/etc/passwd`, `/etc/shadow`
+        protected — run this engine only where whole-host access is intended.
       '';
   };
 }

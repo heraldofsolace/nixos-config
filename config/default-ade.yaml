@@ -1,0 +1,31 @@
+id: default-ade
+name: ADE
+description: |-
+  ADE server and UI settings — live HTTP port binding, the data \
+                          directory for the workspace layout, Traces V2 saved views, and \
+                          per-worker injectable-UI toggles.
+metadata:
+  ui_form: console
+value:
+  data_dir: data/ade
+  http_port: 3113
+  injectableUi:
+    disabledWorkers: []
+  traces:
+    activeViewId: view-sessions
+    followTurns: true
+    spanFilters:
+      hiddenGroups:
+      - harness::send
+      hiddenWorkers:
+      - context-manager
+      - session-manager
+    views:
+    - filters: {}
+      groupBy: iii.session.id
+      hiddenFunctions: []
+      id: view-sessions
+      label:
+        attribute: iii.tag.message
+        mode: attribute
+      name: sessions

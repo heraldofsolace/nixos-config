@@ -327,6 +327,7 @@ hl.bind(mod .. " + 0", hl.dsp.workspace.toggle_special())
 hl.bind(mod .. " + SHIFT + 0", hl.dsp.window.move({
     workspace = "special"
 }))
+hl.bind(mod .. " + P", hl.dsp.workspace.toggle_special("polymath"))
 
 -- Relative workspace focus
 hl.bind("SUPER + period", hl.dsp.focus({
@@ -796,6 +797,15 @@ hl.workspace_rule({
     on_created_empty = "firefox --kiosk --profile /home/aniket/.local/share/cheatsheet-ff-profile file:///home/aniket/.local/share/cheatsheet/index.html"
 })
 
+-- Polymath autostarts via its systemd user service, not on_created_empty;
+-- "silent" keeps it from yanking focus to the special workspace on launch.
+hl.window_rule({
+    match = {
+        class = "^(com.fluxkeyboard.polymath)$"
+    },
+    workspace = "special:polymath silent"
+})
+
 hl.workspace_rule({
     workspace = "m[HDMI-A-1]",
     layout = "scrolling"
@@ -977,7 +987,9 @@ local function shaderBurst()
         decoration = {screen_shader = shaderAnimated}
     })
     if shaderBurstTimer then
-        shaderBurstTimer:cancel()
+        -- HL.Timer has no cancel(); disarming is the documented way to
+        -- drop a still-pending oneshot early. A no-op if it already fired.
+        shaderBurstTimer:set_enabled(false)
     end
     shaderBurstTimer = hl.timer(function()
         hl.config({

@@ -1,0 +1,4 @@
+# iii engine configuration.
+# Declare project workers in worker-compose.yaml and run `iii compose --up`.
+# Configure engine workers at runtime through the configuration worker (configuration::set).
+workers: []

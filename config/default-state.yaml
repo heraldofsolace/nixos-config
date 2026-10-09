@@ -1,0 +1,7 @@
+id: default-state
+name: State
+description: State store settings — storage adapter (kv/redis), trigger fan-out gate, max value size, and file-store flush cadence.
+metadata:
+  ui_form: state
+value:
+  triggers_enabled: true

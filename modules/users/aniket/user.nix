@@ -35,6 +35,7 @@
         shells
         tmux
         keyboard
+        keyboard._.polymath
         # nix
         # development._.desktop
         # development._.console

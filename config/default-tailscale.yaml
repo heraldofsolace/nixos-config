@@ -1,0 +1,11 @@
+id: default-tailscale
+name: Tailscale
+description: Local Console target, CLI path, default HTTPS port, public Funnel policy, and command timeout.
+metadata:
+  ui_form: tailscale
+value:
+  allow_funnel: false
+  command_timeout_ms: 20000
+  console_url: http://127.0.0.1:3113
+  default_https_port: 443
+  tailscale_binary: tailscale

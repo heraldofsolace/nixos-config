@@ -117,6 +117,7 @@ return {
 
                 },
                 html = {filetypes = {'html', 'twig', 'hbs'}},
+                jsonls = {},
                 nixd = {},
                 nil_ls = {},
                 solargraph = {},

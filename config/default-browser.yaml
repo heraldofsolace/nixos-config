@@ -1,0 +1,43 @@
+id: default-browser
+name: browser
+description: Session limits, buffers, timeouts, viewport, and executable for the browser worker.
+metadata:
+  ui_form: browser
+value:
+  allow_attach: false
+  allow_cookie_import: true
+  allow_history_access: true
+  allowed_schemes:
+  - http
+  - https
+  - file
+  console_buffer: 500
+  data_dir: ./data/browser
+  default_timeout_ms: 30000
+  engine: chromium
+  executable: ''
+  headless: true
+  inactive_after_ms: 1800000
+  max_sessions: 4
+  max_snapshot_nodes: 2000
+  max_timeout_ms: 120000
+  network_buffer: 500
+  scrapling:
+    adaptive_max_bytes: 268435456
+    adaptive_storage_path: ./data/scrapling/elements.db
+    allow_loopback: false
+    chromium_executable: ''
+    defaults:
+      headless: true
+      impersonate: chrome
+      include_html: false
+      network_idle: false
+      proxy: ''
+    inject_guidance: true
+    max_bulk_concurrency: 5
+    max_sessions: 8
+    security_mode: safe
+    session_idle_timeout_s: 900
+  screenshot_quality: 60
+  viewport_height: 800
+  viewport_width: 1280

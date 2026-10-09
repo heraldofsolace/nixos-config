@@ -1,0 +1,26 @@
+id: default-kanban
+name: Kanban
+description: Where the board file lives, how tickets are numbered, and which columns the board has.
+metadata:
+  ui_form: kanban
+value:
+  agents_path: agents
+  columns:
+  - id: backlog
+    label: Backlog
+  - id: todo
+    label: To do
+  - id: in_progress
+    label: In progress
+  - id: in_review
+    label: In review
+  - id: done
+    label: Done
+  data_path: data/kanban
+  default_status: backlog
+  id_prefix: KAN
+  priorities:
+  - low
+  - medium
+  - high
+  - urgent

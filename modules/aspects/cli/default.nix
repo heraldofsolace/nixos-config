@@ -59,6 +59,7 @@
           jq # A lightweight and flexible command-line JSON processor.
           yq-go # yaml processer https://github.com/mikefarah/yq.
           glow # Markdown previewer in terminal.
+          vhs # Scripts a terminal session into a GIF/MP4 from a .tape file.
           treemd
           moreutils
           broot

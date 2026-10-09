@@ -103,6 +103,81 @@
                 buildInputs = oldAttrs.buildInputs ++ [ pkgs.dav1d ];
                 cargoBuildFlags = [ "--features=avif" ];
               });
+
+              # grub2's --enable-libzfs configure check looks for
+              # libzfs.h/libnvpair.h directly under the include dir, but
+              # OpenZFS's own dev output nests them under include/libzfs
+              # and include/libspl (see zfs.dev's lib/pkgconfig/libzfs.pc:
+              # "Cflags: -I${includedir}/libzfs -I${includedir}/libspl").
+              # grub2.nix never adds those two -I paths when it links zfs
+              # in, so `boot.loader.grub.zfsSupport = true` fails to build
+              # from scratch. Workaround until nixpkgs' grub2 package
+              # threads the right include paths itself.
+              #
+              # -idirafter, not -I: these get added to every translation
+              # unit in grub, not just the ones touching zfs, and
+              # zfs.dev/include/libspl ships its own assert.h - with -I,
+              # that shadowed glibc's real <assert.h> for unrelated files
+              # (e.g. grub-core/lib/reed_solomon.c), breaking their own
+              # gnulib includes. -idirafter only falls back to these dirs
+              # when the real system headers don't already provide a
+              # match, so libzfs.h/libnvpair.h (genuinely absent
+              # elsewhere) still resolve, without shadowing anything.
+              grub2 = prev.grub2.overrideAttrs (oldAttrs: {
+                NIX_CFLAGS_COMPILE =
+                  (oldAttrs.NIX_CFLAGS_COMPILE or "")
+                  + " -idirafter ${prev.zfs.dev}/include/libzfs -idirafter ${prev.zfs.dev}/include/libspl";
+                # configure's AC_CHECK_LIB(zfs, libzfs_init) link-tests
+                # -lzfs alone; the .so lives in zfs's `out` output (plain
+                # `zfs`, not `zfs.dev`), which buildInputs' default output
+                # selection for a multi-output package doesn't add to the
+                # linker search path on its own.
+                NIX_LDFLAGS = (oldAttrs.NIX_LDFLAGS or "") + " -L${prev.zfs}/lib";
+
+                # GRUB's own config.h.in hand-injects a reallocarray()
+                # prototype (for cross-compile builds, where gnulib's
+                # autoconf detection runs against the host, not the
+                # target) with `unsigned int` parameters. Modern glibc
+                # (2.26+) declares reallocarray itself with `size_t`
+                # parameters - a straight type conflict, not a mere
+                # warning, which is what was actually breaking the
+                # _GL_INLINE_HEADER_BEGIN/END-wrapped gnulib headers
+                # (manifesting as a confusing "expected ';' before
+                # 'extern'" at the unrelated _GL_INLINE_HEADER_END several
+                # hundred lines later, once the parser lost sync).
+                # Verified by patching a preserved failed build's
+                # config.h directly and recompiling: this one-line type
+                # fix alone clears it. Patching post-configure since
+                # config.h is generated from config.h.in at configure
+                # time, not patch time.
+                postConfigure = (oldAttrs.postConfigure or "") + ''
+                  substituteInPlace config.h \
+                    --replace-fail \
+                      'reallocarray (void *ptr, unsigned int nmemb, unsigned int size);' \
+                      'reallocarray (void *ptr, size_t nmemb, size_t size);'
+
+                  # autoconf's AC_HEADER_MAJOR (run for grub's *utility*
+                  # programs, config-util.h, separately from config.h)
+                  # wrongly detects MAJOR_IN_MKDEV here: sys/mkdev.h is a
+                  # Solaris/BSD header that doesn't exist on glibc at
+                  # all, so every file including grub's own
+                  # include/grub/osdep/major.h compat shim (which is
+                  # *supposed* to pick sys/sysmacros.h on Linux) hits
+                  # "fatal error: sys/mkdev.h: No such file or
+                  # directory", and major/minor/makedev end up
+                  # undeclared everywhere else that shim is used.
+                  # Verified the same way as the reallocarray fix above:
+                  # confirmed MAJOR_IN_MKDEV was the only one of the two
+                  # defined (grep found neither otherwise), swapped it in
+                  # a preserved failed build's config-util.h, and the
+                  # exact failing file (grub-core/osdep/devmapper/hostdisk.c)
+                  # compiled clean afterward.
+                  substituteInPlace config-util.h \
+                    --replace-fail \
+                      '#define MAJOR_IN_MKDEV 1' \
+                      '#define MAJOR_IN_SYSMACROS 1'
+                '';
+              });
             })
           ];
         config = {

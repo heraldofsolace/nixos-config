@@ -63,8 +63,42 @@
     {
       pkgs,
       lib,
+      config,
       ...
     }:
+    let
+      # sysc-greet custom theme (docs: F1 -> Themes, or drop a .toml in
+      # ~/.config/sysc-greet/themes/). Colors come from the same
+      # stylix.base16Scheme as everywhere else, so this follows if the
+      # scheme ever changes instead of drifting like a hardcoded copy
+      # would. See internal/themes/colors.go in Nomadcxx/sysc-greet for
+      # the required TOML schema.
+      greeterColors = config.lib.stylix.colors.withHashtag;
+      greeterThemeFile = pkgs.writeText "greeter.toml" ''
+        name = "Greeter"
+
+        [colors]
+        bg_base = "${greeterColors.base00}"
+        bg_active = "${greeterColors.base02}"
+        primary = "${greeterColors.base0D}"
+        secondary = "${greeterColors.base0B}"
+        accent = "${greeterColors.base0C}"
+        warning = "${greeterColors.base0A}"
+        danger = "${greeterColors.base08}"
+        fg_primary = "${greeterColors.base05}"
+        fg_secondary = "${greeterColors.base04}"
+        fg_muted = "${greeterColors.base03}"
+        border_focus = "${greeterColors.base0D}"
+      '';
+      # Pre-selects the theme above so it's active from first boot, not
+      # just available to pick via F1 - sysc-greet persists the last
+      # choice to this exact path (internal/cache/cache.go).
+      greeterPreferencesFile = pkgs.writeText "sysc-greet-preferences" (
+        builtins.toJSON {
+          theme = "Everforest Dark Hard";
+        }
+      );
+    in
     {
       imports = [
         inputs.sysc-greet.nixosModules.default
@@ -133,6 +167,26 @@
       services.atd.allowEveryone = true;
       systemd.tmpfiles.rules = [
         "d '/var/cache/greeter' - greeter greeter - -"
+        # Intermediate dirs need their own explicit rules: a `d` rule only
+        # applies its owner to the leaf, and auto-creates missing parents
+        # as root. That root-owned .config/.cache under greeter-owned
+        # /var/lib/greeter trips systemd-tmpfiles' unsafe-path-transition
+        # check, which then refuses to touch anything below it - silently
+        # skipping the theme/preferences rules and leaving the greeter
+        # process unable to create its own cache dir ("no writable cache
+        # directory", crash-looping on every login).
+        "d /var/lib/greeter/.config 0755 greeter greeter -"
+        "d /var/lib/greeter/.cache 0755 greeter greeter -"
+        "d /var/lib/greeter/.config/sysc-greet/themes 0755 greeter greeter -"
+        "d /var/lib/greeter/.cache/sysc-greet 0755 greeter greeter -"
+        "L+ /var/lib/greeter/.config/sysc-greet/themes/greeter.toml - - - - ${greeterThemeFile}"
+        # C, not L+: sysc-greet's SavePreferences writes this file directly
+        # (os.WriteFile) every time a preference changes. A symlink into
+        # the read-only Nix store made every write fail - "no writable
+        # cache directory". C only copies the seed in if the file doesn't
+        # exist yet, so this seeds the default once and then lets the app
+        # own the real, writable file from then on.
+        "C /var/lib/greeter/.cache/sysc-greet/preferences 0644 greeter greeter - ${greeterPreferencesFile}"
       ];
     };
 
@@ -250,6 +304,7 @@
           copyq
           xdg-desktop-portal-hyprland
           kitty
+          wmctrl # Polymath's window/process enumeration shells out to this for app-based profile switching
           # inputs.caelestia-shell.packages.${pkgs.stdenv.hostPlatform.system}.default
           # (breeze-hacked-cursor-theme.override {accentColor = "#${red}";})
           # inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.default
@@ -266,6 +321,11 @@
       };
 
       services.kdeconnect.enable = true;
+
+      # Hyprland has no shell component watching for removable storage, so
+      # nothing ever auto-mounts it (e.g. a keyboard's RP2 bootloader drive
+      # during a firmware flash sits unmounted until the device times out).
+      services.udiskie.enable = true;
 
       programs.wezterm = {
         enable = true;

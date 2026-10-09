@@ -21,15 +21,15 @@ mod host
 alias s := switch
 [default]
 switch:
-  nh os switch
+  nh os switch "." -- --impure
 
 alias b := boot
 boot:
-  nh os boot
+  nh os boot "." -- --impure
 
 alias bd := build
 build:
-  nh os build
+  nh os build "." -- --impure
 
 alias t := test
 test:

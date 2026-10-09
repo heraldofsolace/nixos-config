@@ -37,7 +37,7 @@
       enable = true;
       image = ./_files/wall.png;
       polarity = "dark";
-      base16Scheme = ./_files/everforest.yaml;
+      base16Scheme = ./_files/catpuccin.yaml;
       targets.grub.useWallpaper = true;
       fonts = {
         serif = {

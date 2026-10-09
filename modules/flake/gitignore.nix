@@ -48,6 +48,12 @@
       #    extraConfig.
       extraConfig = ''
         *.qcow2?
+        .env
+        # iii compose runtime state — the engine writes it; keep it out of the flake source
+        /.iii/
+        /data/
+        /skills/*
+        !/skills/iii/
         #  .editorconfig
         #  .pre-commit-config.yaml
       '';

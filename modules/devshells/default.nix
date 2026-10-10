@@ -52,13 +52,13 @@
 
       make-shells.default =
         let
-          version = "0.24.4";
+          version = "0.24.6-rc.3";
           tag = "iii/v${version}";
           base = "https://github.com/iii-hq/iii/releases/download/${tag}";
 
           # sha256 values taken verbatim from the upstream *.sha256 files for
           # this release and cross-checked with `sha256sum` on the downloaded
-          # tarballs. Bump `version` and every sha256 together; the upstream tag is `iii/v0.24.4`.
+          # tarballs. Bump `version` and every sha256 together; the upstream tag is `iii/v0.24.6-rc.3`.
           mkIiiBin =
             {
               pname,
@@ -82,7 +82,7 @@
 
           iii-bin = mkIiiBin {
             pname = "iii";
-            sha256 = "21da5cacc28b2d8a430662d8d99339ab258df32029d5448f1ed6746b4b9b5aee";
+            sha256 = "c8ad9acce63c82e6bcd4abdbf5ec52ce4a326cc91c8b53970700e30ecfe79a1f";
           };
           # iii-init is a libkrun microVM init binary that iii itself spawns
           # inside a sandboxed guest; it is not meant to be invoked directly
@@ -91,7 +91,7 @@
           # presence are recorded; see EXPERIMENT_LOG.md.
           iii-init = mkIiiBin {
             pname = "iii-init";
-            sha256 = "b17de7d63c0469246e7c2d06bc5e080778896d0fd3c559ec7e5611b766b9512c";
+            sha256 = "79499b1738f9dcc0fb312226026414d39bfee7b4944b92bb3063206398ac3899";
           };
           # iii-worker's musl build is dynamically linked against
           # /lib/ld-musl-x86_64.so.1 ("dynamic musl for firmware loading" per
@@ -103,7 +103,7 @@
             inherit version;
             src = pkgs.fetchurl {
               url = "${base}/iii-worker-x86_64-unknown-linux-gnu.tar.gz";
-              sha256 = "f7b95e6103f6fedd5d9cf730c418f0ceb8a482c7534fabcd55bb96a5b345f514";
+              sha256 = "0ff1fe7cbf720f3d15014727e6c0d931ea25a0907ed2246cc74a6593336905bb";
             };
             sourceRoot = ".";
             dontBuild = true;
@@ -119,7 +119,7 @@
           };
           iii-console = mkIiiBin {
             pname = "iii-console";
-            sha256 = "d4dbf9566cea5679529db122252dedd73c9cab25181c26dde9defb3ad9087f2f";
+            sha256 = "f83a9a101f838353ba4b328c2cce15cbcbfbc8ba5b3c815903d2d1ce2684b120";
           };
         in
         {

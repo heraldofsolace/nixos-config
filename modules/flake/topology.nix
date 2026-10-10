@@ -21,28 +21,26 @@
 
   imports = [ inputs.nix-topology.flakeModule ];
 
-  perSystem =
-    _:
-    {
-      # No overlay wiring needed here: the flake module defaults
-      # `topology.pkgs` to `pkgs.extend`d with nix-topology's own overlay.
-      #
-      # Global diagram definitions belong in `topology.modules`: the physical
-      # world that cannot be read off a NixOS configuration, i.e. networks, the
-      # switch/router/APs, and which interface of which host plugs into what.
-      # Verified option shapes from the upstream documentation:
-      #
-      #   networks.home = { name = "Home Network"; cidrv4 = "192.168.1.1/24"; };
-      #   nodes.<node>.interfaces.<iface>.network = "home";
-      #   nodes.<node>.interfaces.<iface>.physicalConnections = [
-      #     { node = "<other-node>"; interface = "<iface>"; }
-      #   ];
-      #
-      # Per-host additions can instead go under `topology = { ... }` in a host
-      # configuration (see modules/aspects/topology.nix).
-      #
-      # Left empty: every entry above needs real LAN facts (CIDRs, interface
-      # names, switch ports) that are not derivable from this repository.
-      topology.modules = [ ];
-    };
+  perSystem = _: {
+    # No overlay wiring needed here: the flake module defaults
+    # `topology.pkgs` to `pkgs.extend`d with nix-topology's own overlay.
+    #
+    # Global diagram definitions belong in `topology.modules`: the physical
+    # world that cannot be read off a NixOS configuration, i.e. networks, the
+    # switch/router/APs, and which interface of which host plugs into what.
+    # Verified option shapes from the upstream documentation:
+    #
+    #   networks.home = { name = "Home Network"; cidrv4 = "192.168.1.1/24"; };
+    #   nodes.<node>.interfaces.<iface>.network = "home";
+    #   nodes.<node>.interfaces.<iface>.physicalConnections = [
+    #     { node = "<other-node>"; interface = "<iface>"; }
+    #   ];
+    #
+    # Per-host additions can instead go under `topology = { ... }` in a host
+    # configuration (see modules/aspects/topology.nix).
+    #
+    # Left empty: every entry above needs real LAN facts (CIDRs, interface
+    # names, switch ports) that are not derivable from this repository.
+    topology.modules = [ ];
+  };
 }

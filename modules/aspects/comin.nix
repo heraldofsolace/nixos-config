@@ -42,7 +42,7 @@
         #   poller.period = 60;                     # seconds
         #   auth.ssh_deploy_key_path = "<path>";     # XOR auth.access_token_path
         #   auth.ssh_known_hosts_path = "<path>";
-        remotes = [ ]; 
+        remotes = [ ];
       };
     };
 }

@@ -22,7 +22,7 @@
   imports = [ inputs.nix-topology.flakeModule ];
 
   perSystem =
-    { ... }:
+    _:
     {
       # No overlay wiring needed here: the flake module defaults
       # `topology.pkgs` to `pkgs.extend`d with nix-topology's own overlay.

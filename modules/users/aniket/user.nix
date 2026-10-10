@@ -28,6 +28,10 @@
         security._.sops
         security._.onepassword
         virtualisation
+        # Diagram generation (inert on the host) and the GitOps agent, which is
+        # wired but not enabled - see modules/aspects/comin.nix.
+        topology
+        comin
         # cpu
         console
         atuin

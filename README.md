@@ -59,6 +59,35 @@ Builds of everything under `packages/` are pushed automatically by CI to a perso
 full system/devshell closures, to stay within the free tier). It's already wired in as
 a substituter for this flake, so no extra setup is needed to pull from it.
 
+## CI and `just ci`
+
+CI runs exactly one command, and it is the same one available locally:
+
+```sh
+just ci   # nix flake check --no-build --accept-flake-config, against a copy of HEAD
+```
+
+`just ci` is the single source of truth for the check: `.github/workflows/test.yml`
+installs `just` from this flake's own `nixpkgs` and calls the recipe, so no second copy of
+the command can drift, and the recipe's exit code is `nix flake check`'s exit code. Like
+`gate-full` it evaluates rather than builds — the options evaluation of the three host
+systems is what the check verifies — while the derivations themselves are built by the
+`cachix-push` job on push.
+
+Nothing is written into the checkout: the recipe requires a committed tree, extracts it
+with `git archive HEAD` into a temporary directory, adds the CI signal there, and runs the
+check against that copy. The workflow asserts an empty `git status --porcelain` before it
+starts.
+
+The CI signal is `_module.args.CI`, consumed by `den.default.includes` and the host schema
+(they disable booting and the bootloader) by testing whether the attribute is *present*.
+It comes from `ci/ci-runtime.nix` — three lines setting `_module.args.CI = true` — which
+the recipe copies in as `modules/ci-runtime.nix`, so that evaluation imports it. It lives
+outside `modules/` because a tracked copy there would flag every local build as CI. (The
+old workflow generated the same file into the checkout instead, which could never work:
+a file written into a git worktree is untracked, and flake evaluation does not see
+untracked files.)
+
 ## iii engine (agents, skills, worker config)
 
 This repository also hosts the [iii](https://iii.dev) engine that runs the local agent

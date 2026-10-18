@@ -44,7 +44,11 @@
     <den/define-user>
 
     # Disable booting when running on CI on all NixOS hosts.
-    (if config ? _module.args.CI then <eg/ci-no-boot> else { })
+    # `<blazar/ci-no-boot>`: the aspect is declared in `modules/ci-no-boot.nix` under this
+    # repo's `blazar` namespace (`modules/namespace.nix`); the template's `eg` example
+    # namespace does not exist here, so the CI signal used to abort evaluation with
+    # "Aspect not found: eg.ci-no-boot" the moment it was actually set.
+    (if config ? _module.args.CI then <blazar/ci-no-boot> else { })
     # Provides the `flake-parts` `self'` (the flake's `self` with system pre-selected) as a top-level module argument.
     # This allows modules to access per-system flake outputs without needing
     # `pkgs.stdenv.hostPlatform.system`.

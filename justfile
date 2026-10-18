@@ -52,9 +52,30 @@ gate:
 gate-full: gate
   nix flake check --no-build --accept-flake-config
 
-# TODO: Implement.
+# Reproduce what CI runs, exit-code faithful and non-interactive: the flake check, evaluated
+# against the committed tree with the CI signal on, with no GitHub dependency and nothing
+# written into the checkout. Notes:
+# - `--no-build` keeps it to what the check actually verifies here -- the evaluation of three
+#   host systems, minutes. The derivations are built by the cachix-push job on push.
+# - The signal is `ci/ci-runtime.nix`, copied into a throwaway checkout as
+#   `modules/ci-runtime.nix`: `modules/` is auto-imported, so it sets `_module.args.CI` for that
+#   evaluation only (a tracked copy there would flag every local build as CI).
+# - The copy is `git archive HEAD`, so the tree must be committed: the check tests what lands.
+# - just propagates the recipe exit code -- today non-zero on unfree polymath / claude-code,
+#   reported rather than hidden.
+# Reproduce the flake check CI runs locally, exit-code faithful and non-interactive.
 ci:
-  {{ error("Unimplemented") }}
+  #!/usr/bin/env bash
+  set -euo pipefail
+  if [ -n "$(git status --porcelain)" ]; then
+    echo "just ci: the tree is dirty -- commit first so the check tests what lands" >&2
+    exit 1
+  fi
+  tmp=$(mktemp -d)
+  trap 'rm -rf "$tmp"' EXIT
+  git archive HEAD | tar -x -C "$tmp"
+  cp ci/ci-runtime.nix "$tmp/modules/ci-runtime.nix"
+  nix flake check --no-build --accept-flake-config "path:$tmp"
 
 alias h := help
 help:

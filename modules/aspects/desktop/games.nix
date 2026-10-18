@@ -43,7 +43,13 @@
               };
             };
 
-            packages = with inputs.prismnix.packages.${pkgs.system}; [
+            # prismnix's own `packages.<system>` are instantiated from
+            # `nixpkgs.legacyPackages`, which carries no unfree allowance, so
+            # forcing these Modrinth packages aborts evaluation (`sodium` is
+            # Polyform Shield). Its overlay builds the same expressions from the
+            # pkgs it is applied to — this home-manager's pkgs, whose NixOS-scope
+            # config already allows unfree. KAN-2.
+            packages = with (pkgs.extend inputs.prismnix.overlays.default).prismnix; [
               modmenu
               midnightcontrols
               (sodium.override {

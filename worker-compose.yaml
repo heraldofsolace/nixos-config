@@ -8,21 +8,22 @@ engine:
 containers:
   queue:
     worker: package://queue
-    version: "0.21.17"
+    version: "latest"
 
   state:
     worker: package://state
-    version: "0.22.18"
+    version: "latest"
 
   session-manager:
     worker: package://session-manager
-    version: "1.0.29"
+    version: "latest"
 
   llm-router:
     worker: package://llm-router
-    version: "1.4.27"
+    version: "latest"
     start_after:
-      - state
+    - secrets
+    - state
     # Every provider key resolves in the router's process, not in the provider
     # worker, and is read from ./.env. When you uncomment a provider below,
     # uncomment its key in ./.env too.
@@ -32,7 +33,7 @@ containers:
 
   provider-anthropic:
     worker: package://provider-anthropic
-    version: "1.2.23"
+    version: "latest"
     start_after:
       - llm-router
       - state
@@ -49,7 +50,7 @@ containers:
   # Enabled by default; its key in ./.env is optional.
   provider-deepseek:            # DEEPSEEK_API_KEY
     worker: package://provider-deepseek
-    version: "0.1.17"
+    version: "latest"
     start_after:
       - llm-router
       - state
@@ -128,64 +129,68 @@ containers:
 
   context-manager:
     worker: package://context-manager
-    version: "1.1.18"
+    version: "latest"
     start_after:
       - llm-router
 
   iii-directory:
     worker: package://iii-directory
-    version: "1.2.34"
+    version: "latest"
 
   cron:
     worker: package://cron
-    version: "0.21.25"
+    version: "latest"
 
   ade: # the ADE web UI (registers console::*)
     worker: package://ade
-    version: "1.9.51"
+    version: "latest"
 
   ide: # files and commands for agents and the ADE (registers shell::* and coder::*)
     worker: package://ide
-    version: "0.12.23"
+    version: "latest"
 
   harness:
     worker: package://harness
-    version: "1.8.43"
+    version: "latest"
     start_after:
-      - state
-      - queue
-      - session-manager
-      - llm-router
-      - provider-anthropic
-      - provider-deepseek
-      - context-manager
-      - iii-directory
-      - cron
-      - ide
+    - ade
+    - context-manager
+    - cron
+    - ide
+    - iii-directory
+    - judge
+    - llm-router
+    - provider-anthropic
+    - provider-deepseek
+    - provider-openai
+    - provider-openai-codex
+    - queue
+    - session-manager
+    - state
 
   browser: # Chromium sessions + one-shot fetches (browser::fetch) for verification
     worker: package://browser
-    version: "0.2.24"
+    version: "latest"
 
   document:
     worker: package://document
-    version: "0.1.11"
+    version: "latest"
   pdf: # PDF parsing and text extraction
     worker: package://pdf
-    version: "0.1.12"
+    version: "latest"
   kanban: # Kanban board for tasks and notes
     worker: package://kanban
     version: "0.1.18"
   # added by compose::add
   tailscale:
     worker: package://api.workers.iii.dev/tailscale
-    version: "0.1.16"
+    version: "latest"
     start_after:
     - ade
   # added by compose::add
   worktree:
     worker: package://api.workers.iii.dev/worktree
-    version: "0.3.15"
+    version: "latest"
     start_after:
     - ide
     - state
@@ -203,3 +208,31 @@ containers:
       run: node src/index.js
     environment:
       PATH: /usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/workspace/node_modules/.bin
+  # added by compose::add
+  secrets:
+    worker: package://api.workers.iii.dev/secrets
+    version: "latest"
+  # added by compose::add
+  judge-typesafe:
+    worker: package://api.workers.iii.dev/judge-typesafe
+    version: "latest"
+  # added by compose::add
+  judge:
+    worker: package://api.workers.iii.dev/judge
+    version: "latest"
+    start_after:
+    - judge-typesafe
+  # added by compose::add
+  provider-openai:
+    worker: package://api.workers.iii.dev/provider-openai
+    version: "latest"
+    start_after:
+    - llm-router
+    - state
+  # added by compose::add
+  provider-openai-codex:
+    worker: package://api.workers.iii.dev/provider-openai-codex
+    version: "latest"
+    start_after:
+    - llm-router
+    - state

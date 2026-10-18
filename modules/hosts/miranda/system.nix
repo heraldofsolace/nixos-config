@@ -5,7 +5,47 @@
 }:
 {
   den.hosts.x86_64-linux.miranda = _: {
-    description = "NixOS workstation";
+    # Hardware survey of the machine miranda actually is, taken from the
+    # running system over `ssh aniket@192.168.0.4` with the command named
+    # next to each fact. The string below said "NixOS workstation", which
+    # was wrong on both counts: this is a desktop tower doing server duty,
+    # not a workstation like andromeda or horologium.
+    #
+    # Form factor - `hostnamectl` reports Icon name `computer-desktop` and
+    # Chassis `desktop`; `/sys/class/dmi/id/chassis_type` is 3 (desktop).
+    # Board - `hostnamectl`: Hardware Vendor ASUS, Model ROG STRIX B550-A
+    # GAMING, firmware 2006 dated 2021-03-19.
+    # CPU - `lscpu`: AMD Ryzen 7 5800X 8-Core Processor, 16 CPUs, 2 threads
+    # per core, 8 cores per socket, 1 socket, L3 32 MiB (1 instance), L2
+    # 4 MiB (8 instances).
+    # RAM - `free -h`: 31Gi total memory and 59Gi of swap on nvme0n1p2.
+    # GPU - `lspci -nn`: Navi 23 [Radeon RX 6600/6600 XT/6600M] [1002:73ff]
+    # with its Navi 21/23 HDMI/DP audio controller [1002:ab28]; the only GPU
+    # in the box. VRAM from `mem_info_vram_total` is 8573157376 bytes
+    # (~8 GiB). sysfs only names the family, so the SKU is not guessed at.
+    # Storage - `lsblk -o NAME,SIZE,MODEL,TYPE,FSTYPE,MOUNTPOINTS` and
+    # `df -h`: plain ext4, no ZFS and no pool layout, unlike andromeda.
+    # nvme0n1 953.9G XPG GAMMIX S11 Pro holds p1 893.8G ext4 mounted at both
+    # `/` and `/nix/store` (43% full), p2 59.6G swap, p3 487M vfat
+    # `/boot/efi`; sda 1.8T ST2000DM008-2FR102 holds one ext4 partition
+    # bind-mounted at `/mnt/storage`, `/data` and `/var/lib/nextcloud` (30%
+    # full). `lspci -nn` names the NVMe controller as ADATA XPG SX8200 Pro
+    # [1cc1:8201]; the model string above is the disk's own.
+    # Network - `lspci -nn` and `ip -br addr`: Intel I225-V 2.5GbE (enp9s0)
+    # at 192.168.0.4, Tailscale (tailscale0, 100.96.77.9), a WireGuard
+    # bridge wg-br 192.168.15.5 with a veth-wg-br peer, vboxnet0, and wlan0
+    # present but down (iwd runs, but no Wi-Fi radio appears in `lspci`).
+    # OS - `hostnamectl`: NixOS 26.05 (Yarara) on kernel 6.18.50, the
+    # mainline kernel, not the cachyos kernel andromeda runs.
+    # Role - this is the fleet's server, not a workstation. `systemctl
+    # list-units --type=service --state=running` and `ss -lnt` show nginx
+    # on 0.0.0.0:80 and :443 fronting plex, jellyfin, the sonarr/radarr/
+    # lidarr/prowlarr/sabnzbd/qbittorrent/seerr stack, navidrome,
+    # phpfpm-nextcloud with redis-nextcloud and postgresql on :5432, the
+    # onlyoffice-docservice/converter pair over rabbitmq, and ollama on
+    # :11434 behind open-webui on :8000, all alongside tailscaled and
+    # ivpn-service.
+    description = "NixOS server in a desktop tower - ASUS ROG STRIX B550-A GAMING - Ryzen 7 5800X, 31 GiB RAM, 8 GiB Navi 23 Radeon, a 953G XPG NVMe root on ext4 plus a 1.8T Seagate HDD, fronting the fleet's media, Nextcloud and Ollama stacks through nginx";
     users.aniket = {
       description = "Aniket";
       userNameNick = "Aniket";

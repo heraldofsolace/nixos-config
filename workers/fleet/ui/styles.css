@@ -1,0 +1,353 @@
+/* Every rule is scoped under the console's worker wrapper. Colours, radius, shadows and
+   motion come from the console's tokens; no literals, no unscoped selectors, and
+   responsiveness is a container query because the pane width is what matters. */
+
+[data-iii-ui="fleet"] .fleet-shell {
+  min-width: 0;
+  min-height: 0;
+}
+
+[data-iii-ui="fleet"] .fleet-main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 16px 24px;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  container-type: inline-size;
+}
+
+[data-iii-ui="fleet"] .fleet-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+[data-iii-ui="fleet"] .fleet-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  min-width: 0;
+}
+
+[data-iii-ui="fleet"] .fleet-stat-label {
+  font-size: 11px;
+  color: var(--color-ink-ghost);
+}
+
+[data-iii-ui="fleet"] .fleet-stat-value {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+[data-iii-ui="fleet"] .fleet-stat-hint {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+[data-iii-ui="fleet"] .fleet-text-ok {
+  color: var(--color-ok);
+}
+
+[data-iii-ui="fleet"] .fleet-text-warn {
+  color: var(--color-warn);
+}
+
+[data-iii-ui="fleet"] .fleet-text-alert {
+  color: var(--color-alert);
+}
+
+[data-iii-ui="fleet"] .fleet-text-accent {
+  color: var(--color-accent);
+}
+
+[data-iii-ui="fleet"] .fleet-text-neutral,
+[data-iii-ui="fleet"] .fleet-text-ghost {
+  color: var(--color-ink-ghost);
+}
+
+[data-iii-ui="fleet"] .fleet-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  align-items: start;
+}
+
+[data-iii-ui="fleet"] .fleet-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  overflow: hidden;
+}
+
+[data-iii-ui="fleet"] .fleet-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  background: var(--color-panel-raised);
+}
+
+[data-iii-ui="fleet"] .fleet-card-title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-ink-faint);
+}
+
+[data-iii-ui="fleet"] .fleet-card-aside {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+[data-iii-ui="fleet"] .fleet-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  min-width: 0;
+}
+
+[data-iii-ui="fleet"] .fleet-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  min-width: 0;
+}
+
+[data-iii-ui="fleet"] .fleet-row-label {
+  font-size: 12px;
+  color: var(--color-ink-faint);
+  flex: 0 0 auto;
+}
+
+[data-iii-ui="fleet"] .fleet-row-value {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  text-align: right;
+}
+
+[data-iii-ui="fleet"] .fleet-sans {
+  font-family: var(--font-sans);
+}
+
+[data-iii-ui="fleet"] .fleet-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: var(--color-surface);
+  color: var(--color-ink-faint);
+  white-space: nowrap;
+}
+
+[data-iii-ui="fleet"] .fleet-badge-ok {
+  background: var(--color-ok-muted);
+  color: var(--color-ok);
+}
+
+[data-iii-ui="fleet"] .fleet-badge-warn {
+  background: var(--color-warn-muted);
+  color: var(--color-warn);
+}
+
+[data-iii-ui="fleet"] .fleet-badge-alert {
+  background: var(--color-alert-muted);
+  color: var(--color-alert);
+}
+
+[data-iii-ui="fleet"] .fleet-badge-accent {
+  background: var(--color-accent-muted);
+  color: var(--color-accent);
+}
+
+[data-iii-ui="fleet"] .fleet-dot {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 auto;
+  border-radius: var(--radius-full);
+  background: var(--color-ink-ghost);
+}
+
+[data-iii-ui="fleet"] .fleet-dot-ok {
+  background: var(--color-ok);
+}
+
+[data-iii-ui="fleet"] .fleet-dot-warn {
+  background: var(--color-warn);
+}
+
+[data-iii-ui="fleet"] .fleet-dot-accent {
+  background: var(--color-accent);
+}
+
+[data-iii-ui="fleet"] .fleet-dot-neutral {
+  background: var(--color-ink-ghost);
+}
+
+[data-iii-ui="fleet"] .fleet-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+[data-iii-ui="fleet"] .fleet-list-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 6px;
+  border-radius: var(--radius-sm);
+  min-width: 0;
+  transition: background var(--motion-duration-control) var(--motion-ease-standard);
+}
+
+[data-iii-ui="fleet"] .fleet-list-item:hover {
+  background: var(--color-surface-hover);
+}
+
+[data-iii-ui="fleet"] .fleet-list-name {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--color-ink);
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+[data-iii-ui="fleet"] .fleet-list-meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink-ghost);
+  flex: 0 0 auto;
+}
+
+[data-iii-ui="fleet"] .fleet-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+[data-iii-ui="fleet"] .fleet-button {
+  padding: 6px 12px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background var(--motion-duration-control) var(--motion-ease-standard);
+}
+
+[data-iii-ui="fleet"] .fleet-button:hover:not(:disabled) {
+  background: var(--color-surface-hover);
+}
+
+[data-iii-ui="fleet"] .fleet-button:focus-visible {
+  outline: 2px solid var(--color-rule-focus);
+  outline-offset: 2px;
+}
+
+[data-iii-ui="fleet"] .fleet-button:disabled {
+  color: var(--color-ink-disabled);
+  cursor: default;
+}
+
+[data-iii-ui="fleet"] .fleet-button-primary {
+  background: var(--color-accent);
+  color: var(--color-accent-fg);
+}
+
+[data-iii-ui="fleet"] .fleet-button-primary:hover:not(:disabled) {
+  background: var(--color-accent-hover);
+}
+
+[data-iii-ui="fleet"] .fleet-panel {
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  background: var(--color-surface);
+  color: var(--color-ink-faint);
+}
+
+[data-iii-ui="fleet"] .fleet-panel-alert {
+  background: var(--color-alert-muted);
+  color: var(--color-alert);
+}
+
+[data-iii-ui="fleet"] .fleet-log {
+  margin: 0;
+  padding: 10px 12px;
+  max-height: 260px;
+  overflow: auto;
+  border-radius: var(--radius-sm);
+  background: var(--color-panel-raised);
+  color: var(--color-ink-faint);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+[data-iii-ui="fleet"] .fleet-note,
+[data-iii-ui="fleet"] .fleet-quiet,
+[data-iii-ui="fleet"] .fleet-footnote {
+  margin: 0;
+  font-size: 12px;
+  color: var(--color-ink-ghost);
+}
+
+[data-iii-ui="fleet"] .fleet-footnote {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+@container (max-width: 720px) {
+  [data-iii-ui="fleet"] .fleet-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  [data-iii-ui="fleet"] .fleet-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-iii-ui="fleet"] .fleet-list-item,
+  [data-iii-ui="fleet"] .fleet-button {
+    transition: none;
+  }
+}

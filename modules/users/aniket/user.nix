@@ -79,6 +79,8 @@
         utils._.obsidian
         utils._.openrgb
         utils._.cryfs
+        utils._.securityCheck
+        utils._.vivoOfficeKit
 
         games
       ])

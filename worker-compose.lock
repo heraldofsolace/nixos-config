@@ -672,6 +672,8 @@ containers:
           url: https://api.workers.iii.dev/download/worktree/0.3.15/x86_64-unknown-linux-musl
       default_config: {}
 graphs:
+  ide:
+  - ide
   tailscale:
   - ade
   - tailscale

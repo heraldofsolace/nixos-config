@@ -12,6 +12,41 @@
 
       inherit (pkgs.python3Packages) sparklines;
 
+      # Cycles stdin character-by-character through the theme's accent
+      # colors (skipping base0F/brown, which muddies the gradient), replacing
+      # lolcat's generic rainbow so the sparkline banner reads as *this*
+      # theme rather than a stock effect.
+      paletteAccents = with config.lib.stylix.colors.withHashtag; [
+        base08
+        base09
+        base0A
+        base0B
+        base0C
+        base0D
+        base0E
+      ];
+      paletteCat = pkgs.writeScriptBin "palette-cat" ''
+        #!${pkgs.python3}/bin/python3
+        import sys
+
+        def hex_to_rgb(h):
+            h = h.lstrip("#")
+            return tuple(int(h[i : i + 2], 16) for i in (0, 2, 4))
+
+        colors = [hex_to_rgb(c) for c in ${builtins.toJSON paletteAccents}]
+        i = 0
+        out = []
+        for ch in sys.stdin.read():
+            if ch == "\n":
+                out.append(ch)
+                continue
+            r, g, b = colors[i % len(colors)]
+            out.append(f"\033[38;2;{r};{g};{b}m{ch}")
+            i += 1
+        out.append("\033[0m")
+        sys.stdout.write("".join(out))
+      '';
+
       runIfCommandExists = commandToCheck: command: ''
         if type ${commandToCheck} &> /dev/null
           ${command}
@@ -145,7 +180,7 @@
         functions = {
           print_terminal_line_sparklines = {
             description = "Print colourful sparklines";
-            body = "seq 1 $(tput cols) | sort -R | ${getExe sparklines} | ${getExeName pkgs.lolcat}";
+            body = "seq 1 $(tput cols) | sort -R | ${getExe sparklines} | ${getExe paletteCat}";
           };
 
           # Printing colourful spark lines at the top of the terminal before the prompt.
@@ -183,9 +218,12 @@
             description = "Update all system components";
             body = ''
               # System.
+              # --no-nom: Determinate's Nix emits a newer build-event type
+              # (CopySourcePath) that nixpkgs' nix-output-monitor doesn't
+              # recognize yet, spamming harmless-but-alarming parse errors.
               nix flake update --flake ${config.home.homeDirectory}/my-nix
-              ${getExe pkgs.nh} os switch -- --impure
-              ${getExe pkgs.nh} home switch -- --impure
+              ${getExe pkgs.nh} os switch --no-nom -- --impure
+              ${getExe pkgs.nh} home switch --no-nom -- --impure
               # ${getExe pkgs.flatpak} update --assumeyes
 
               ${getExe pkgs.television} update-channels

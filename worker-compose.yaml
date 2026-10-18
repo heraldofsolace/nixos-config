@@ -189,3 +189,17 @@ containers:
     start_after:
     - ide
     - state
+
+  # local worker: hosts, generations, the land gate and worker health (workers/fleet)
+  fleet:
+    worker: path:///home/aniket/my-nix/workers/fleet
+    start_after:
+      - ade
+    scripts:
+      # dependencies are installed on the host into this directory (gitignored
+      # node_modules); the guest image ships no package manager, so installing there
+      # fails — assert the host install instead.
+      pre_run: test -d node_modules/iii-sdk
+      run: node src/index.js
+    environment:
+      PATH: /usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/workspace/node_modules/.bin

@@ -56,6 +56,8 @@
         /worktrees/
         /skills/*
         !/skills/iii/
+        # dependencies a local worker installs into its own source directory
+        node_modules/
         #  .editorconfig
         #  .pre-commit-config.yaml
       '';

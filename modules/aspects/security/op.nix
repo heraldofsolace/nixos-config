@@ -11,9 +11,14 @@ _: {
     '';
 
     environment.etc = {
+      # This file replaces 1Password's built-in allowed-browsers list rather
+      # than extending it - firefox is supported by default, but having this
+      # file at all with only .zen-wrapped listed silently broke Firefox's
+      # extension ("An unknown database error occurred").
       "1password/custom_allowed_browsers" = {
         text = ''
           .zen-wrapped
+          firefox
         ''; # or just "zen" if you use unwrapped package
         mode = "0755";
       };

@@ -29,3 +29,12 @@ value:
       redeliver_on_engine_restart: true
       timeout_ms: 1800000
       type: fifo
+    worktree-land:
+      backoff_ms: 1000
+      concurrency: 1
+      max_retries: 3
+      message_group_field: repo_key
+      poll_interval_ms: 100
+      redeliver_on_engine_restart: true
+      timeout_ms: 900000
+      type: fifo

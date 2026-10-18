@@ -155,7 +155,13 @@
             iii-worker
             iii-console
           ];
-          shellHook = "${self'.checks.pre-commit}";
+          shellHook = ''
+            ${self'.checks.pre-commit}
+            # iii's local-worker launcher dlopens libkrun to boot a microVM for a
+            # `path://` worker, and NixOS has no loader cache to find it in: without
+            # this, a path worker fails before it starts (no process, no log).
+            export LD_LIBRARY_PATH="${pkgs.libkrun}/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+          '';
         };
 
       make-shells.latex = {

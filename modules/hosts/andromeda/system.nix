@@ -80,6 +80,12 @@
 
       networking.interfaces.enp6s0.wakeOnLan.enable = true;
       networking.hostName = "andromeda";
+
+      # The Focusrite Scarlett 2i2 (1235:8210) doesn't reliably resume from
+      # suspend on its own - it sometimes stays disconnected until physically
+      # replugged. USB_QUIRK_RESET_RESUME ('b') makes the kernel force a full
+      # USB reset on resume instead of trying (and failing) a normal restore.
+      boot.kernelParams = [ "usbcore.quirks=1235:8210:b" ];
       services = {
         geoclue2.enable = true;
         gnome.gnome-keyring.enable = true;

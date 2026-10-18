@@ -13,6 +13,10 @@
   boot.loader.grub.efiInstallAsRemovable = true;
   boot.loader.grub.enable = true;
   boot.loader.grub.copyKernels = true;
+  # Unbounded otherwise - 160 generations had accumulated by the time this
+  # was added, each one pinning its whole closure against GC regardless of
+  # any nix.gc settings.
+  boot.loader.grub.configurationLimit = 10;
   boot.loader.grub.efiSupport = true;
   boot.loader.grub.zfsSupport = true;
 
@@ -45,6 +49,15 @@
   #   screen = "2k";
   #   footer = true;
   # };
+
+  # ZFS scrub catches data corruption, but says nothing about a drive's own
+  # wear/predictive-failure state (SMART) before it actually dies - nothing
+  # else here watches that for the two NVMes + two SATA disks in this pool.
+  services.smartd = {
+    enable = true;
+    autodetect = true;
+    notifications.wall.enable = true;
+  };
 
   services.zfs = {
     autoScrub.enable = true;

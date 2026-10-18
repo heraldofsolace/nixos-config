@@ -1,0 +1,18 @@
+iii: v1
+name: fleet
+language: javascript
+deploy: bundle
+manifest: package.json
+license: Apache-2.0
+tags: [nixos, fleet, console-ui]
+description: The local fleet — hosts, system generation, the land gate and worker health for this repository.
+
+runtime:
+  kind: javascript
+
+scripts:
+  start: node ./src/index.js
+  dev: node --watch ./src/index.js
+
+dependencies:
+  console: "0.x"

@@ -100,6 +100,7 @@
               "/var/lib/postgresql"
               "/var/lib/coolercontrol"
               "/var/lib/qemu"
+              "/var/lib/comin"
               "/var/lib/OpenRGB"
               "/root"
             ];

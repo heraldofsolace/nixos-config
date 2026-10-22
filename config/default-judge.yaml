@@ -1,0 +1,7 @@
+id: default-judge
+name: Judge
+description: 'Default judge provider: the judge-<provider> worker forwarded calls go to.'
+metadata:
+  ui_form: judge
+value:
+  provider: typesafe

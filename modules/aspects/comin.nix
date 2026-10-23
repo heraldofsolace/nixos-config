@@ -27,7 +27,10 @@
     { config, ... }:
     let
       # Hosts that run comin. The single place to opt a machine in or out.
-      enabledHosts = [ "andromeda" ];
+      enabledHosts = [
+        "horologium"
+        "miranda"
+      ];
     in
     {
       imports = [ inputs.comin.nixosModules.comin ];

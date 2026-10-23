@@ -49,7 +49,7 @@ _: {
             furiganaize
             gesturefy
             greasemonkey
-            hover-zoom-plus
+            # hover-zoom-plus
             image-search-options
             js-search-extension
             link-gopher

@@ -76,6 +76,11 @@
                 zoom
                 kstars
                 electron
+                # Stable's seerr (3.2.0) still has the old
+                # GET-with-query-params jellyfin/library API; nixflix's
+                # library-sync script was rewritten for the newer
+                # POST+PUT API that only exists from 3.5.0 onward.
+                seerr
                 ;
             };
           in

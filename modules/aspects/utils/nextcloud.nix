@@ -2,6 +2,7 @@ _: {
   blazar.utils._.nextcloud = {
     nixos =
       {
+        lib,
         pkgs,
         config,
         ...
@@ -47,6 +48,12 @@ _: {
             trusted_domains = [ "miranda.dorper-ghost.ts.net" ];
             default_phone_region = "IN";
             "profile.enabled" = true;
+            # Defaults to http://localhost for any URL generated outside
+            # a real HTTP request (occ, cron, the onlyoffice document
+            # service's download callback) - that doesn't match any
+            # nginx vhost here, so those downloads just hang.
+            "overwrite.cli.url" = "https://miranda.dorper-ghost.ts.net";
+            overwriteprotocol = "https";
             enabledPreviewProviders = [
               "OC\\Preview\\BMP"
               "OC\\Preview\\GIF"
@@ -156,6 +163,17 @@ _: {
           ];
           sslCertificate = "/var/lib/tailscale-certs/miranda.crt";
           sslCertificateKey = "/var/lib/tailscale-certs/miranda.key";
+          # The onlyoffice module's own vhost config forwards
+          # X-Forwarded-Host as nginx's $host, which strips the port.
+          # The docservice trusts that header to build the result URLs
+          # it hands back to Nextcloud (e.g. /cache/files/...), so
+          # without the port those requests fall back to 443 - which is
+          # nextcloud's vhost, not this one - and 404. $http_host keeps
+          # the port; mkAfter guarantees this line wins (nginx uses
+          # last-directive-wins for repeated proxy_set_header).
+          extraConfig = lib.mkAfter ''
+            proxy_set_header X-Forwarded-Host $http_host;
+          '';
         };
       };
   };

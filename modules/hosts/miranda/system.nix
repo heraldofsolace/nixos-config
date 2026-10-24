@@ -85,23 +85,57 @@
   };
 
   den.aspects.miranda = {
-    nixos = { ... }: {
+    nixos = { pkgs, ... }: {
       imports = [
         ./_hardware-configuration.nix
         inputs.disko.nixosModules.disko
         ./_disko.nix
       ];
 
-      sops.secrets.miranda-cert = {
-        key = "miranda-cert";
-        sopsFile = ../../../secrets/keys.yaml;
-        owner = "nginx";
+      # The cert used to be a one-shot `tailscale cert` run baked into
+      # sops; it expired silently (Tailscale certs are ~90 days) since
+      # nothing ever renewed it. Generate it live via a timer instead,
+      # straight from tailscaled's local API - no secret to rotate.
+      systemd.tmpfiles.rules = [
+        "d /var/lib/tailscale-certs 0750 root nginx -"
+      ];
+
+      systemd.services.tailscale-cert-renew = {
+        description = "Renew the Tailscale TLS cert for miranda.dorper-ghost.ts.net";
+        after = [ "tailscaled.service" ];
+        requires = [ "tailscaled.service" ];
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = pkgs.writeShellScript "tailscale-cert-renew" ''
+            set -euo pipefail
+            ${pkgs.tailscale}/bin/tailscale cert \
+              --cert-file /var/lib/tailscale-certs/miranda.crt \
+              --key-file /var/lib/tailscale-certs/miranda.key \
+              miranda.dorper-ghost.ts.net
+            chown root:nginx /var/lib/tailscale-certs/miranda.key
+            chmod 640 /var/lib/tailscale-certs/miranda.key
+            chmod 644 /var/lib/tailscale-certs/miranda.crt
+          '';
+          # No-op if nginx isn't up yet (first boot); on later timer-driven
+          # renewals this picks up the fresh cert without dropping conns.
+          ExecStartPost = "${pkgs.systemd}/bin/systemctl try-reload-or-restart nginx.service";
+        };
       };
 
-      sops.secrets.miranda-cert-key = {
-        key = "miranda-cert-key";
-        sopsFile = ../../../secrets/keys.yaml;
-        owner = "nginx";
+      systemd.timers.tailscale-cert-renew = {
+        description = "Periodic renewal check for the Tailscale TLS cert";
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          OnCalendar = "daily";
+          Persistent = true;
+          RandomizedDelaySec = "1h";
+        };
+      };
+
+      # nginx's ssl_certificate* paths must exist before it starts.
+      systemd.services.nginx = {
+        after = [ "tailscale-cert-renew.service" ];
+        requires = [ "tailscale-cert-renew.service" ];
       };
 
       # stylix.enable = lib.mkForce false;

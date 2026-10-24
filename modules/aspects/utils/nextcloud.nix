@@ -131,8 +131,8 @@ _: {
         services.nginx.validateConfigFile = false;
         services.nginx.virtualHosts.${config.services.nextcloud.hostName} = {
           forceSSL = true;
-          sslCertificate = config.sops.secrets.miranda-cert.path;
-          sslCertificateKey = config.sops.secrets.miranda-cert-key.path;
+          sslCertificate = "/var/lib/tailscale-certs/miranda.crt";
+          sslCertificateKey = "/var/lib/tailscale-certs/miranda.key";
         };
 
         services.nginx.virtualHosts.${config.services.onlyoffice.hostname} = {

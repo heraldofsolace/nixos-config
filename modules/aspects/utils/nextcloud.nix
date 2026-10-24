@@ -133,6 +133,10 @@ _: {
         # that's tailnet-only anyway.
         services.nginx.virtualHosts.${config.services.onlyoffice.hostname} = {
           serverName = "miranda.dorper-ghost.ts.net";
+          # nginx's module only emits ssl_certificate when one of
+          # onlySSL/addSSL/forceSSL is set - a manual listen.*.ssl = true
+          # alone isn't enough. No plain-HTTP listener here, so onlySSL.
+          onlySSL = true;
           listen = [
             {
               addr = "0.0.0.0";

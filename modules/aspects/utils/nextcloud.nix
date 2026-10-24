@@ -52,10 +52,17 @@ _: {
           https = true;
           enableImagemagick = true;
           database.createLocally = true;
-          appstoreEnable = true;
+          # Every app we use is pinned via extraApps below; leaving the App
+          # Store enabled lets Nextcloud's own `occ upgrade` self-fetch
+          # "updates" for those same apps into the writable store-apps/
+          # dir, which then collides with the Nix-provided copy (duplicate
+          # composer autoloader class declarations crash the upgrade).
+          appstoreEnable = false;
           autoUpdateApps.enable = false;
           settings = {
             trusted_domains = [ "miranda.dorper-ghost.ts.net" ];
+            default_phone_region = "IN";
+            "profile.enabled" = true;
             enabledPreviewProviders = [
               "OC\\Preview\\BMP"
               "OC\\Preview\\GIF"
@@ -73,7 +80,6 @@ _: {
           config = {
             dbtype = "pgsql";
             adminpassFile = config.sops.secrets.nextcloud-password.path;
-            defaultPhoneRegion = "IN";
           };
           extraApps = with config.services.nextcloud.package.packages.apps; {
             inherit
@@ -102,7 +108,6 @@ _: {
             # };
           };
           extraAppsEnable = true;
-          globalProfiles = true;
           maxUploadSize = "5G";
           # notify_push.enable = true;
           configureRedis = true;

@@ -17,7 +17,14 @@
     };
     latest.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
-    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
+    # Pinned (not tracking nyxpkgs-unstable) - a chaotic commit after
+    # 2026-10-03 broke the cachyos kernel's module build: it ends up
+    # invoking raw/unwrapped clang, which can't find any libc headers
+    # ('stdio.h' file not found etc), failing zfs's kmod build. `nix flake
+    # update` silently re-breaks this by moving chaotic forward again, so
+    # the pin lives here instead of only in flake.lock. Bump deliberately
+    # once upstream fixes it.
+    chaotic.url = "github:chaotic-cx/nyx/5ce5dc04c257f328f35f068ff1575064b5598c8c";
 
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";

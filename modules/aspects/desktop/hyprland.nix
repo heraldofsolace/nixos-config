@@ -9,11 +9,6 @@
     hyprland = {
       url = "github:hyprwm/Hyprland";
     };
-    hyprland-plugins = {
-      url = "github:hyprwm/hyprland-plugins";
-      inputs.hyprland.follows = "hyprland";
-    };
-
     hyprland-contrib = {
       url = "github:hyprwm/contrib";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -28,11 +23,6 @@
 
       # THIS IS IMPORTANT
       # Mismatched system dependencies will lead to crashes and other issues.
-      inputs.nixpkgs.follows = "latest";
-    };
-
-    sysc-greet = {
-      url = "github:Nomadcxx/sysc-greet";
       inputs.nixpkgs.follows = "latest";
     };
 
@@ -67,43 +57,44 @@
       ...
     }:
     let
-      # sysc-greet custom theme (docs: F1 -> Themes, or drop a .toml in
-      # ~/.config/sysc-greet/themes/). Colors come from the same
-      # stylix.base16Scheme as everywhere else, so this follows if the
-      # scheme ever changes instead of drifting like a hardcoded copy
-      # would. See internal/themes/colors.go in Nomadcxx/sysc-greet for
-      # the required TOML schema.
-      greeterColors = config.lib.stylix.colors.withHashtag;
-      greeterThemeFile = pkgs.writeText "greeter.toml" ''
-        name = "Greeter"
+      # Same nixpkgs snapshot hardware.graphics.package pulls mesa from
+      # below - needed again for cage's own package override further down,
+      # so the greeter's compositor links against the exact mesa that's
+      # actually being served at runtime instead of the main nixpkgs pin's
+      # (mismatched) one.
+      pkgs-unstable = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
 
-        [colors]
-        bg_base = "${greeterColors.base00}"
-        bg_active = "${greeterColors.base02}"
-        primary = "${greeterColors.base0D}"
-        secondary = "${greeterColors.base0B}"
-        accent = "${greeterColors.base0C}"
-        warning = "${greeterColors.base0A}"
-        danger = "${greeterColors.base08}"
-        fg_primary = "${greeterColors.base05}"
-        fg_secondary = "${greeterColors.base04}"
-        fg_muted = "${greeterColors.base03}"
-        border_focus = "${greeterColors.base0D}"
-      '';
-      # Pre-selects the theme above so it's active from first boot, not
-      # just available to pick via F1 - sysc-greet persists the last
-      # choice to this exact path (internal/cache/cache.go).
-      greeterPreferencesFile = pkgs.writeText "sysc-greet-preferences" (
-        builtins.toJSON {
-          theme = "Everforest Dark Hard";
+      # ReGreet CSS theme, same live stylix palette used everywhere else
+      # (fish's palette-cat, the Neovim dashboard gradient, etc.) so this
+      # follows if the scheme ever changes instead of drifting like a
+      # hardcoded copy would. Class names (.background, button.suggested-
+      # action/.destructive-action) are verified against ReGreet's actual
+      # widget templates (src/gui/templates.rs upstream), not guessed.
+      greeterColors = config.lib.stylix.colors.withHashtag;
+      greeterCss = ''
+        window, .background {
+          background-color: ${greeterColors.base00};
+          color: ${greeterColors.base05};
         }
-      );
+        entry {
+          background-color: ${greeterColors.base01};
+          color: ${greeterColors.base05};
+          border-color: ${greeterColors.base0D};
+        }
+        button.suggested-action {
+          background-color: ${greeterColors.base0B};
+          color: ${greeterColors.base00};
+        }
+        button.destructive-action {
+          background-color: ${greeterColors.base08};
+          color: ${greeterColors.base00};
+        }
+        .widget-clock {
+          color: ${greeterColors.base0C};
+        }
+      '';
     in
     {
-      imports = [
-        inputs.sysc-greet.nixosModules.default
-      ];
-
       programs.hyprland = {
         enable = true;
         xwayland = {
@@ -126,18 +117,14 @@
         ];
       };
 
-      hardware.graphics =
-        let
-          pkgs-unstable = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
-        in
-        {
-          package = pkgs-unstable.mesa;
+      hardware.graphics = {
+        package = pkgs-unstable.mesa;
 
-          # if you also want 32-bit support (e.g for Steam)
-          enable32Bit = true;
-          package32 = pkgs-unstable.pkgsi686Linux.mesa;
-          enable = true;
-        };
+        # if you also want 32-bit support (e.g for Steam)
+        enable32Bit = true;
+        package32 = pkgs-unstable.pkgsi686Linux.mesa;
+        enable = true;
+      };
 
       environment.sessionVariables = {
         NIXOS_OZONE_WL = "1"; # hint electron apps to use wayland
@@ -157,37 +144,47 @@
       #   configHome = "/home/aniket";
       # };
 
-      services.sysc-greet = {
+      # programs.regreet: this nixpkgs pin predates the rename to
+      # services.displayManager.regreet (verified against the actual
+      # module source in this exact pin, not just upstream HEAD). The
+      # module handles greetd wiring, the greeter user/group, and its own
+      # state dirs (/var/lib/regreet, /var/log/regreet) itself - no manual
+      # tmpfiles hacking needed here the way sysc-greet required.
+      programs.regreet = {
         enable = true;
-        compositor = "cagebreak"; # or "hyprland" or "sway"
-        cagebreakPackage = pkgs.cagebreak;
+        extraCss = greeterCss;
+        # cage has no real output-mirroring mode (verified via its own
+        # --help - only "extend", the default that was stretching the
+        # single greeter surface across both monitors, or "last", a single
+        # output). "last" at least stops the stretch, even though the
+        # other monitor goes blank during login rather than mirroring.
+        cageArgs = [
+          "-s"
+          "-d"
+          "-m"
+          "last"
+        ];
       };
+
+      # The module's own default_session.command (lib.mkDefault, so this
+      # plain assignment overrides it) hardcodes pkgs.cage from the main
+      # nixpkgs pin. That cage links against mesa-libgbm 26.0.3, but
+      # hardware.graphics.package above overrides the *runtime* driver
+      # /run/opengl-driver serves to pkgs-unstable's mesa - a different
+      # build. Hyprland itself is consistent (built from the same
+      # pkgs-unstable), but cage's EGL init failed outright against the
+      # mismatched driver ("EGL_EXT_platform_base not supported", verified
+      # by capturing cage's actual stderr, which greetd otherwise routes
+      # straight to the VT and never into the journal). Using cage from
+      # the same pkgs-unstable snapshot keeps it ABI-consistent with
+      # whatever mesa build is actually being served.
+      services.greetd.settings.default_session.command =
+        "${pkgs.dbus}/bin/dbus-run-session ${lib.getExe pkgs-unstable.cage} "
+        + lib.escapeShellArgs config.programs.regreet.cageArgs
+        + " -- ${lib.getExe config.programs.regreet.package}";
 
       services.atd.enable = true;
       services.atd.allowEveryone = true;
-      systemd.tmpfiles.rules = [
-        "d '/var/cache/greeter' - greeter greeter - -"
-        # Intermediate dirs need their own explicit rules: a `d` rule only
-        # applies its owner to the leaf, and auto-creates missing parents
-        # as root. That root-owned .config/.cache under greeter-owned
-        # /var/lib/greeter trips systemd-tmpfiles' unsafe-path-transition
-        # check, which then refuses to touch anything below it - silently
-        # skipping the theme/preferences rules and leaving the greeter
-        # process unable to create its own cache dir ("no writable cache
-        # directory", crash-looping on every login).
-        "d /var/lib/greeter/.config 0755 greeter greeter -"
-        "d /var/lib/greeter/.cache 0755 greeter greeter -"
-        "d /var/lib/greeter/.config/sysc-greet/themes 0755 greeter greeter -"
-        "d /var/lib/greeter/.cache/sysc-greet 0755 greeter greeter -"
-        "L+ /var/lib/greeter/.config/sysc-greet/themes/greeter.toml - - - - ${greeterThemeFile}"
-        # C, not L+: sysc-greet's SavePreferences writes this file directly
-        # (os.WriteFile) every time a preference changes. A symlink into
-        # the read-only Nix store made every write fail - "no writable
-        # cache directory". C only copies the seed in if the file doesn't
-        # exist yet, so this seeds the default once and then lets the app
-        # own the real, writable file from then on.
-        "C /var/lib/greeter/.cache/sysc-greet/preferences 0644 greeter greeter - ${greeterPreferencesFile}"
-      ];
     };
 
   blazar.hyprland.includes = [
@@ -203,6 +200,14 @@
     }:
     let
       terminal = "waveterm";
+      # Same nixpkgs snapshot hardware.graphics.package (in blazar.hyprland.
+      # nixos above) pulls mesa from. wezterm-gui from the main nixpkgs pin
+      # crashes on startup against that overridden runtime mesa/EGL driver
+      # - a documented nixpkgs regression (NixOS/nixpkgs#436438): a
+      # wayland-client version mismatch between an app's build and what
+      # Mesa 25.2+ expects. Sourcing wezterm from the same pkgs-unstable
+      # snapshot keeps it version-consistent, same fix as cage's.
+      pkgs-unstable = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
       generate-wallpapers =
         { pkgs, ... }:
         {
@@ -329,6 +334,7 @@
 
       programs.wezterm = {
         enable = true;
+        package = pkgs-unstable.wezterm;
         extraConfig = ''
           local config = wezterm.config_builder()
           config.enable_wayland = true
@@ -393,9 +399,6 @@
         package = null;
         portalPackage = null;
         configType = "lua";
-        plugins = [
-          inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system}.hyprfocus
-        ];
       };
       wayland.windowManager.hyprland.systemd.variables = [ "--all" ];
       # wayland.windowManager.hyprland.extraLuaFiles = {

@@ -861,10 +861,6 @@ hl.config({
         rounding = 20,
         dim_inactive = false,
         active_opacity = 0.98,
-        -- No shader by default. shaderBurst() below briefly switches this
-        -- on for _files/shaders/grain-animated.glsl on window move/focus,
-        -- then switches it back off.
-        screen_shader = "",
         blur = {
             enabled = true,
             size = 3,
@@ -945,13 +941,6 @@ hl.config({
     scrolling = {
         column_width = 0.8,
         focus_fit_method = 0
-    },
-    plugin = {
-        hyprfocus = {
-            enable = true,
-            keyboard_focus_animation = "flash",
-            mouse_focus_animation = "flash"
-        }
     }
 })
 
@@ -974,36 +963,6 @@ hl.on("config.reloaded", function()
     hl.exec_cmd("hass-report-status http://homeassistant.local/api/webhook/eaea48a1-30e3-47bf-a076-30f816f0d3d1 true")
     workspaces_set()
 end)
-
--- Screen shader is off by default (decoration.screen_shader = "" above) and
--- only appears for a brief burst on window move/focus, then switches off
--- again - never left running while idle.
-local shaderAnimated = "/home/aniket/my-nix/modules/aspects/desktop/_files/shaders/grain-animated.glsl"
-local shaderBurstTimer = nil
-
-local function shaderBurst()
-    hl.config({
-        debug = {damage_tracking = false},
-        decoration = {screen_shader = shaderAnimated}
-    })
-    if shaderBurstTimer then
-        -- HL.Timer has no cancel(); disarming is the documented way to
-        -- drop a still-pending oneshot early. A no-op if it already fired.
-        shaderBurstTimer:set_enabled(false)
-    end
-    shaderBurstTimer = hl.timer(function()
-        hl.config({
-            decoration = {screen_shader = ""},
-            debug = {damage_tracking = true}
-        })
-        shaderBurstTimer = nil
-    end, {timeout = 600, type = "oneshot"})
-end
-
-hl.on("window.open", shaderBurst)
-hl.on("window.active", shaderBurst)
-hl.on("window.move_to_workspace", shaderBurst)
-hl.on("workspace.active", shaderBurst)
 
 -- Static per-workspace accent color pushed to the Dygma Defy's LEDs over
 -- Focus (see keyboardAccent in hyprland.nix). Cycles through the 7 base16

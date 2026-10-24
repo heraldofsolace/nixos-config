@@ -107,6 +107,11 @@ _: {
           hostname = "onlyoffice-internal";
           securityNonceFile = config.sops.secrets.onlyoffice-nonce-file.path;
           jwtSecretFile = config.sops.secrets.onlyoffice-jwt-secret.path;
+          # Nextcloud's own hostname resolves to its Tailscale address
+          # (100.64.0.0/10), which the docservice's request-filtering
+          # agent treats as a private IP and refuses to fetch from by
+          # default - exactly where it needs to download documents from.
+          allowLocalConnections = true;
         };
 
         networking.firewall.interfaces.tailscale0.allowedTCPPorts = [

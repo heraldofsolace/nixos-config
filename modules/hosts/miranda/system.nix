@@ -132,6 +132,12 @@
         };
       };
 
+      # Tailscale's MagicDNS (100.100.100.100) doesn't resolve a node's
+      # own hostname when queried from itself - only from other tailnet
+      # peers. Nextcloud's onlyoffice connectivity check runs locally on
+      # miranda and needs this to work, so override it here.
+      networking.hosts."127.0.0.1" = [ "miranda.dorper-ghost.ts.net" ];
+
       # nginx's ssl_certificate* paths must exist before it starts.
       systemd.services.nginx = {
         after = [ "tailscale-cert-renew.service" ];

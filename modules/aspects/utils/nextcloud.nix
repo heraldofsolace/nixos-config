@@ -121,6 +121,22 @@ _: {
           allowLocalConnections = true;
         };
 
+        # storage.externalHost isn't exposed as a module option. Without
+        # it, the docservice assumes the standard port when building the
+        # result URLs it hands back to Nextcloud (e.g. /cache/files/...),
+        # so they come back missing :8444 and 404 against nextcloud's own
+        # vhost instead. mkAfter guarantees this runs after the module's
+        # own prestart populates the file, so it's there to patch.
+        systemd.services.onlyoffice-docservice.serviceConfig.ExecStartPre = lib.mkAfter [
+          (pkgs.writeShellScript "onlyoffice-external-host-patch" ''
+            set -euo pipefail
+            ${pkgs.jq}/bin/jq \
+              --arg host "https://miranda.dorper-ghost.ts.net:8444" \
+              '.storage.externalHost = $host' \
+              /run/onlyoffice/config/default.json | ${pkgs.moreutils}/bin/sponge /run/onlyoffice/config/default.json
+          '')
+        ];
+
         networking.firewall.interfaces.tailscale0.allowedTCPPorts = [
           8443
           # nextcloud's virtualHost below needs 443; onlyoffice's needs

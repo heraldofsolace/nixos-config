@@ -24,23 +24,7 @@ _: {
           group = "onlyoffice";
           mode = "0440";
         };
-        sops.secrets.cloudflare-acme-env = {
-          key = "cloudflare-acme-env";
-          sopsFile = ../../../secrets/keys.yaml;
-          owner = "acme";
-        };
 
-        security.acme = {
-          acceptTerms = true;
-          defaults.email = "aniketmail669@gmail.com";
-          defaults.dnsResolver = "1.1.1.1:53";
-          certs."onlyoffice.abhattacharyea.dev" = {
-            domain = "onlyoffice.abhattacharyea.dev";
-            dnsProvider = "cloudflare";
-            environmentFile = config.sops.secrets.cloudflare-acme-env.path;
-            group = "nginx";
-          };
-        };
         environment.systemPackages = with pkgs; [
           nodejs
           ffmpeg
@@ -113,19 +97,25 @@ _: {
           configureRedis = true;
         };
 
+        # Not a real DNS name - just an internal label for the
+        # services.nginx.virtualHosts attribute below. The actual
+        # serverName/listen port are overridden there so this vhost
+        # doesn't merge with nextcloud's (which shares the real
+        # hostname, miranda.dorper-ghost.ts.net, on port 443).
         services.onlyoffice = {
           enable = true;
-          hostname = "onlyoffice.abhattacharyea.dev";
+          hostname = "onlyoffice-internal";
           securityNonceFile = config.sops.secrets.onlyoffice-nonce-file.path;
           jwtSecretFile = config.sops.secrets.onlyoffice-jwt-secret.path;
         };
 
         networking.firewall.interfaces.tailscale0.allowedTCPPorts = [
           8443
-          # onlyoffice's forceSSL virtualHost below needs 443; scoped to
-          # tailscale0 to match nextcloud's own privacy posture rather than
-          # opening it globally.
+          # nextcloud's virtualHost below needs 443; onlyoffice's needs
+          # 8444. Both scoped to tailscale0 to match nextcloud's own
+          # privacy posture rather than opening them globally.
           443
+          8444
         ];
 
         services.nginx.validateConfigFile = false;
@@ -135,9 +125,28 @@ _: {
           sslCertificateKey = "/var/lib/tailscale-certs/miranda.key";
         };
 
+        # onlyoffice.abhattacharyea.dev never had a real DNS record
+        # pointing anywhere, which broke Nextcloud's connectivity check.
+        # Serve it under the same Tailscale-only hostname/cert nextcloud
+        # already uses instead, on its own port, rather than depending on
+        # a custom domain + Cloudflare DNS-01 ACME cert for a service
+        # that's tailnet-only anyway.
         services.nginx.virtualHosts.${config.services.onlyoffice.hostname} = {
-          forceSSL = true;
-          useACMEHost = "onlyoffice.abhattacharyea.dev";
+          serverName = "miranda.dorper-ghost.ts.net";
+          listen = [
+            {
+              addr = "0.0.0.0";
+              port = 8444;
+              ssl = true;
+            }
+            {
+              addr = "[::0]";
+              port = 8444;
+              ssl = true;
+            }
+          ];
+          sslCertificate = "/var/lib/tailscale-certs/miranda.crt";
+          sslCertificateKey = "/var/lib/tailscale-certs/miranda.key";
         };
       };
   };

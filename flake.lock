@@ -1680,17 +1680,18 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1789886136,
-        "narHash": "sha256-qvV/WeHEQ4jGxPSHorw85FkfGa/ki6IBzv7lo9iDSyw=",
-        "ref": "refs/heads/main",
-        "rev": "618cf95110f8a19954cafc4e079a2e4fc390c1fc",
-        "revCount": 556,
-        "type": "git",
-        "url": "file:///home/aniket/lian-li-linux"
+        "lastModified": 1792848174,
+        "narHash": "sha256-pjfz9qfLSuGEQnAPvsVLPHp5RSuK0Z8kvwMka3tZ5MQ=",
+        "owner": "heraldofsolace",
+        "repo": "lian-li-linux",
+        "rev": "449db489aea2a1673e5e0ffd458223ba9d6ef543",
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "file:///home/aniket/lian-li-linux"
+        "owner": "heraldofsolace",
+        "repo": "lian-li-linux",
+        "rev": "449db489aea2a1673e5e0ffd458223ba9d6ef543",
+        "type": "github"
       }
     },
     "make-shell": {

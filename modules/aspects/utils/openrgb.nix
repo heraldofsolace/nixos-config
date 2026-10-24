@@ -1,8 +1,10 @@
 { inputs, ... }: {
   flake-file.inputs = {
-    lian-li-linux = {
-      url = "git+file:///home/aniket/lian-li-linux";
-    };
+    # Fork, not upstream directly: carries a local packaging commit (the
+    # home-manager module for session-capture autostart) that hasn't been
+    # upstreamed. Was a local git+file:// path, which doesn't exist outside
+    # this machine and broke every CI check that touches it.
+    lian-li-linux.url = "github:heraldofsolace/lian-li-linux/449db489aea2a1673e5e0ffd458223ba9d6ef543";
   };
   blazar.utils._.openrgb = {
     nixos = { pkgs, ... }: {

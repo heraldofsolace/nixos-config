@@ -132,7 +132,7 @@
       };
     };
     latest.url = "github:NixOS/nixpkgs/nixos-unstable";
-    lian-li-linux.url = "git+file:///home/aniket/lian-li-linux";
+    lian-li-linux.url = "github:heraldofsolace/lian-li-linux/449db489aea2a1673e5e0ffd458223ba9d6ef543";
     make-shell = {
       url = "github:nicknovitski/make-shell";
       inputs.flake-compat.follows = "flake-compat";

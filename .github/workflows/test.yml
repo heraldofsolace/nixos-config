@@ -26,8 +26,15 @@ jobs:
           test -z "$(git status --porcelain)"
       # `just` comes from this flake's own nixpkgs, so CI runs the same version a devshell
       # gives you: no extra action to pin and no second copy of the check command to drift.
+      # Retried: magic-nix-cache-action has intermittently served stale/evicted cache
+      # entries, which surfaces as "path ... is not valid" for an unrelated derivation
+      # rather than a clear cache error - unrelated to the actual flake contents.
       - name: just ci
-        run: nix shell --inputs-from . nixpkgs#just -c just ci
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 20
+          max_attempts: 3
+          command: nix shell --inputs-from . nixpkgs#just -c just ci
   cachix-push:
     if: github.event_name == 'push'
     needs: flake-check

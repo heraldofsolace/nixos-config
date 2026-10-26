@@ -29,49 +29,60 @@
     };
   };
 
-  blazar.stylix.nixos = { pkgs, ... }: {
-    imports = [
-      inputs.stylix.nixosModules.stylix
-    ];
-    stylix = {
-      enable = true;
-      image = ./_files/wall.png;
-      polarity = "dark";
-      base16Scheme = ./_files/ryoku.yaml;
-      targets.grub.useWallpaper = true;
-      fonts = {
-        serif = {
-          package = pkgs.figtree;
-          name = "Figtree";
+  blazar.stylix.nixos =
+    {
+      pkgs,
+      lib,
+      config,
+      ...
+    }:
+    {
+      imports = [
+        inputs.stylix.nixosModules.stylix
+      ];
+      stylix = {
+        enable = true;
+        # Midnight wallpaper (hour 0) through the shared monochrome step, same as the hourly walls.
+        image =
+          (import ./_mono-wallpaper.nix { inherit lib; }).convertFile pkgs config.lib.stylix.colors
+            "wall-midnight.png"
+            ./_files/wall-midnight.png;
+        polarity = "dark";
+        base16Scheme = ./_files/ryoku.yaml;
+        targets.grub.useWallpaper = true;
+        fonts = {
+          serif = {
+            package = pkgs.figtree;
+            name = "Figtree";
+          };
+
+          sansSerif = {
+            package = pkgs.figtree;
+            name = "Figtree";
+          };
+
+          monospace = {
+            package = pkgs.nerd-fonts.jetbrains-mono;
+            name = "JetBrainsMono Nerd Font Mono";
+          };
+
+          emoji = {
+            package = pkgs.noto-fonts-color-emoji;
+            name = "Noto Color Emoji";
+          };
+
+          sizes = {
+            desktop = 14;
+            applications = 14;
+          };
         };
 
-        sansSerif = {
-          package = pkgs.figtree;
-          name = "Figtree";
+        opacity = {
+          popups = 0.5;
+          applications = 0.5;
+          desktop = 0.5;
+          terminal = 0.8;
         };
-
-        monospace = {
-          package = pkgs.nerd-fonts.jetbrains-mono;
-          name = "JetBrainsMono Nerd Font Mono";
-        };
-
-        emoji = {
-          package = pkgs.noto-fonts-color-emoji;
-          name = "Noto Color Emoji";
-        };
-
-        sizes = {
-          desktop = 14;
-          applications = 14;
-        };
-      };
-
-      opacity = {
-        popups = 0.5;
-        applications = 0.5;
-        desktop = 0.5;
-        terminal = 0.8;
       };
     };
-  };
 }

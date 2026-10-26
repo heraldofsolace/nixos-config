@@ -208,30 +208,9 @@
       # Mesa 25.2+ expects. Sourcing wezterm from the same pkgs-unstable
       # snapshot keeps it version-consistent, same fix as cage's.
       pkgs-unstable = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
-      generate-wallpapers =
-        { pkgs, ... }:
-        {
-          name,
-          colors,
-          directory,
-        }:
-        let
-          jsonContent = builtins.toJSON {
-            inherit name;
-            inherit colors;
-          };
-          themeFile = pkgs.writeText "stylix.json" jsonContent;
-        in
-        pkgs.runCommand "generate-wallpapers"
-          {
-            buildInputs = [ pkgs.gowall ];
-          }
-          ''
-            export HOME=$(mktemp -d)
-            mkdir -p $out
-            echo "${themeFile}"
-            gowall convert --dir ${directory} -t ${themeFile} --output $out
-          '';
+      # Hourly wallpapers go through the shared monochrome step (16-step
+      # blue-grey ramp from base00 to base07), same helper stylix.image uses.
+      monoWallpaper = import ../stylix/_mono-wallpaper.nix { inherit lib; };
       red = config.lib.stylix.colors.base08;
       mauve = config.lib.stylix.colors.base0E;
       green = config.lib.stylix.colors.base0B;
@@ -240,9 +219,7 @@
       # cool-toned color left, was previously a duplicate of `red`.
       lavender = config.lib.stylix.colors.base0C;
       blue = config.lib.stylix.colors.base0D;
-      colors = config.lib.stylix.colors.withHashtag;
       baseNames = builtins.genList (i: lib.toUpper (lib.fixedWidthNumber 2 (lib.toHexString i))) 16;
-      colorValues = map (n: colors."base${n}") baseNames;
       # Full base16 passthrough (rgb(...), no leading #) so hyprland.lua can
       # reach any palette slot by name (e.g. nix.vars.base00 for background,
       # nix.vars.base05 for foreground) instead of hardcoding hex that would
@@ -253,11 +230,7 @@
           value = "rgb(${config.lib.stylix.colors."base${n}"})";
         }) baseNames
       );
-      wallpapers = generate-wallpapers { inherit config pkgs; } {
-        colors = colorValues;
-        name = "stylix";
-        directory = ./_files/walls;
-      };
+      wallpapers = monoWallpaper.convertDir pkgs config.lib.stylix.colors ./_files/walls;
       padString = n: if n < 10 then "0" + builtins.toString n else builtins.toString n;
       wallpaper-name = i: "${wallpapers}/${builtins.toString i}.png";
       awww-args = builtins.map (i: "-i \"${wallpaper-name i};${padString i}:00\" ") (lib.range 0 23);

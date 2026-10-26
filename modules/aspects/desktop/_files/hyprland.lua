@@ -437,7 +437,7 @@ hl.bind("ALT + mouse:272", hl.dsp.window.resize(), {
 
 -- Environment variables
 hl.env("XCURSOR_SIZE", "24")
-hl.env("HYPRCURSOR_SIZE", "32")
+hl.env("HYPRCURSOR_SIZE", "24")
 hl.env("GDK_BACKEND", "wayland,x11,*")
 hl.env("QT_QPA_PLATFORM", "wayland;xcb")
 hl.env("QT_QPA_PLATFORMTHEME", "hyprqt6engine")
@@ -858,7 +858,7 @@ hl.window_rule({
 
 hl.config({
     decoration = {
-        rounding = 20,
+        rounding = 8,
         dim_inactive = false,
         active_opacity = 0.98,
         blur = {
@@ -875,8 +875,9 @@ hl.config({
             popups_ignorealpha = 0.6
         },
         shadow = {
-            offset = "0, 0",
-            range = 30,
+            enabled = true,
+            offset = "0, 5",
+            range = 45,
             render_power = 1,
             color = "0x000000"
         }
@@ -885,16 +886,13 @@ hl.config({
         no_update_news = true
     },
     general = {
-        gaps_in = 3,
-        gaps_out = 30,
-        border_size = 3,
+        gaps_in = 16,
+        gaps_out = 16,
+        border_size = 4,
         resize_on_border = true,
         col = {
-            active_border = {
-                colors = {nix.vars.lavender, nix.vars.mauve, nix.vars.red},
-                angle = 45
-            },
-            inactive_border = "rgba(00000000)"
+            active_border = nix.vars.base08,
+            inactive_border = nix.vars.base02
         }
     },
     group = {

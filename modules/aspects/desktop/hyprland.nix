@@ -318,11 +318,13 @@
       home.pointerCursor = {
         gtk.enable = true;
         x11.enable = true;
-        # package = pkgs.breeze-hacked-cursor-theme.override {accentColor = "#${red}";};
-        package = self.packages.${pkgs.stdenv.hostPlatform.system}.hornet-cursor-theme;
-        hyprcursor.enable = true;
-        name = "Hornet";
-        size = 64;
+        # Ryoku default-rice cursor. Bibata ships X cursors only (no
+        # hyprcursor theme), so hyprcursor stays off and Hyprland falls back
+        # to XCURSOR_THEME/XCURSOR_SIZE, which pointerCursor exports.
+        package = pkgs.bibata-cursors;
+        hyprcursor.enable = false;
+        name = "Bibata-Modern-Ice";
+        size = 24;
       };
 
       services.kdeconnect.enable = true;

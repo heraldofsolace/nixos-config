@@ -67,9 +67,14 @@
       # ReGreet CSS theme, same live stylix palette used everywhere else
       # (fish's palette-cat, the Neovim dashboard gradient, etc.) so this
       # follows if the scheme ever changes instead of drifting like a
-      # hardcoded copy would. Class names (.background, button.suggested-
-      # action/.destructive-action) are verified against ReGreet's actual
-      # widget templates (src/gui/templates.rs upstream), not guessed.
+      # hardcoded copy would. Selectors verified against this pin's ReGreet
+      # source (src/gui/templates.rs: window/.background, entry, the
+      # suggested-action Login button, the destructive-action reboot/poweroff
+      # buttons): all real. One caveat - the clock is a plain gtk::Label inside
+      # the frame that carries the "background" class (templates.rs
+      # clock_frame) and has no .widget-clock class in this version, so the
+      # .widget-clock rule is kept for older/newer builds while
+      # `frame.background label` is what actually colours it.
       greeterColors = config.lib.stylix.colors.withHashtag;
       greeterCss = ''
         window, .background {
@@ -80,6 +85,18 @@
           background-color: ${greeterColors.base01};
           color: ${greeterColors.base05};
           border-color: ${greeterColors.base0D};
+          border-radius: 8px;
+        }
+        entry:focus, entry:focus-within {
+          border-color: ${greeterColors.base08};
+          border-style: solid;
+          border-width: 1px;
+          outline-color: ${greeterColors.base08};
+          outline-style: solid;
+          outline-width: 2px;
+        }
+        button {
+          border-radius: 8px;
         }
         button.suggested-action {
           background-color: ${greeterColors.base0B};
@@ -89,8 +106,8 @@
           background-color: ${greeterColors.base08};
           color: ${greeterColors.base00};
         }
-        .widget-clock {
-          color: ${greeterColors.base0C};
+        .widget-clock, frame.background label {
+          color: ${greeterColors.base05};
         }
       '';
     in
@@ -152,7 +169,25 @@
       # tmpfiles hacking needed here the way sysc-greet required.
       programs.regreet = {
         enable = true;
-        extraCss = greeterCss;
+        # Ryoku cursor, the same theme home.pointerCursor uses on the desktop.
+        # Scoped to regreet on purpose: stylix.cursor is deliberately left
+        # unset, so this does not leak into other hosts or home-manager.
+        # mkForce because Stylix's regreet target also defines cursorTheme
+        # (Adwaita, since no stylix.cursor is set); the greeter needs Bibata.
+        # No size option exists on programs.regreet.cursorTheme, so the name is
+        # the whole knob; settings.GTK.cursor_theme_name follows from it.
+        cursorTheme = {
+          name = "Bibata-Modern-Ice";
+          package = pkgs.bibata-cursors;
+        };
+        # Our rules are the only text here: mkForce drops Stylix's regreet
+        # target definition of this same option, which is a *path* to its
+        # palette CSS file. Merging a path with text stringifies the path, so
+        # before this the file written to /etc/greetd/regreet.css began with a
+        # bare store-path line (invalid CSS, never its contents) followed by
+        # our rules. The palette itself still arrives live through
+        # greeterColors below, so nothing is hardcoded by dropping it.
+        extraCss = lib.mkForce greeterCss;
         # cage has no real output-mirroring mode (verified via its own
         # --help - only "extend", the default that was stretching the
         # single greeter surface across both monitors, or "last", a single

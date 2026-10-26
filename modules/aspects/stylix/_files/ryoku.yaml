@@ -1,5 +1,6 @@
+# base09..base0F are muted to 35% saturation (hue kept) by user choice; base00..base08 unchanged.
 scheme: "Ryoku"
-author: "Ryoku-dev/Ryoku-on-NixOS; matugen scheme-tonal-spot (dark) from the default rice wall.webp, accents pinned to the rice (#e0563b, #ffc777)"
+author: "Ryoku-dev/Ryoku-on-NixOS; matugen scheme-tonal-spot (dark) from the default rice wall.webp, red accent pinned to the rice (#e0563b), accents base09..base0F muted to 35% saturation"
 variant: "dark"
 base00: "#111318" # surface
 base01: "#1a1b20" # surface_container_low
@@ -10,10 +11,10 @@ base05: "#e2e2e9" # on_surface
 base06: "#eceef6" # lighter on_surface
 base07: "#f8f9ff" # lightest
 base08: "#e0563b" # red, Ryoku active border accent
-base09: "#f08a4b" # orange
-base0A: "#ffc777" # yellow, Ryoku launcher horizon
-base0B: "#a6d189" # green
-base0C: "#7fd4c4" # teal
-base0D: "#adc6ff" # primary (matugen)
-base0E: "#d7b0f0" # purple (tertiary family)
-base0F: "#c2785c" # brown
+base09: "#ba9781" # muted orange
+base0A: "#d3bfa3" # muted yellow, Ryoku launcher horizon
+base0B: "#abbaa0" # muted green
+base0C: "#9bb8b3" # muted teal
+base0D: "#c8d0e4" # muted primary blue
+base0E: "#d2c5db" # muted purple
+base0F: "#a1877d" # muted brown

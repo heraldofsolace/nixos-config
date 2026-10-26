@@ -1,0 +1,25 @@
+0.png <- 1004017-colorized.png
+1.png <- 138032536_p0.jpg
+2.png <- 139396752_p0.jpg
+3.png <- Angel1.png
+4.png <- wallhaven-212ldx.png
+5.png <- wallhaven-211xrg.jpg
+6.png <- lain-walk.jpg
+7.png <- wallhaven-5yzd98.png
+8.png <- wallhaven-6lyp2w.png
+9.png <- wallhaven-x866ko.jpg
+10.png <- wallhaven-yqg6r7.jpg
+11.png <- wallhaven-yqgk6g.png
+12.png <- wallhaven-jevz8y.png
+13.png <- wallhaven-9orlxx.jpg
+14.png <- wallhaven-jedpzw.jpg
+15.png <- random_wallpaper.jpg
+16.png <- wallhaven-qrop2l.jpg
+17.png <- wallhaven-ex.png
+18.png <- wallhaven-6l27v6.jpg
+19.png <- wallhaven-rq61dj.jpg
+20.png <- wallhaven-yqv2wx.jpg
+21.png <- wallhaven-5y3pd8.png
+22.png <- wallhaven-w55m8x.jpg
+23.png <- wallhaven-ly2yg2.jpg
+Origin: Ryoku-dev/Ryoku-on-NixOS ryoku/assets/wallpapers; per-image licences not stated by the repo NOTICE, review before redistributing.

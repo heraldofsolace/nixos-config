@@ -1,0 +1,19 @@
+scheme: "Ryoku"
+author: "Ryoku-dev/Ryoku-on-NixOS; matugen scheme-tonal-spot (dark) from the default rice wall.webp, accents pinned to the rice (#e0563b, #ffc777)"
+variant: "dark"
+base00: "#111318" # surface
+base01: "#1a1b20" # surface_container_low
+base02: "#282a2f" # surface_container_high
+base03: "#8e9099" # outline
+base04: "#c4c6d0" # on_surface_variant
+base05: "#e2e2e9" # on_surface
+base06: "#eceef6" # lighter on_surface
+base07: "#f8f9ff" # lightest
+base08: "#e0563b" # red, Ryoku active border accent
+base09: "#f08a4b" # orange
+base0A: "#ffc777" # yellow, Ryoku launcher horizon
+base0B: "#a6d189" # green
+base0C: "#7fd4c4" # teal
+base0D: "#adc6ff" # primary (matugen)
+base0E: "#d7b0f0" # purple (tertiary family)
+base0F: "#c2785c" # brown

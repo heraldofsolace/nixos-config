@@ -37,22 +37,22 @@
       enable = true;
       image = ./_files/wall.png;
       polarity = "dark";
-      base16Scheme = ./_files/catpuccin.yaml;
+      base16Scheme = ./_files/ryoku.yaml;
       targets.grub.useWallpaper = true;
       fonts = {
         serif = {
-          package = pkgs.nerd-fonts.iosevka;
-          name = "Iosevka Nerd Font";
+          package = pkgs.figtree;
+          name = "Figtree";
         };
 
         sansSerif = {
-          package = pkgs.nerd-fonts.iosevka;
-          name = "Iosevka Nerd Font";
+          package = pkgs.figtree;
+          name = "Figtree";
         };
 
         monospace = {
-          package = pkgs.nerd-fonts.iosevka;
-          name = "Iosevka Nerd Font Mono";
+          package = pkgs.nerd-fonts.jetbrains-mono;
+          name = "JetBrainsMono Nerd Font Mono";
         };
 
         emoji = {

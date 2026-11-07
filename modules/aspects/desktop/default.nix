@@ -1,9 +1,23 @@
+{ inputs, ... }:
 {
   blazar.desktop.homeManager =
     {
       pkgs,
       ...
     }:
+    let
+      # Same nixpkgs snapshot hardware.graphics.package (hyprland.nix) pulls
+      # mesa from. nextcloud-client's Qt6/QtQuick tray UI is built against
+      # the main nixpkgs pin's mesa - mismatched against the unstable mesa
+      # actually served at /run/opengl-driver. QSGRenderLoop can't create
+      # its GPU render context against that mismatch and treats it as
+      # fatal (QSGRenderLoop::handleContextCreationFailure -> qFatal ->
+      # abort), crash-looping the client every few seconds (confirmed via
+      # `coredumpctl info` on the .nextcloud-wrapped core dumps). Same fix
+      # as librewolf/firefox/steam: pull the whole package from the same
+      # unstable snapshot instead of patching individual libs.
+      pkgs-unstable = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+    in
     {
       home = {
         packages = with pkgs; [
@@ -128,6 +142,7 @@
       services.nextcloud-client = {
         enable = true;
         startInBackground = true;
+        package = pkgs-unstable.nextcloud-client;
       };
 
       # programs.calibre = {

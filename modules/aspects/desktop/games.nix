@@ -99,38 +99,54 @@
     ];
   };
 
-  blazar.games.nixos = { pkgs, ... }: {
-    programs.steam = {
-      enable = true;
-      remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-      dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
-      localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
-      gamescopeSession.enable = true;
-    };
+  blazar.games.nixos =
+    { pkgs, ... }:
+    let
+      # Same nixpkgs snapshot hardware.graphics.package (hyprland.nix) pulls
+      # mesa from. Steam's own client (the outer launcher UI, not the
+      # pressure-vessel-sandboxed games) is built against the main nixpkgs
+      # pin's mesa/libGL/libvulkan-loader - mismatched against the unstable
+      # mesa actually served at /run/opengl-driver. Surfaced as
+      # "glXChooseVisual failed" / "CVulkanTopology: failed to get physical
+      # device count" followed by a fatal assert, crashing the client
+      # outright (confirmed via `journalctl --since today | grep steam`).
+      # Same fix as librewolf/firefox: pull the whole package from the same
+      # unstable snapshot instead of patching individual libs.
+      pkgs-unstable = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+    in
+    {
+      programs.steam = {
+        enable = true;
+        package = pkgs-unstable.steam;
+        remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+        dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+        localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
+        gamescopeSession.enable = true;
+      };
 
-    programs.gamescope = {
-      enable = true;
-      capSysNice = false;
-    };
-    environment.systemPackages = [
-      pkgs.mangohud
-      pkgs.steamcmd
-      pkgs.lact
-    ];
-    programs.gamemode.enable = true;
-    hardware.graphics = {
-      enable = true;
-      enable32Bit = true;
-      extraPackages = with pkgs; [
-        vulkan-loader
-        vulkan-validation-layers
-        vulkan-extension-layer
+      programs.gamescope = {
+        enable = true;
+        capSysNice = false;
+      };
+      environment.systemPackages = [
+        pkgs.mangohud
+        pkgs.steamcmd
+        pkgs.lact
       ];
-    };
+      programs.gamemode.enable = true;
+      hardware.graphics = {
+        enable = true;
+        enable32Bit = true;
+        extraPackages = with pkgs; [
+          vulkan-loader
+          vulkan-validation-layers
+          vulkan-extension-layer
+        ];
+      };
 
-    systemd.packages = with pkgs; [ lact ];
-    systemd.services.lactd.wantedBy = [ "multi-user.target" ];
-  };
+      systemd.packages = with pkgs; [ lact ];
+      systemd.services.lactd.wantedBy = [ "multi-user.target" ];
+    };
 
   # GPU overdrive/overclocking is only safe on hosts with a proper
   # desktop-class GPU and cooling (andromeda, miranda) - not horologium, a

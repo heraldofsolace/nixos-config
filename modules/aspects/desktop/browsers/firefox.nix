@@ -1,19 +1,32 @@
-_: {
+{ inputs, ... }:
+{
   blazar.firefox.homeManager =
     {
       pkgs,
       config,
       ...
     }:
+    let
+      # librewolf links against the same *stable* mesa/libva as every other
+      # app hitting this today (cage, wezterm-gui, lian-li-linux, polymath):
+      # hardware.graphics.package overrides the runtime driver
+      # (/run/opengl-driver) with mesa from the unstable snapshot, and the
+      # two aren't ABI-compatible. Here it surfaces as a VA-API version
+      # mismatch ("has no function __vaDriverInit_1_0"), silently falling
+      # back to full software video decode instead of erroring loudly.
+      pkgs-unstable = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+    in
     {
-      home.packages = with pkgs; [
-        firefox
-        ungoogled-chromium
+      # This is the actually-used daily browser (the "firefox" launcher) -
+      # same unstable-sourced fix as librewolf below, for the same reason.
+      home.packages = [
+        pkgs-unstable.firefox
+        pkgs.ungoogled-chromium
       ];
       stylix.targets.firefox.profileNames = [ "default" ];
       programs.firefox = {
         enable = true;
-        package = pkgs.librewolf;
+        package = pkgs-unstable.librewolf;
         nativeMessagingHosts = with pkgs; [
           tridactyl-native
         ];

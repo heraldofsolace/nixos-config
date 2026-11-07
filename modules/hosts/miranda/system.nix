@@ -138,10 +138,20 @@
       # miranda and needs this to work, so override it here.
       networking.hosts."127.0.0.1" = [ "miranda.dorper-ghost.ts.net" ];
 
-      # nginx's ssl_certificate* paths must exist before it starts.
+      # nginx's ssl_certificate* paths need to exist before it starts, but
+      # that's only true on a truly fresh install - in steady state the
+      # cert files already live on disk from a prior renewal. A hard
+      # `requires` here cascades: tailscale-cert-renew intermittently
+      # fails at boot ("500: no netmap available" - tailscaled hasn't
+      # finished reaching the coordination server yet that early), and
+      # since systemd doesn't retry a failed Requires= dependency, nginx
+      # stayed down for hours until the next renewal attempt reloaded it
+      # or it was restarted by hand. `wants` keeps the ordering (renewal
+      # gets a chance to refresh the cert first) without making nginx's
+      # own start job hostage to that one-shot's success.
       systemd.services.nginx = {
         after = [ "tailscale-cert-renew.service" ];
-        requires = [ "tailscale-cert-renew.service" ];
+        wants = [ "tailscale-cert-renew.service" ];
       };
 
       # stylix.enable = lib.mkForce false;

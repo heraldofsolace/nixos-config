@@ -118,7 +118,21 @@
       # suspend on its own - it sometimes stays disconnected until physically
       # replugged. USB_QUIRK_RESET_RESUME ('b') makes the kernel force a full
       # USB reset on resume instead of trying (and failing) a normal restore.
-      boot.kernelParams = [ "usbcore.quirks=1235:8210:b" ];
+      #
+      # That alone wasn't enough: sometimes the port vanishes from the USB
+      # topology entirely on resume (confirmed via journalctl - no
+      # reconnect attempt logged at all, and a *different* port failed to
+      # enable around the same resume too), meaning the kernel never even
+      # gets far enough to apply the device-level quirk above. This is the
+      # AMD Matisse xHCI controller itself (USB controller [1022:149c])
+      # occasionally failing to fully resume some downstream ports.
+      # XHCI_RESET_ON_RESUME (bit 25) forces a full controller reset on
+      # resume rather than its native (unreliable here) resume path -
+      # affects the whole controller, not just this one device.
+      boot.kernelParams = [
+        "usbcore.quirks=1235:8210:b"
+        "xhci_hcd.quirks=0x2000000"
+      ];
       services = {
         geoclue2.enable = true;
         gnome.gnome-keyring.enable = true;

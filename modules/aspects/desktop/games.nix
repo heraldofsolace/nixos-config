@@ -137,7 +137,25 @@
       hardware.graphics = {
         enable = true;
         enable32Bit = true;
-        extraPackages = with pkgs; [
+        # These used to come from the main (stable) pkgs. hardware.graphics
+        # unions extraPackages' lib/ dirs straight into /run/opengl-driver
+        # alongside `package` (pkgs-unstable.mesa, set in hyprland.nix), so
+        # the vulkan-loader actually served there was stable's 1.4.341.0 -
+        # built against stable glibc - while the radv ICD it has to dlopen
+        # is unstable mesa 26.2.6, whose LLVM backend needs GLIBC_2.44.
+        # dlopen can't satisfy that from a process already running on
+        # stable's older glibc, so vkEnumeratePhysicalDevices fails
+        # outright ("GLIBC_2.44 not found", confirmed by running stable
+        # vulkan-tools' vulkaninfo directly against this live ICD - it
+        # fails the same way; the unstable build of the same tool doesn't).
+        # Steam injects this exact /run/opengl-driver into every game's
+        # pressure-vessel sandbox, which is what crashed Visage
+        # (Visage-Win64-Shipping.exe, SIGSEGV, confirmed via coredumpctl -
+        # the stable vulkan-loader-1.4.363.0 the old extraPackages set
+        # pulled in was loaded in the crashing process). Sourcing all
+        # three from the same pkgs-unstable snapshot as `package` removes
+        # the skew.
+        extraPackages = with pkgs-unstable; [
           vulkan-loader
           vulkan-validation-layers
           vulkan-extension-layer

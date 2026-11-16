@@ -37,6 +37,25 @@
     depends = [ "/mnt/storage" ]; # Ensures base storage is mounted first
   };
 
+  # Nextcloud's preview/thumbnail cache (appdata_*/preview) was living on
+  # the same spinning HDD as the rest of /var/lib/nextcloud - every
+  # thumbnail in a Photos grid is a separate small random read, and the
+  # disk's seek latency made that painfully slow (confirmed by comparing
+  # read timings against the NVMe root). Moved the actual cache contents
+  # (301,648 files, verified identical by count/size/checksum before the
+  # original was touched) onto the NVMe root at
+  # /var/lib/nextcloud-preview-cache and bind-mount it back at the
+  # original path, so Nextcloud's own appdata path doesn't change. The
+  # pre-migration copy was kept, not deleted - renamed aside to
+  # appdata_*/preview.old-hdd-backup on the HDD - as a safety net; it can
+  # be removed once this is confirmed stable.
+  fileSystems."/var/lib/nextcloud/data/appdata_ocztfcl9078p/preview" = {
+    device = "/var/lib/nextcloud-preview-cache";
+    fsType = "none";
+    options = [ "bind" ];
+    depends = [ "/var/lib/nextcloud" ]; # Ensures the nextcloud data bind mount is up first
+  };
+
   # Automatically create the required mount point folders on boot
   systemd.tmpfiles.rules = [
     "d /mnt/storage 0755 root root -"
@@ -44,6 +63,7 @@
     # "d /mnt/storage/data 0775 root root -"
     "d /var/lib/nextcloud 0770 nextcloud nextcloud -"
     "d /data 0775 root root -"
+    "d /var/lib/nextcloud-preview-cache 0755 nextcloud nextcloud -"
   ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";

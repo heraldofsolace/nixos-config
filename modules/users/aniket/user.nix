@@ -32,6 +32,9 @@
         # wired but not enabled - see modules/aspects/comin.nix.
         topology
         comin
+        # Oh My Pi (`omp`) terminal coding agent - wanted on every host, like
+        # the other CLI tooling below.
+        ai._.omp
         # cpu
         console
         atuin

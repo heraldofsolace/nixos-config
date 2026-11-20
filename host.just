@@ -3,15 +3,15 @@ host := `hostname`
 alias b := build
 build HOST=host *ARGS:
     @#nix build .#nixosConfigurations.{{HOST}}.config.system.build.toplevel {{ARGS}}
-    nh os build --hostname {{HOST}}
+    nh os build --hostname {{HOST}} {{ARGS}} -- --impure
 
 alias bo := boot
 boot HOST=host *ARGS:
     @#nixos-rebuild boot --flake .#{{HOST}} --target-host {{HOST}} --sudo --ask-sudo-password
-    nh os boot --hostname {{HOST}} --target-host {{HOST}} {{ARGS}}
+    nh os boot --hostname {{HOST}} --target-host {{HOST}} {{ARGS}} -- --impure
 
 alias s := switch
 [default]
 switch HOST=host *ARGS:
     @#nixos-rebuild switch --flake .#{{HOST}} --target-host {{HOST}} --sudo --ask-sudo-password
-    nh os switch --hostname {{HOST}} --target-host {{HOST}} {{ARGS}}
+    nh os switch --hostname {{HOST}} --target-host {{HOST}} {{ARGS}} -- --impure

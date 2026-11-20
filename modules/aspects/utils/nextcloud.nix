@@ -32,7 +32,7 @@ _: {
         ];
         services.nextcloud = {
           enable = true;
-          package = pkgs.nextcloud34;
+          package = pkgs.nextcloud35;
           hostName = "miranda.dorper-ghost.ts.net";
           https = true;
           enableImagemagick = true;
@@ -84,7 +84,6 @@ _: {
               mail
               twofactor_webauthn
               end_to_end_encryption
-              memories
               music
               onlyoffice
               previewgenerator
@@ -92,6 +91,15 @@ _: {
               richdocuments
               spreed
               ;
+            # nixpkgs packages each Nextcloud app against a hardcoded
+            # per-nc-major table of versions+hashes. On nixos-26.05 the
+            # memories table still stops at nc34 (8.1.0) and nc35 throws
+            # "memories currently does not support nextcloud version 35";
+            # only unstable has the nc35 entry (11.1.1), and no backport to
+            # release-26.05 is open. Core nextcloud35 is 35.0.3 on both
+            # branches, so taking just this app across is safe. Drop this
+            # override once 26.05 grows a "35" entry of its own.
+            memories = pkgs.latest.nextcloud35Packages.apps.memories;
             # recognize = pkgs.fetchNextcloudApp {
             #   hash = "sha256-x3LXZKDWmzCYLTaNqSvgu4Gvrn6w2c/jifNCx1oaw1U=";
             #   url = "https://github.com/nextcloud/recognize/releases/download/v11.0.1/recognize-11.0.1.tar.gz";

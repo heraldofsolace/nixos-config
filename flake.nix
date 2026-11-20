@@ -163,6 +163,7 @@
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    oh-my-pi.url = "github:can1357/oh-my-pi";
     omnix = {
       url = "github:juspay/omnix";
       inputs.nixpkgs.follows = "nixpkgs";

@@ -2,7 +2,7 @@
 let
   name = "fish-ssh-agent";
   version = "f10d95775352931796fd17f54e6bf2f910163d1b";
-  hash = "";
+  hash = "sha256-cFroQ7PSBZ5BhXzZEKTKHnEAuEu8W9rFrGZAb8vTgIE=";
   owner = "danhper";
   repo = "fish-ssh-agent";
 in
@@ -14,6 +14,25 @@ pkgs.stdenv.mkDerivation {
     rev = version;
     sha256 = hash;
   };
+
+  installPhase = ''
+    runHook preInstall
+
+    if [[ -d functions ]]; then
+      install -Dm644 -t $out/share/fish/vendor_functions.d functions/*.fish
+    fi
+    if [[ -d completions ]]; then
+      install -Dm644 -t $out/share/fish/vendor_completions.d completions/*.fish
+    fi
+    if [[ -d conf.d ]]; then
+      install -Dm644 -t $out/share/fish/vendor_conf.d conf.d/*.fish
+    fi
+    if [[ -f init.fish ]]; then
+      install -Dm644 init.fish $out/share/fish/vendor_conf.d/${name}-init.fish
+    fi
+
+    runHook postInstall
+  '';
 
   passthru.update = pkgs.writeShellScriptBin "update-${name}" ''
     set -euo pipefail

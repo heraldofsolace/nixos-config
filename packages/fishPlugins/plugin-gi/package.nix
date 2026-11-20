@@ -16,6 +16,25 @@ pkgs.stdenv.mkDerivation {
     sha256 = hash;
   };
 
+  installPhase = ''
+    runHook preInstall
+
+    if [[ -d functions ]]; then
+      install -Dm644 -t $out/share/fish/vendor_functions.d functions/*.fish
+    fi
+    if [[ -d completions ]]; then
+      install -Dm644 -t $out/share/fish/vendor_completions.d completions/*.fish
+    fi
+    if [[ -d conf.d ]]; then
+      install -Dm644 -t $out/share/fish/vendor_conf.d conf.d/*.fish
+    fi
+    if [[ -f init.fish ]]; then
+      install -Dm644 init.fish $out/share/fish/vendor_conf.d/${name}-init.fish
+    fi
+
+    runHook postInstall
+  '';
+
   passthru.update = pkgs.writeShellScriptBin "update-plugin-gi" ''
     set -euo pipefail
 

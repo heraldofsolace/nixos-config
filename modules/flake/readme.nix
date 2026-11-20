@@ -93,12 +93,12 @@
         a file written into a git worktree is untracked, and flake evaluation does not see
         untracked files.)
 
-        One config difference is gated on the same signal: `editors._.anivim` disables the neovim
-        Ruby provider during CI (`hosts.ruby.enable = false`). Its `bundlerEnv` instantiates a
-        `gemfile-and-lockfile` derivation whose input is a filtered nixpkgs source tree — a store
-        path no substituter carries and that `--no-build` can never realize, aborting host
-        evaluation. Real systems keep the provider; see the comment in
-        `modules/aspects/developement/editors/_anivim/anivim.nix`.
+        One config difference is gated on the same signal: packages whose builds embed deferred
+        filtered source trees — store paths that `--no-build` can never realize — are swapped for
+        their nixpkgs builds (or dropped) during CI evaluation. This covers `editors._.anivim`'s
+        neovim Ruby provider, the hyprland flake's `hyprland` and portal packages, walker
+        (`modules/aspects/desktop/hyprland.nix`), and omnix in the devshell
+        (`modules/devshells/default.nix`). Real systems keep the flake builds.
 
         ## iii engine (agents, skills, worker config)
 

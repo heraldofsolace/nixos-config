@@ -3,6 +3,11 @@
   config,
   ...
 }:
+let
+  # Read at FILE level so the perSystem shells can gate eval-hostile packages
+  # on the CI signal.
+  ci = config ? _module.args.CI;
+in
 {
   flake-file.inputs.make-shell = {
     url = "github:nicknovitski/make-shell";
@@ -133,7 +138,10 @@
             git
             jujutsu
             jjui
-            neovim
+            # No `neovim` wrapper here: its bundlerEnv takes the nixpkgs source
+            # tree as a derivation input (gemdir), which `--no-build` gates
+            # (`just ci`) can never realize, breaking the default-shell check.
+            # The system provides anivim (aliased to neovim/vim) instead.
             dysk
             nh
             just
@@ -149,7 +157,11 @@
             nixpkgs-hammering
             angrr
             inputs'.nixos-anywhere.packages.default
-            inputs'.omnix.packages.default
+            # The omnix flake builds with crane, whose filtered source tree is a
+            # deferred `builtins.path` that a `--no-build` gate (`just ci`) can
+            # never realize, breaking the default-shell check. Evaluate against
+            # nixpkgs' omnix under CI; interactive shells keep the flake package.
+            (if ci then pkgs.omnix else inputs'.omnix.packages.default)
             iii-bin
             iii-init
             iii-worker

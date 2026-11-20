@@ -37,7 +37,7 @@ Enter the default dev shell with `nix develop`. Alongside nixd, nixfmt, statix, 
 
 ### Validation and CI
 
-`just ci` requires a clean, committed tree. It archives `HEAD` into a temporary directory, copies `ci/ci-runtime.nix` to `modules/ci-runtime.nix` there, and runs `nix flake check --no-build --accept-flake-config`. The injected `_module.args.CI` disables boot and bootloader configuration and turns off anivim's neovim Ruby provider (its `bundlerEnv` needs a nixpkgs source store path that `--no-build` can never realize), so this evaluates all three hosts without building their system closures or modifying the checkout.
+`just ci` requires a clean, committed tree. It archives `HEAD` into a temporary directory, copies `ci/ci-runtime.nix` to `modules/ci-runtime.nix` there, and runs `nix flake check --no-build --accept-flake-config`. The injected `_module.args.CI` disables boot and bootloader configuration and swaps out packages whose builds embed deferred filtered source trees that `--no-build` can never realize: anivim's neovim Ruby provider (dropped), and the flake-built hyprland, walker, and omnix packages (replaced by their nixpkgs builds). Real systems keep the flake packages, and CI still evaluates all three hosts without building their system closures or modifying the checkout.
 
 GitHub Actions runs that same recipe on pushes and pull requests. After a successful push check, the `cachix-push` job builds every exported package and publishes it to the `heraldofsolace` Cachix cache, which is already configured as a flake substituter.
 

@@ -1,10 +1,16 @@
 {
   inputs,
   lib',
+  config,
   self,
   blazar,
   ...
 }:
+let
+  # Read at FILE level so aspect blocks can gate eval-hostile packages on the
+  # CI signal without it being shadowed by their own module arguments.
+  ci = config ? _module.args.CI;
+in
 {
   flake-file.inputs = {
     hyprland = {
@@ -118,10 +124,18 @@
         xwayland = {
           enable = true;
         };
-        package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+        # The hyprland flake builds with cmake against its filtered source tree,
+        # a deferred `builtins.path` that a `--no-build` gate (`just ci`) can
+        # never realize, aborting andromeda's evaluation. Evaluate against
+        # nixpkgs' hyprland under CI; real systems keep the flake packages.
+        package =
+          if ci then pkgs.hyprland else inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
         # make sure to also set the portal package, so that they are in sync
         portalPackage =
-          inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+          if ci then
+            pkgs.xdg-desktop-portal-hyprland
+          else
+            inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
       };
       services.displayManager.sddm.enable = lib.mkForce false;
       security.pam.services.hyprlock = { };
@@ -355,6 +369,13 @@
       programs.walker = {
         enable = true;
         runAsService = true;
+
+        # The walker flake builds its package with crane, whose filtered
+        # source tree is a deferred `builtins.path` that a `--no-build` gate
+        # (`just ci`) can never realize, aborting andromeda's evaluation.
+        # Evaluate against nixpkgs' walker under CI; real systems keep the
+        # flake package.
+        package = lib.mkIf ci (lib.mkForce pkgs.walker);
 
         # All options from the config.json can be used here.
         config = {

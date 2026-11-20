@@ -1,5 +1,6 @@
 {
   inputs,
+  lib',
   self,
   blazar,
   ...
@@ -62,7 +63,7 @@
       # so the greeter's compositor links against the exact mesa that's
       # actually being served at runtime instead of the main nixpkgs pin's
       # (mismatched) one.
-      pkgs-unstable = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+      pkgs-unstable = lib'.unstableUnfree pkgs.stdenv.hostPlatform.system;
 
       # ReGreet CSS theme, same live stylix palette used everywhere else
       # (fish's palette-cat, the Neovim dashboard gradient, etc.) so this
@@ -242,7 +243,7 @@
       # wayland-client version mismatch between an app's build and what
       # Mesa 25.2+ expects. Sourcing wezterm from the same pkgs-unstable
       # snapshot keeps it version-consistent, same fix as cage's.
-      pkgs-unstable = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+      pkgs-unstable = lib'.unstableUnfree pkgs.stdenv.hostPlatform.system;
       # Hourly wallpapers go through the shared monochrome step (16-step
       # blue-grey ramp from base00 to base07), same helper stylix.image uses.
       monoWallpaper = import ../stylix/_mono-wallpaper.nix { inherit lib; };

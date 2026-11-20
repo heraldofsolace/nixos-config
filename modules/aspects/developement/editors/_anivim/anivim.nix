@@ -18,7 +18,11 @@
 
   The following is just the outputs function from the flake template.
 */
-{ inputs, ... }:
+{
+  inputs,
+  ci ? false,
+  ...
+}:
 let
   nixpkgs = inputs.latest;
   inherit (inputs.nixCats) utils;
@@ -263,7 +267,13 @@ let
         hosts.node.enable = true;
         hosts.python3.enable = true;
         hosts.perl.enable = true;
-        hosts.ruby.enable = true;
+        # The Ruby provider instantiates a `bundlerEnv` whose `gemfile-and-lockfile`
+        # derivation takes a *filtered nixpkgs source tree* as an input - a store
+        # path no substituter carries and that a `--no-build` gate (`just ci`,
+        # `just gate-full`) can never realize, aborting host evaluation with
+        # "path ... is not valid". CI evaluates without it (signal passed as
+        # `ci` from editors/anivim.nix); real systems keep the provider.
+        hosts.ruby.enable = !ci;
         neovim-unwrapped = inputs.neovim-nightly-overlay.packages.${pkgs.system}.neovim;
       };
       # and a set of categories that you want

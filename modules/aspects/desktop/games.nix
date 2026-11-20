@@ -1,4 +1,4 @@
-{ inputs, ... }: {
+{ inputs, lib', ... }: {
   flake-file.inputs = {
     prismnix = {
       url = "github:qacow37/prismnix";
@@ -112,7 +112,7 @@
       # outright (confirmed via `journalctl --since today | grep steam`).
       # Same fix as librewolf/firefox: pull the whole package from the same
       # unstable snapshot instead of patching individual libs.
-      pkgs-unstable = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+      pkgs-unstable = lib'.unstableUnfree pkgs.stdenv.hostPlatform.system;
     in
     {
       programs.steam = {

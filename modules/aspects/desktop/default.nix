@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ lib', ... }:
 {
   blazar.desktop.homeManager =
     {
@@ -16,7 +16,7 @@
       # `coredumpctl info` on the .nextcloud-wrapped core dumps). Same fix
       # as librewolf/firefox/steam: pull the whole package from the same
       # unstable snapshot instead of patching individual libs.
-      pkgs-unstable = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+      pkgs-unstable = lib'.unstableUnfree pkgs.stdenv.hostPlatform.system;
     in
     {
       home = {

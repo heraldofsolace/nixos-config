@@ -45,6 +45,18 @@ let
       {
         inherit nodes;
       };
+
+    unstableUnfree =
+      system:
+      # The unstable nixpkgs snapshot that Hyprland pins, with an unfree
+      # allowance. `legacyPackages` carries no config, so forcing any unfree
+      # package built from it (steam, polymath) aborts evaluation: check-meta
+      # trips on the outPath assert, which `toplevel.drvPath` traversal hits.
+      # KAN-2.
+      import inputs.hyprland.inputs.nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+      };
   };
   #   options = {
   #   lib = lib.mkOption {

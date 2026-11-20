@@ -1,4 +1,4 @@
-{ inputs, ... }: {
+{ inputs, lib', ... }: {
   flake-file.inputs = {
     # Fork, not upstream directly: carries a local packaging commit (the
     # home-manager module for session-capture autostart) that hasn't been
@@ -16,7 +16,7 @@
         # the same class of bug fixed for cage/wezterm-gui in hyprland.nix.
         # Without this, enabling hardware_video in ~/.config/lianli
         # silently falls back to software decode with no benefit.
-        pkgs-unstable = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+        pkgs-unstable = lib'.unstableUnfree pkgs.stdenv.hostPlatform.system;
         lianliPackage = inputs.lian-li-linux.packages.${pkgs.stdenv.hostPlatform.system}.default;
       in
       {

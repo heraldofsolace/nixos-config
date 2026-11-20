@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ lib', ... }:
 {
   blazar.keyboard._.polymath = {
     nixos =
@@ -8,7 +8,7 @@
         # unstable snapshot for EGL/mesa ABI consistency - see its comment.
         # Built here too (rather than reusing self'.packages.polymath) so
         # system-installed polymath isn't a different, stable-linked copy.
-        pkgs-unstable = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+        pkgs-unstable = lib'.unstableUnfree pkgs.stdenv.hostPlatform.system;
         polymathPackage = pkgs-unstable.callPackage ../../../packages/polymath/package.nix { };
       in
       {
@@ -17,7 +17,11 @@
 
         # Lets udisks2 auto-mount the RP2040 bootloader drive without a polkit
         # prompt, matching upstream's /etc/polkit-1/rules.d/10-rpi-rp2-mount.rules.
-        security.polkit.extraConfig = builtins.readFile "${polymathPackage}/share/polkit-1/rules.d/10-rpi-rp2-mount.rules";
+        # The rules are vendored (packages/polymath/_files/, same content as the
+        # .deb's copy) instead of read out of the built package: readFile on a
+        # package output forces polymath's realization at eval time, which a
+        # `--no-build` gate (`just ci`, `just gate-full`) can never satisfy.
+        security.polkit.extraConfig = builtins.readFile ../../../packages/polymath/_files/10-rpi-rp2-mount.rules;
       };
 
     homeManager =
@@ -33,7 +37,7 @@
         # needs to come from the same snapshot, so rebuild the package
         # entirely with pkgs-unstable rather than overriding individual
         # inputs on a stable-built derivation.
-        pkgs-unstable = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+        pkgs-unstable = lib'.unstableUnfree pkgs.stdenv.hostPlatform.system;
         polymathPackage = pkgs-unstable.callPackage ../../../packages/polymath/package.nix { };
       in
       {

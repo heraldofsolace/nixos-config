@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ lib', ... }:
 {
   blazar.games.nixos =
     { pkgs, ... }:
@@ -11,7 +11,7 @@
       # (GLIBC_2.44 not found) - see games.nix's hardware.graphics comment
       # for how this was confirmed. The rest of this list is unaffected,
       # left on the main pkgs set.
-      pkgs-unstable = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+      pkgs-unstable = lib'.unstableUnfree pkgs.stdenv.hostPlatform.system;
     in
     {
       programs.nix-ld = {

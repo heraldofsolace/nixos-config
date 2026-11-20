@@ -1,0 +1,12 @@
+// PolicyKit rule to allow mounting RP2040 bootloader without authentication
+// This fixes "Not authorized to perform operation" errors on Linux Mint and other distros
+// Install to: /etc/polkit-1/rules.d/10-rpi-rp2-mount.rules
+
+polkit.addRule(function(action, subject) {
+    if ((action.id == "org.freedesktop.udisks2.filesystem-mount-system" ||
+         action.id == "org.freedesktop.udisks2.filesystem-mount") &&
+        action.lookup("drive.vendor") == "RPI" &&
+        action.lookup("drive.model") == "RP2") {
+        return polkit.Result.YES;
+    }
+});

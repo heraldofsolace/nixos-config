@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ lib', ... }:
 {
   blazar.firefox.homeManager =
     {
@@ -14,7 +14,7 @@
       # two aren't ABI-compatible. Here it surfaces as a VA-API version
       # mismatch ("has no function __vaDriverInit_1_0"), silently falling
       # back to full software video decode instead of erroring loudly.
-      pkgs-unstable = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+      pkgs-unstable = lib'.unstableUnfree pkgs.stdenv.hostPlatform.system;
     in
     {
       # This is the actually-used daily browser (the "firefox" launcher) -
